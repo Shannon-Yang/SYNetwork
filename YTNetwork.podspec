@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "YTNetwork"
-  s.version      = "1.0.0"
+  s.version      = "1.0"
   s.summary      = "YTNetwork is is a high level request util based on Alamofire.It provides a High Level API for network request.Inspired by YTKNetwork"
 
   # This description is used to generate tags and improve search results.
