@@ -1,0 +1,10 @@
+framework module YTNetwork {
+  umbrella header "YTNetwork.h"
+
+  export *
+  module * { export * }
+}
+
+module YTNetwork.Swift {
+    header "YTNetwork-Swift.h"
+}
