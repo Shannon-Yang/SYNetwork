@@ -9,7 +9,6 @@
 import UIKit
 import YTNetwork
 import Alamofire
-import CryptoSwift
 import ObjectMapper
 import SwiftyJSON
 
@@ -46,5 +45,9 @@ class YTBasicDataRequest: YTDataRequest {
             return nil
         }
         return keyPath
+    }
+    
+    override var cacheTimeInSeconds: Int {
+       return 1000
     }
 }

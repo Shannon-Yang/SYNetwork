@@ -268,7 +268,7 @@ class YTNetworkTestCase: XCTestCase {
     
     func expectSuccessWithNotSendRequetIfCache(request: YTBasicDataRequest) {
         let exp = self.expectation(description: "Request should succeed")
-        request.responseJSON(cacheTactics: .notSendRequetIfCacheExist) { (isDataFromCache, dataResponse) in
+        request.responseJSON(responseDataSource: .cacheIfPossible) { (isDataFromCache, dataResponse) in
             // load cache
             do {
                 let json = try request.responseJSONFromCache()

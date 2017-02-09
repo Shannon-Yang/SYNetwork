@@ -14,10 +14,12 @@ class WeatherResponse: Mappable {
     var threeDayForecast: [Forecast]?
     var date: Date?
     
-    init(){}
+    init(){
+        
+    }
     
     required init?(map: Map){
-        
+    
     }
     
     func mapping(map: Map) {
@@ -26,16 +28,20 @@ class WeatherResponse: Mappable {
     }
 }
 
-class Forecast: Mappable {
+struct Forecast: Mappable {
     var day: String?
     var temperature: Int?
     var conditions: String?
     
-    required init?(map: Map){
+    init(){
         
     }
     
-    func mapping(map: Map) {
+    init?(map: Map){
+        
+    }
+    
+    mutating func mapping(map: Map) {
         day <- map["day"]
         temperature <- map["temperature"]
         conditions <- map["conditions"]

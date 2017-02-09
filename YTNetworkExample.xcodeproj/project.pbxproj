@@ -24,13 +24,19 @@
 		822345681E15029400B1CCF1 /* YTNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 822345521E15029400B1CCF1 /* YTNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		822345761E15032500B1CCF1 /* AlamofireSwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223456F1E15032500B1CCF1 /* AlamofireSwiftyJSON.swift */; };
 		822345771E15032500B1CCF1 /* YTCacheMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345701E15032500B1CCF1 /* YTCacheMetadata.swift */; };
-		822345781E15032500B1CCF1 /* YTNetworkCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345711E15032500B1CCF1 /* YTNetworkCache.swift */; };
+		822345781E15032500B1CCF1 /* YTDataRequest+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345711E15032500B1CCF1 /* YTDataRequest+Cache.swift */; };
 		822345791E15032500B1CCF1 /* YTNetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345721E15032500B1CCF1 /* YTNetworkConfig.swift */; };
 		8223457A1E15032500B1CCF1 /* YTRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345731E15032500B1CCF1 /* YTRequest.swift */; };
-		8223457B1E15032500B1CCF1 /* YTResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345741E15032500B1CCF1 /* YTResponseSerialization.swift */; };
-		8223457C1E15032500B1CCF1 /* YTValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345751E15032500B1CCF1 /* YTValidation.swift */; };
+		8223457B1E15032500B1CCF1 /* YTDataRequest+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345741E15032500B1CCF1 /* YTDataRequest+Serialization.swift */; };
+		8223457C1E15032500B1CCF1 /* YTDataRequest+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345751E15032500B1CCF1 /* YTDataRequest+Validation.swift */; };
 		8223457E1E1504CE00B1CCF1 /* YTBasicDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223457D1E1504CE00B1CCF1 /* YTBasicDataRequest.swift */; };
 		822345821E15163900B1CCF1 /* YTNetworkRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822345811E15163900B1CCF1 /* YTNetworkRequestTests.swift */; };
+		82697DEA1E4C0985004F259E /* YTDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82697DE91E4C0985004F259E /* YTDataRequest.swift */; };
+		82697DEC1E4C0A55004F259E /* YTDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82697DEB1E4C0A55004F259E /* YTDownloadRequest.swift */; };
+		82697DEE1E4C0B2F004F259E /* YTStreamRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82697DED1E4C0B2F004F259E /* YTStreamRequest.swift */; };
+		82697DF01E4C0B7D004F259E /* YTUploadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82697DEF1E4C0B7D004F259E /* YTUploadRequest.swift */; };
+		82697DF31E4C438F004F259E /* YTDownloadRequest+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82697DF21E4C438F004F259E /* YTDownloadRequest+Serialization.swift */; };
+		82697DF51E4C44FE004F259E /* YTDownloadRequest+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82697DF41E4C44FE004F259E /* YTDownloadRequest+Validation.swift */; };
 		82C843281E45737D00CA93BD /* YTNetworkRequestCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C843271E45737D00CA93BD /* YTNetworkRequestCacheTests.swift */; };
 		82C8432A1E45AF6800CA93BD /* YTNetworkCacheRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C843291E45AF6800CA93BD /* YTNetworkCacheRequest.swift */; };
 		82C8432C1E45B30800CA93BD /* YTNetworkValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C8432B1E45B30800CA93BD /* YTNetworkValidationTests.swift */; };
@@ -43,6 +49,7 @@
 		82C8433C1E48496100CA93BD /* AFError+AlamofireTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C8433B1E48496000CA93BD /* AFError+AlamofireTests.swift */; };
 		82C8433E1E484A7700CA93BD /* String+AlamofireTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C8433D1E484A7700CA93BD /* String+AlamofireTests.swift */; };
 		82C843501E49D41500CA93BD /* AlamofireObjectMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C8434F1E49D41500CA93BD /* AlamofireObjectMapper.swift */; };
+		82C843541E4AF5A100CA93BD /* String+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C843531E4AF5A100CA93BD /* String+MD5.swift */; };
 		82DCCA171E3207AF00438393 /* YTNetworkTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DCCA161E3207AF00438393 /* YTNetworkTestCase.swift */; };
 		82DCCA191E35B16100438393 /* YTBasicDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223457D1E1504CE00B1CCF1 /* YTBasicDataRequest.swift */; };
 		82DCCA1B1E36EFE600438393 /* YTSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DCCA1A1E36EFE600438393 /* YTSessionManager.swift */; };
@@ -132,13 +139,19 @@
 		822345631E15029400B1CCF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8223456F1E15032500B1CCF1 /* AlamofireSwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireSwiftyJSON.swift; sourceTree = "<group>"; };
 		822345701E15032500B1CCF1 /* YTCacheMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTCacheMetadata.swift; sourceTree = "<group>"; };
-		822345711E15032500B1CCF1 /* YTNetworkCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTNetworkCache.swift; sourceTree = "<group>"; };
+		822345711E15032500B1CCF1 /* YTDataRequest+Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YTDataRequest+Cache.swift"; sourceTree = "<group>"; };
 		822345721E15032500B1CCF1 /* YTNetworkConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTNetworkConfig.swift; sourceTree = "<group>"; };
 		822345731E15032500B1CCF1 /* YTRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTRequest.swift; sourceTree = "<group>"; };
-		822345741E15032500B1CCF1 /* YTResponseSerialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTResponseSerialization.swift; sourceTree = "<group>"; };
-		822345751E15032500B1CCF1 /* YTValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTValidation.swift; sourceTree = "<group>"; };
+		822345741E15032500B1CCF1 /* YTDataRequest+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YTDataRequest+Serialization.swift"; sourceTree = "<group>"; };
+		822345751E15032500B1CCF1 /* YTDataRequest+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YTDataRequest+Validation.swift"; sourceTree = "<group>"; };
 		8223457D1E1504CE00B1CCF1 /* YTBasicDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTBasicDataRequest.swift; sourceTree = "<group>"; };
 		822345811E15163900B1CCF1 /* YTNetworkRequestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTNetworkRequestTests.swift; sourceTree = "<group>"; };
+		82697DE91E4C0985004F259E /* YTDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTDataRequest.swift; sourceTree = "<group>"; };
+		82697DEB1E4C0A55004F259E /* YTDownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTDownloadRequest.swift; sourceTree = "<group>"; };
+		82697DED1E4C0B2F004F259E /* YTStreamRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTStreamRequest.swift; sourceTree = "<group>"; };
+		82697DEF1E4C0B7D004F259E /* YTUploadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTUploadRequest.swift; sourceTree = "<group>"; };
+		82697DF21E4C438F004F259E /* YTDownloadRequest+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YTDownloadRequest+Serialization.swift"; sourceTree = "<group>"; };
+		82697DF41E4C44FE004F259E /* YTDownloadRequest+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YTDownloadRequest+Validation.swift"; sourceTree = "<group>"; };
 		82C843271E45737D00CA93BD /* YTNetworkRequestCacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTNetworkRequestCacheTests.swift; sourceTree = "<group>"; };
 		82C843291E45AF6800CA93BD /* YTNetworkCacheRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTNetworkCacheRequest.swift; sourceTree = "<group>"; };
 		82C8432B1E45B30800CA93BD /* YTNetworkValidationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTNetworkValidationTests.swift; sourceTree = "<group>"; };
@@ -150,7 +163,7 @@
 		82C8433B1E48496000CA93BD /* AFError+AlamofireTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AFError+AlamofireTests.swift"; sourceTree = "<group>"; };
 		82C8433D1E484A7700CA93BD /* String+AlamofireTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+AlamofireTests.swift"; sourceTree = "<group>"; };
 		82C8434F1E49D41500CA93BD /* AlamofireObjectMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireObjectMapper.swift; sourceTree = "<group>"; };
-		82DCC9F71E31F11800438393 /* AlamofireObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireObjectMapper.framework; path = "../../Library/Developer/Xcode/DerivedData/YTNetworkExample-blomouakyrzmxqbnidejxftnqjxz/Build/Products/Debug-iphonesimulator/AlamofireObjectMapper/AlamofireObjectMapper.framework"; sourceTree = "<group>"; };
+		82C843531E4AF5A100CA93BD /* String+MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+MD5.swift"; sourceTree = "<group>"; };
 		82DCC9F81E31F11800438393 /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = "../../Library/Developer/Xcode/DerivedData/YTNetworkExample-blomouakyrzmxqbnidejxftnqjxz/Build/Products/Debug-iphonesimulator/ObjectMapper/ObjectMapper.framework"; sourceTree = "<group>"; };
 		82DCCA0A1E31F30400438393 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82DCCA0B1E31F30400438393 /* Pods-YTNetworkExample-acknowledgements.markdown */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Pods-YTNetworkExample-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -232,7 +245,6 @@
 			isa = PBXGroup;
 			children = (
 				82DCCA091E31F30400438393 /* Pods-YTNetworkExample */,
-				82DCC9F71E31F11800438393 /* AlamofireObjectMapper.framework */,
 				82DCC9F81E31F11800438393 /* ObjectMapper.framework */,
 				822344361E14E84600B1CCF1 /* SwiftyJSON.framework */,
 				822344301E14E82700B1CCF1 /* Alamofire.framework */,
@@ -305,15 +317,22 @@
 			isa = PBXGroup;
 			children = (
 				822345541E15029400B1CCF1 /* YTNetwork.h */,
+				82C843531E4AF5A100CA93BD /* String+MD5.swift */,
 				8223456F1E15032500B1CCF1 /* AlamofireSwiftyJSON.swift */,
 				82C8434F1E49D41500CA93BD /* AlamofireObjectMapper.swift */,
+				822345731E15032500B1CCF1 /* YTRequest.swift */,
+				82697DE91E4C0985004F259E /* YTDataRequest.swift */,
+				82697DEB1E4C0A55004F259E /* YTDownloadRequest.swift */,
+				82697DEF1E4C0B7D004F259E /* YTUploadRequest.swift */,
+				82697DED1E4C0B2F004F259E /* YTStreamRequest.swift */,
+				822345711E15032500B1CCF1 /* YTDataRequest+Cache.swift */,
+				822345751E15032500B1CCF1 /* YTDataRequest+Validation.swift */,
+				82697DF41E4C44FE004F259E /* YTDownloadRequest+Validation.swift */,
+				822345741E15032500B1CCF1 /* YTDataRequest+Serialization.swift */,
+				82697DF21E4C438F004F259E /* YTDownloadRequest+Serialization.swift */,
 				822345701E15032500B1CCF1 /* YTCacheMetadata.swift */,
-				822345711E15032500B1CCF1 /* YTNetworkCache.swift */,
 				822345721E15032500B1CCF1 /* YTNetworkConfig.swift */,
 				82DCCA1A1E36EFE600438393 /* YTSessionManager.swift */,
-				822345731E15032500B1CCF1 /* YTRequest.swift */,
-				822345741E15032500B1CCF1 /* YTResponseSerialization.swift */,
-				822345751E15032500B1CCF1 /* YTValidation.swift */,
 				822345551E15029400B1CCF1 /* Info.plist */,
 			);
 			path = YTNetwork;
@@ -749,13 +768,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				822345781E15032500B1CCF1 /* YTNetworkCache.swift in Sources */,
+				82697DEE1E4C0B2F004F259E /* YTStreamRequest.swift in Sources */,
+				82697DEC1E4C0A55004F259E /* YTDownloadRequest.swift in Sources */,
+				822345781E15032500B1CCF1 /* YTDataRequest+Cache.swift in Sources */,
+				82697DF31E4C438F004F259E /* YTDownloadRequest+Serialization.swift in Sources */,
 				822345791E15032500B1CCF1 /* YTNetworkConfig.swift in Sources */,
+				82697DF51E4C44FE004F259E /* YTDownloadRequest+Validation.swift in Sources */,
 				82C843501E49D41500CA93BD /* AlamofireObjectMapper.swift in Sources */,
-				8223457C1E15032500B1CCF1 /* YTValidation.swift in Sources */,
-				8223457B1E15032500B1CCF1 /* YTResponseSerialization.swift in Sources */,
+				8223457C1E15032500B1CCF1 /* YTDataRequest+Validation.swift in Sources */,
+				82697DEA1E4C0985004F259E /* YTDataRequest.swift in Sources */,
+				8223457B1E15032500B1CCF1 /* YTDataRequest+Serialization.swift in Sources */,
 				8223457A1E15032500B1CCF1 /* YTRequest.swift in Sources */,
 				82DCCA1B1E36EFE600438393 /* YTSessionManager.swift in Sources */,
+				82C843541E4AF5A100CA93BD /* String+MD5.swift in Sources */,
+				82697DF01E4C0B7D004F259E /* YTUploadRequest.swift in Sources */,
 				822345771E15032500B1CCF1 /* YTCacheMetadata.swift in Sources */,
 				822345761E15032500B1CCF1 /* AlamofireSwiftyJSON.swift in Sources */,
 			);

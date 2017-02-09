@@ -9,11 +9,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>CryptoSwift.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>ObjectMapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,17 +37,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>30AB58E3FBAECFF9F82752FFFB4954EF</key>
+		<key>09DD5F05797EDF0FE65B9384A250D341</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6BB1C1403B2419F911818DA8413FDA07</key>
+		<key>3A48E1F0C638C45B070597003749A83C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7FD72D0053A2A23C21EC31A2E92CE34F</key>
+		<key>4310A25E07D44E1529CCF86659FC59D8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6376F038348B6E17F00B8E9C61AE75C6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -62,17 +62,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AD087C1FED76736EC934DFE9E84B42AB</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>B43918AB915242B851ABEFB5D70BE0AD</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F2512CBBCB7AAC72FCE849E2609202D4</key>
 		<dict>
 			<key>primary</key>
 			<true/>

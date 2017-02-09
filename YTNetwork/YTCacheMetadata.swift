@@ -13,13 +13,9 @@ import ObjectMapper
 
 class YTCacheMetadata: NSObject, NSSecureCoding {
     
-    /// cache version
+    /// can be used to identify and invalidate local cache
     
-    var cacheVersion: String
-    
-    /// current app version
-    
-    var appVersionString: String
+    var cacheKey: String
     
     /// cachemetadate create data
     
@@ -51,39 +47,45 @@ class YTCacheMetadata: NSObject, NSSecureCoding {
         return true
     }
     
-    /// aDecoder
+    //MARK: - Enum
+    
+    enum Key: String {
+        case cacheKey
+        case creationDate
+        case responseStringEncoding
+        case responseJSONOptions
+        case responsePropertyListOptions
+        case responseObjectKeyPath
+        case responseObjectContext
+    }
+    
+    
+    //MARK: - aDecoder
     
     required init?(coder aDecoder: NSCoder) {
-        
-        self.cacheVersion = aDecoder.decodeObject(forKey: "cacheVersion") as! String
-        self.appVersionString = aDecoder.decodeObject(forKey: "appVersionString") as! String
-        self.creationDate = aDecoder.decodeObject(forKey: "creationDate") as! Date
-        self.responseStringEncoding = String.Encoding(rawValue: aDecoder.decodeObject(forKey: "responseStringEncoding") as! UInt)
-        self.responseJSONOptions = JSONSerialization.ReadingOptions(rawValue: aDecoder.decodeObject(forKey: "responseJSONOptions") as! UInt)
-        self.responsePropertyListOptions = PropertyListSerialization.ReadOptions(rawValue: aDecoder.decodeObject(forKey: "responsePropertyListOptions") as! UInt)
-        self.responseObjectKeyPath = aDecoder.decodeObject(forKey: "responseObjectKeyPath") as? String
-        self.responseObjectContext = aDecoder.decodeObject(forKey: "responseObjectContext") as? MapContext
+        self.cacheKey = aDecoder.decodeObject(forKey: Key.cacheKey.rawValue) as! String
+        self.creationDate = aDecoder.decodeObject(forKey: Key.creationDate.rawValue) as! Date
+        self.responseStringEncoding = String.Encoding(rawValue: aDecoder.decodeObject(forKey: Key.responseStringEncoding.rawValue) as! UInt)
+        self.responseJSONOptions = JSONSerialization.ReadingOptions(rawValue: aDecoder.decodeObject(forKey: Key.responseJSONOptions.rawValue) as! UInt)
+        self.responsePropertyListOptions = PropertyListSerialization.ReadOptions(rawValue: aDecoder.decodeObject(forKey: Key.responsePropertyListOptions.rawValue) as! UInt)
+        self.responseObjectKeyPath = aDecoder.decodeObject(forKey: Key.responseObjectKeyPath.rawValue) as? String
+        self.responseObjectContext = aDecoder.decodeObject(forKey: Key.responseObjectContext.rawValue) as? MapContext
     }
-    
-    /// implement encode
     
     func encode(with aCoder: NSCoder) {
-        
-        aCoder.encode(self.cacheVersion, forKey: "cacheVersion")
-        aCoder.encode(self.appVersionString, forKey: "appVersionString")
-        aCoder.encode(self.creationDate, forKey: "creationDate")
-        aCoder.encode( self.responseStringEncoding.rawValue, forKey: "responseStringEncoding")
-        aCoder.encode(self.responseJSONOptions.rawValue, forKey: "responseJSONOptions")
-        aCoder.encode(self.responsePropertyListOptions.rawValue, forKey: "responsePropertyListOptions")
-        aCoder.encode(self.responseObjectKeyPath, forKey: "responseObjectKeyPath")
-        aCoder.encode(self.responseObjectContext, forKey: "responseObjectContext")
+        aCoder.encode(self.cacheKey, forKey: Key.cacheKey.rawValue)
+        aCoder.encode(self.creationDate, forKey: Key.creationDate.rawValue)
+        aCoder.encode( self.responseStringEncoding.rawValue, forKey: Key.responseStringEncoding.rawValue)
+        aCoder.encode(self.responseJSONOptions.rawValue, forKey: Key.responseJSONOptions.rawValue)
+        aCoder.encode(self.responsePropertyListOptions.rawValue, forKey: Key.responsePropertyListOptions.rawValue)
+        aCoder.encode(self.responseObjectKeyPath, forKey: Key.responseObjectKeyPath.rawValue)
+        aCoder.encode(self.responseObjectContext, forKey: Key.responseObjectContext.rawValue)
     }
     
-    /// default value
+    //MARK: - Init
     
     override init() {
-        self.cacheVersion = ""
-        self.appVersionString = ""
+        self.cacheKey = ""
         self.creationDate = Date()
         self.responsePropertyListOptions = []
         self.responseStringEncoding = .isoLatin1

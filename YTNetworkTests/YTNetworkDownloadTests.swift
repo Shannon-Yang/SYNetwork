@@ -9,7 +9,6 @@
 import Foundation
 
 import Alamofire
-import CryptoSwift
 import ObjectMapper
 import SwiftyJSON
 import XCTest
