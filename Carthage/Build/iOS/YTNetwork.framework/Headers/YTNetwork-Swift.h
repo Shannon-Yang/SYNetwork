@@ -115,13 +115,17 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # define SWIFT_UNAVAILABLE __attribute__((unavailable))
 #endif
 #if defined(__has_feature) && __has_feature(modules)
-@import ObjectiveC;
 @import Foundation;
+@import ObjectiveC;
 @import Alamofire;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
 #pragma clang diagnostic ignored "-Wduplicate-method-arg"
+
+@interface NSMutableData (SWIFT_EXTENSION(YTNetwork))
+@end
+
 @class TaskDelegate;
 @class NSURLSessionTask;
 @class NSHTTPURLResponse;
@@ -206,6 +210,10 @@ SWIFT_CLASS("_TtC9YTNetwork9YTRequest")
 */
 @property (nonatomic, readonly) NSInteger cacheTimeInSeconds;
 /**
+  cacheKey can be used to identify and invalidate local cache, default is empty
+*/
+@property (nonatomic, readonly, copy) NSString * _Nonnull cacheKey;
+/**
   Associates an HTTP Basic credential with the request, The user.
 */
 @property (nonatomic, readonly, copy) NSString * _Nonnull user;
@@ -265,7 +273,7 @@ SWIFT_CLASS("_TtC9YTNetwork13YTDataRequest")
 */
 - (nonnull instancetype)downloadProgressWithQueue:(OS_dispatch_queue * _Nonnull)queue closure:(void (^ _Nonnull)(NSProgress * _Nonnull))closure;
 /**
-  The queue on which the completion handler is dispatched. default is nil.
+  The queue on which the completion handler is dispatched. default is main.
 */
 @property (nonatomic, strong) OS_dispatch_queue * _Nullable responseQueue;
 /**
@@ -313,6 +321,10 @@ SWIFT_CLASS("_TtC9YTNetwork13YTDataRequest")
 
 
 @interface YTDataRequest (SWIFT_EXTENSION(YTNetwork))
+@end
+
+
+@interface YTDataRequest (SWIFT_EXTENSION(YTNetwork))
 /**
   Validates that the response has a status code in the default acceptable range of 200…299, and that the content
   type matches any specified in the Accept HTTP header field.
@@ -322,10 +334,6 @@ SWIFT_CLASS("_TtC9YTNetwork13YTDataRequest")
   The request.
 */
 - (nonnull instancetype)validate;
-@end
-
-
-@interface YTDataRequest (SWIFT_EXTENSION(YTNetwork))
 @end
 
 
@@ -428,18 +436,18 @@ SWIFT_CLASS("_TtC9YTNetwork17YTDownloadRequest")
 
 @interface YTRequest (SWIFT_EXTENSION(YTNetwork))
 /**
-  The textual representation used when written to an output stream, which includes the HTTP method and URL, as
-  well as the response status code if a response has been received.
+  The textual representation used when written to an output stream, in the form of a cURL command.
 */
-@property (nonatomic, readonly, copy) NSString * _Nonnull description;
+@property (nonatomic, readonly, copy) NSString * _Nonnull debugDescription;
 @end
 
 
 @interface YTRequest (SWIFT_EXTENSION(YTNetwork))
 /**
-  The textual representation used when written to an output stream, in the form of a cURL command.
+  The textual representation used when written to an output stream, which includes the HTTP method and URL, as
+  well as the response status code if a response has been received.
 */
-@property (nonatomic, readonly, copy) NSString * _Nonnull debugDescription;
+@property (nonatomic, readonly, copy) NSString * _Nonnull description;
 @end
 
 
