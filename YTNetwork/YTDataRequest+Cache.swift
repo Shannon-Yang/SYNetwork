@@ -130,13 +130,23 @@ extension YTDataRequest {
     
     /// Clear all request's local cache
     
-    static func clearAllLocalCache() throws {
+    static func clearAllLocalCache(completionHandler: @escaping () -> Void) throws {
         let pathOfLibrary = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
         let path = "\(pathOfLibrary)/\(Key.YTNetworkCache.rawValue)"
-        do {
-            try FileManager.default.removeItem(atPath: path)
-        } catch let error {
-            print("clear all local cache failed, error = \(error)")
+        var removeError: Error?
+        DispatchQueue.global(qos: .default).async {
+            do {
+                try FileManager.default.removeItem(atPath: path)
+                DispatchQueue.main.async {
+                    completionHandler()
+                }
+            } catch let error {
+                print("clear all local cache failed, error = \(error)")
+                removeError = error
+            }
+        }
+        
+        if let error = removeError {
             throw error
         }
     }
