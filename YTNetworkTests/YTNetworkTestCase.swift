@@ -266,19 +266,72 @@ class YTNetworkTestCase: XCTestCase {
         self.waitForExpectationsWithCommonTimeout()
     }
     
-    func expectSuccessWithNotSendRequetIfCache(request: YTBasicDataRequest) {
+    func expectSuccess(_ responseDataSource: ResponseDataSource, request: YTBasicDataRequest?) {
+        guard let request = request else {
+            return
+        }
         let exp = self.expectation(description: "Request should succeed")
-        request.responseJSON(responseDataSource: .cacheIfPossible) { (isDataFromCache, dataResponse) in
-            // load cache
-            do {
-                let json = try request.responseJSONFromCache()
-                XCTAssertNil(json)
-                XCTAssertNotNil(json.data)
-                XCTAssertNotNil(json.result)
-            } catch let error {
-                print("\(error)")
+        
+        switch responseDataSource {
+        case .server:
+            request.responseJSON(responseDataSource: responseDataSource) { (isDataFromCache, dataResponse) in
+                // Data should not be from cache.
+                XCTAssertFalse(isDataFromCache)
+                XCTAssertNotNil(dataResponse)
+                XCTAssertNotNil(dataResponse.result)
+                XCTAssertNotNil(dataResponse.data)
+                exp.fulfill()
             }
-            exp.fulfill()
+        case .cacheIfPossible:
+            request.responseJSON(responseDataSource: responseDataSource) { (isDataFromCache, dataResponse) in
+                // First time. Data should not be from cache. should from server
+                XCTAssertFalse(isDataFromCache)
+                XCTAssertNotNil(dataResponse)
+                XCTAssertNotNil(dataResponse.result)
+                XCTAssertNotNil(dataResponse.data)
+                exp.fulfill()
+            }
+            
+            self.waitForExpectationsWithCommonTimeout()
+            
+            sleep(5)
+            
+            // Request again.
+             let exp = self.expectation(description: "Request should fail")
+            request.responseJSON(responseDataSource: responseDataSource) { (isDataFromCache, dataResponse) in
+                // This time data should be from cache.
+                XCTAssertTrue(isDataFromCache)
+                XCTAssertNotNil(dataResponse)
+                XCTAssertNotNil(dataResponse.result)
+                XCTAssertNotNil(dataResponse.data)
+                exp.fulfill()
+            }
+        
+        case .cacheAndServer:
+            
+            request.responseJSON(responseDataSource: responseDataSource) { (isDataFromCache, dataResponse) in
+                // First time. Data should not be from cache. should from server
+                XCTAssertFalse(isDataFromCache)
+                XCTAssertNotNil(dataResponse)
+                XCTAssertNotNil(dataResponse.result)
+                XCTAssertNotNil(dataResponse.data)
+                exp.fulfill()
+            }
+            
+            self.waitForExpectationsWithCommonTimeout()
+            
+            let exp = self.expectation(description: "Request should succeed")
+            request.responseJSON(responseDataSource: responseDataSource) { (isDataFromCache, dataResponse) in
+                // This time data should be from cache.
+                XCTAssertTrue(isDataFromCache)
+                XCTAssertNotNil(dataResponse)
+                XCTAssertNotNil(dataResponse.result)
+                XCTAssertNotNil(dataResponse.data)
+                exp.fulfill()
+            }
+            
+        default:
+            break
         }
         
         self.waitForExpectationsWithCommonTimeout()
