@@ -297,7 +297,7 @@ class YTNetworkTestCase: XCTestCase {
             sleep(5)
             
             // Request again.
-             let exp = self.expectation(description: "Request should fail")
+             let exp = self.expectation(description: "Request should succeed")
             request.responseJSON(responseDataSource: responseDataSource) { (isDataFromCache, dataResponse) in
                 // This time data should be from cache.
                 XCTAssertTrue(isDataFromCache)
