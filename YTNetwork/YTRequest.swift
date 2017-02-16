@@ -168,6 +168,14 @@ open class YTRequest: NSObject {
         return .forSession
     }
     
+    ///  Called on the main thread after request succeeded.
+    
+    open func requestCompleteFilter<T: ResponseDescriptionFormatting>(_ response: T) { }
+    
+    ///  Called on the main thread when request failed.
+    
+    open func requestFailedFilter<T: ResponseDescriptionFormatting>(_ response: T) { }
+    
     /// current Request
     
     var alamofireRequest: Alamofire.Request {
@@ -221,7 +229,27 @@ extension YTRequest {
     }
     
     func setupAlamofireRequest() -> Alamofire.Request {
-        return YTSessionManager.sharedInstance.request(self.urlString, method: self.requestMethod, parameters: self.requestParameters, encoding: self.encoding, headers: self.headers)
+        return YTSessionManager.sharedInstance.request(self.urlString, method: self.requestMethod, parameters: YTNetworkConfig.sharedInstance.uniformParameters?.merged(with: self.requestParameters) ?? self.requestParameters, encoding: self.encoding, headers: self.headers)
     }
 }
+
+//MARK: - Dictionary
+
+extension Dictionary {
+    
+    mutating func merge(with dictionary: Dictionary?) {
+        dictionary?.forEach { updateValue($1, forKey: $0) }
+    }
+    
+    func merged(with dictionary: Dictionary?) -> Dictionary {
+        var dict = self
+        dict.merge(with: dictionary)
+        return dict
+    }
+}
+
+
+
+
+
 

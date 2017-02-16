@@ -65,7 +65,14 @@ extension YTDataRequest {
     
     @discardableResult
     public func response(_ completionHandler: @escaping (_ defaultDataResponse: Alamofire.DefaultDataResponse) -> Void) -> Self {
-        self.dataRequest.response(queue: self.responseQueue, completionHandler: completionHandler)
+        self.dataRequest.response(queue: self.responseQueue, completionHandler: { (defaultDataResponse: Alamofire.DefaultDataResponse) in
+            if let _ = defaultDataResponse.data {
+                self.requestCompleteFilter(defaultDataResponse)
+            } else {
+                self.requestFailedFilter(defaultDataResponse)
+            }
+            completionHandler(defaultDataResponse)
+        })
         return self
     }
     
@@ -81,7 +88,10 @@ extension YTDataRequest {
     
     @discardableResult
     public func response<T: Alamofire.DataResponseSerializerProtocol>(_ responseSerializer: T, completionHandler: @escaping (_ dataResponse: Alamofire.DataResponse<T.SerializedObject>) -> Void) -> Self {
-        self.dataRequest.response(queue: self.responseQueue, responseSerializer: responseSerializer, completionHandler: completionHandler)
+        self.dataRequest.response(queue: self.responseQueue, responseSerializer: responseSerializer, completionHandler: { dataResponse in
+            self.requestFilter(dataResponse)
+            completionHandler(dataResponse)
+        })
         return self
     }
 }
@@ -123,6 +133,7 @@ extension YTDataRequest {
                 if response.result.isSuccess {
                     self.cacheToFile(response.data)
                 }
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         }
@@ -130,6 +141,7 @@ extension YTDataRequest {
         func loadCache() throws {
             do {
                 let responseData = try self.responseDataFromCache()
+                self.requestFilter(responseData)
                 completionHandler(true,responseData)
             } catch let error {
                 throw error
@@ -139,6 +151,7 @@ extension YTDataRequest {
         switch responseDataSource {
         case .server:
             self.dataRequest.responseData(queue: self.responseQueue, completionHandler: { response in
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
@@ -169,6 +182,7 @@ extension YTDataRequest {
                             if response.result.isSuccess {
                                 self.cacheToFile(response.data)
                             }
+                            self.requestFilter(response)
                             completionHandler(false,response)
                         }
                     })
@@ -219,6 +233,7 @@ extension YTDataRequest {
                 if response.result.isSuccess {
                     self.cacheToFile(response.data)
                 }
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         }
@@ -226,6 +241,7 @@ extension YTDataRequest {
         func loadCache() throws {
             do {
                 let responseString = try self.responseStringFromCache()
+                self.requestFilter(responseString)
                 completionHandler(true,responseString)
             } catch let error {
                 throw error
@@ -235,6 +251,7 @@ extension YTDataRequest {
         switch responseDataSource {
         case .server:
             self.dataRequest.responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { response in
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
@@ -259,6 +276,7 @@ extension YTDataRequest {
             
             do {
                 let responseString = try self.responseStringFromCache()
+                self.requestFilter(responseString)
                 completionHandler(true,responseString)
                 let isSendRequest = customCacheRequest.shouldSendRequest(self)
                 if isSendRequest {
@@ -268,6 +286,7 @@ extension YTDataRequest {
                             if response.result.isSuccess {
                                 self.cacheToFile(response.data)
                             }
+                            self.requestFilter(response)
                             completionHandler(false,response)
                         }
                     })
@@ -317,6 +336,7 @@ extension YTDataRequest {
                 if response.result.isSuccess {
                     self.cacheToFile(response.data)
                 }
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         }
@@ -324,6 +344,7 @@ extension YTDataRequest {
         func loadCache() throws {
             do {
                 let responseJSON = try self.responseJSONFromCache()
+                self.requestFilter(responseJSON)
                 completionHandler(true,responseJSON)
             } catch let error {
                 throw error
@@ -333,6 +354,7 @@ extension YTDataRequest {
         switch responseDataSource {
         case .server:
             self.dataRequest.responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { response in
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
@@ -356,6 +378,7 @@ extension YTDataRequest {
             
             do {
                 let responseJSON = try self.responseJSONFromCache()
+                self.requestFilter(responseJSON)
                 completionHandler(true,responseJSON)
                 let isSendRequest = customCacheRequest.shouldSendRequest(self)
                 if isSendRequest {
@@ -365,6 +388,7 @@ extension YTDataRequest {
                             if response.result.isSuccess {
                                 self.cacheToFile(response.data)
                             }
+                            self.requestFilter(response)
                             completionHandler(false,response)
                         }
                     })
@@ -416,6 +440,7 @@ extension YTDataRequest {
                 if response.result.isSuccess {
                     self.cacheToFile(response.data)
                 }
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         }
@@ -423,6 +448,7 @@ extension YTDataRequest {
         func loadCache() throws {
             do {
                 let responsePropertyList = try self.responsePropertyListFromCache()
+                self.requestFilter(responsePropertyList)
                 completionHandler(true,responsePropertyList)
             } catch let error {
                 throw error
@@ -432,6 +458,7 @@ extension YTDataRequest {
         switch responseDataSource {
         case .server:
             self.dataRequest.responsePropertyList(queue: self.responseQueue, options: self.responsePropertyListOptions, completionHandler: { response in
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
@@ -455,6 +482,7 @@ extension YTDataRequest {
             
             do {
                 let responsePropertyList = try self.responsePropertyListFromCache()
+                self.requestFilter(responsePropertyList)
                 completionHandler(true,responsePropertyList)
                 let isSendRequest = customCacheRequest.shouldSendRequest(self)
                 if isSendRequest {
@@ -464,6 +492,7 @@ extension YTDataRequest {
                             if response.result.isSuccess {
                                 self.cacheToFile(response.data)
                             }
+                            self.requestFilter(response)
                             completionHandler(false,response)
                         }
                     })
@@ -512,6 +541,7 @@ extension YTDataRequest {
                 if response.result.isSuccess {
                     self.cacheToFile(response.data)
                 }
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         }
@@ -519,6 +549,7 @@ extension YTDataRequest {
         func loadCache() throws {
             do {
                 let responseSwiftyJSON = try self.responseSwiftyJSONFromCache()
+                self.requestFilter(responseSwiftyJSON)
                 completionHandler(true,responseSwiftyJSON)
             } catch let error {
                 throw error
@@ -528,6 +559,7 @@ extension YTDataRequest {
         switch responseDataSource {
         case .server:
             self.dataRequest.responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { response in
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
@@ -551,6 +583,7 @@ extension YTDataRequest {
             
             do {
                 let responseSwiftyJSON = try self.responseSwiftyJSONFromCache()
+                self.requestFilter(responseSwiftyJSON)
                 completionHandler(true,responseSwiftyJSON)
                 let isSendRequest = customCacheRequest.shouldSendRequest(self)
                 if isSendRequest {
@@ -560,6 +593,7 @@ extension YTDataRequest {
                             if response.result.isSuccess {
                                 self.cacheToFile(response.data)
                             }
+                            self.requestFilter(response)
                             completionHandler(false,response)
                         }
                     })
@@ -627,6 +661,7 @@ extension YTDataRequest {
                 if response.result.isSuccess {
                     self.cacheToFile(response.data)
                 }
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         }
@@ -666,6 +701,7 @@ extension YTDataRequest {
             
             do {
                 let responseObject = try self.responseObjectFromCache(mapToObject: object)
+                self.requestFilter(responseObject)
                 completionHandler(true,responseObject)
                 let isSendRequest = customCacheRequest.shouldSendRequest(self)
                 if isSendRequest {
@@ -675,6 +711,7 @@ extension YTDataRequest {
                             if response.result.isSuccess {
                                 self.cacheToFile(response.data)
                             }
+                            self.requestFilter(response)
                             completionHandler(false,response)
                         }
                     })
@@ -717,6 +754,7 @@ extension YTDataRequest {
                 if response.result.isSuccess {
                     self.cacheToFile(response.data)
                 }
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         }
@@ -724,6 +762,7 @@ extension YTDataRequest {
         func loadCache() throws {
             do {
                 let responseObjectArray = try self.responseObjectArrayFromCache() as DataResponse<[T]>
+                self.requestFilter(responseObjectArray)
                 completionHandler(true,responseObjectArray)
             } catch let error {
                 throw error
@@ -732,7 +771,8 @@ extension YTDataRequest {
         
         switch responseDataSource {
         case .server:
-            self.dataRequest.responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { response in
+            self.dataRequest.responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (response: DataResponse<[T]>) in
+                self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
@@ -756,6 +796,7 @@ extension YTDataRequest {
             
             do {
                 let responseObjectArray = try self.responseObjectArrayFromCache() as DataResponse<[T]>
+                self.requestFilter(responseObjectArray)
                 completionHandler(true,responseObjectArray)
                 let isSendRequest = customCacheRequest.shouldSendRequest(self)
                 if isSendRequest {
@@ -765,6 +806,7 @@ extension YTDataRequest {
                             if response.result.isSuccess {
                                 self.cacheToFile(response.data)
                             }
+                            self.requestFilter(response)
                             completionHandler(false,response)
                         }
                     })
@@ -775,13 +817,20 @@ extension YTDataRequest {
         }
         return self
     }
-    
-    
 }
 
 //MARK: - Private
 
 private extension YTDataRequest {
+    
+    func requestFilter<T>(_ response: Alamofire.DataResponse<T>) {
+        switch response.result {
+        case .success(_):
+            self.requestCompleteFilter(response)
+        case .failure(_):
+            self.requestFailedFilter(response)
+        }
+    }
     
     func generateResponseDataFromCache() throws -> Alamofire.DataResponse<Data> {
         do {
