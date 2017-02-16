@@ -37,6 +37,7 @@
 		82697DF01E4C0B7D004F259E /* YTUploadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82697DEF1E4C0B7D004F259E /* YTUploadRequest.swift */; };
 		82697DF31E4C438F004F259E /* YTDownloadRequest+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82697DF21E4C438F004F259E /* YTDownloadRequest+Serialization.swift */; };
 		82697DF51E4C44FE004F259E /* YTDownloadRequest+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82697DF41E4C44FE004F259E /* YTDownloadRequest+Validation.swift */; };
+		827BC7421E545237002965EB /* YTResponse+DescriptionFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC7411E545237002965EB /* YTResponse+DescriptionFormat.swift */; };
 		82C843281E45737D00CA93BD /* YTNetworkRequestCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C843271E45737D00CA93BD /* YTNetworkRequestCacheTests.swift */; };
 		82C8432A1E45AF6800CA93BD /* YTNetworkCacheRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C843291E45AF6800CA93BD /* YTNetworkCacheRequest.swift */; };
 		82C8432C1E45B30800CA93BD /* YTNetworkValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C8432B1E45B30800CA93BD /* YTNetworkValidationTests.swift */; };
@@ -152,6 +153,7 @@
 		82697DEF1E4C0B7D004F259E /* YTUploadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTUploadRequest.swift; sourceTree = "<group>"; };
 		82697DF21E4C438F004F259E /* YTDownloadRequest+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YTDownloadRequest+Serialization.swift"; sourceTree = "<group>"; };
 		82697DF41E4C44FE004F259E /* YTDownloadRequest+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YTDownloadRequest+Validation.swift"; sourceTree = "<group>"; };
+		827BC7411E545237002965EB /* YTResponse+DescriptionFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YTResponse+DescriptionFormat.swift"; sourceTree = "<group>"; };
 		82C843271E45737D00CA93BD /* YTNetworkRequestCacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTNetworkRequestCacheTests.swift; sourceTree = "<group>"; };
 		82C843291E45AF6800CA93BD /* YTNetworkCacheRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTNetworkCacheRequest.swift; sourceTree = "<group>"; };
 		82C8432B1E45B30800CA93BD /* YTNetworkValidationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTNetworkValidationTests.swift; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 				82697DF41E4C44FE004F259E /* YTDownloadRequest+Validation.swift */,
 				822345741E15032500B1CCF1 /* YTDataRequest+Serialization.swift */,
 				82697DF21E4C438F004F259E /* YTDownloadRequest+Serialization.swift */,
+				827BC7411E545237002965EB /* YTResponse+DescriptionFormat.swift */,
 				822345701E15032500B1CCF1 /* YTCacheMetadata.swift */,
 				822345721E15032500B1CCF1 /* YTNetworkConfig.swift */,
 				82DCCA1A1E36EFE600438393 /* YTSessionManager.swift */,
@@ -773,6 +776,7 @@
 				822345781E15032500B1CCF1 /* YTDataRequest+Cache.swift in Sources */,
 				82697DF31E4C438F004F259E /* YTDownloadRequest+Serialization.swift in Sources */,
 				822345791E15032500B1CCF1 /* YTNetworkConfig.swift in Sources */,
+				827BC7421E545237002965EB /* YTResponse+DescriptionFormat.swift in Sources */,
 				82697DF51E4C44FE004F259E /* YTDownloadRequest+Validation.swift in Sources */,
 				82C843501E49D41500CA93BD /* AlamofireObjectMapper.swift in Sources */,
 				8223457C1E15032500B1CCF1 /* YTDataRequest+Validation.swift in Sources */,
