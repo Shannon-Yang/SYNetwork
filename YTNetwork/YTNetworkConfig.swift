@@ -27,9 +27,9 @@ public class YTNetworkConfig {
     
     public var cdnUrlString: String = ""
 
-    /// Request Uniform Parameters. Default is empty.
+    /// Request Uniform Parameters. Default is nil.
     
-    public var uniformParameters: [String: AnyObject] = [:]
+    public var uniformParameters: [String: Any]? = nil
     
     /// he server trust policy manager to use for evaluating all server trust. default is nil
     
