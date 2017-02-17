@@ -197,14 +197,12 @@ class DataTaskDelegate: TaskDelegate, URLSessionDataDelegate {
 
     // MARK: Lifecycle
 
-    // TODO: Shannon Yang 感觉可以添加这样一个初始化方法而不是重写init(dataTask: URLSessionDataTask?)，下面的几个类也是一样
     override init(task: URLSessionTask?) {
         mutableData = Data()
         progress = Progress(totalUnitCount: 0)
 
         super.init(task: task)
     }
-  
 
     override func reset() {
         super.reset()
@@ -235,8 +233,6 @@ class DataTaskDelegate: TaskDelegate, URLSessionDataDelegate {
         if let dataTaskDidReceiveResponse = dataTaskDidReceiveResponse {
             disposition = dataTaskDidReceiveResponse(session, dataTask, response)
         }
-        // TODO: Shannon Yang 优化代码 var disposition: URLSession.ResponseDisposition = dataTaskDidReceiveResponse?(session, dataTask, response) ?? .allow
-        // 其他几个地方也可以优化
 
         completionHandler(disposition)
     }

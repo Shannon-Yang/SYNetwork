@@ -1,0 +1,1037 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0864BA78D8B7D0DD850CC7AC /* Pods_SYNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFE9B08B7DB90F81E8807BC8 /* Pods_SYNetwork.framework */; };
+		827BC7C31E55FDA0002965EB /* SYNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 827BC7B91E55FDA0002965EB /* SYNetwork.framework */; };
+		827BC7C81E55FDA0002965EB /* SYNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC7C71E55FDA0002965EB /* SYNetworkTests.swift */; };
+		827BC7CA1E55FDA0002965EB /* SYNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 827BC7BC1E55FDA0002965EB /* SYNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		827BC8171E55FFCD002965EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8161E55FFCD002965EB /* AppDelegate.swift */; };
+		827BC8191E55FFCD002965EB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8181E55FFCD002965EB /* ViewController.swift */; };
+		827BC81C1E55FFCD002965EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 827BC81A1E55FFCD002965EB /* Main.storyboard */; };
+		827BC81E1E55FFCD002965EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 827BC81D1E55FFCD002965EB /* Assets.xcassets */; };
+		827BC8211E55FFCD002965EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 827BC81F1E55FFCD002965EB /* LaunchScreen.storyboard */; };
+		827BC82C1E55FFCD002965EB /* SYNetworkExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC82B1E55FFCD002965EB /* SYNetworkExampleTests.swift */; };
+		827BC8371E55FFCD002965EB /* SYNetworkExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8361E55FFCD002965EB /* SYNetworkExampleUITests.swift */; };
+		827BC8531E56007D002965EB /* AlamofireObjectMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8421E56007D002965EB /* AlamofireObjectMapper.swift */; };
+		827BC8541E56007D002965EB /* AlamofireSwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8431E56007D002965EB /* AlamofireSwiftyJSON.swift */; };
+		827BC8551E56007D002965EB /* String+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8441E56007D002965EB /* String+MD5.swift */; };
+		827BC8561E56007D002965EB /* SYCacheMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8451E56007D002965EB /* SYCacheMetadata.swift */; };
+		827BC8571E56007D002965EB /* SYDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8461E56007D002965EB /* SYDataRequest.swift */; };
+		827BC8581E56007D002965EB /* SYDataRequest+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8471E56007D002965EB /* SYDataRequest+Cache.swift */; };
+		827BC8591E56007D002965EB /* SYDataRequest+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8481E56007D002965EB /* SYDataRequest+Serialization.swift */; };
+		827BC85A1E56007D002965EB /* SYDataRequest+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8491E56007D002965EB /* SYDataRequest+Validation.swift */; };
+		827BC85B1E56007D002965EB /* SYDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC84A1E56007D002965EB /* SYDownloadRequest.swift */; };
+		827BC85C1E56007D002965EB /* SYDownloadRequest+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC84B1E56007D002965EB /* SYDownloadRequest+Serialization.swift */; };
+		827BC85D1E56007D002965EB /* SYDownloadRequest+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC84C1E56007D002965EB /* SYDownloadRequest+Validation.swift */; };
+		827BC85E1E56007D002965EB /* SYNetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC84D1E56007D002965EB /* SYNetworkConfig.swift */; };
+		827BC85F1E56007D002965EB /* SYRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC84E1E56007D002965EB /* SYRequest.swift */; };
+		827BC8601E56007D002965EB /* SYResponse+DescriptionFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC84F1E56007D002965EB /* SYResponse+DescriptionFormat.swift */; };
+		827BC8611E56007D002965EB /* SYSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8501E56007D002965EB /* SYSessionManager.swift */; };
+		827BC8621E56007D002965EB /* SYStreamRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8511E56007D002965EB /* SYStreamRequest.swift */; };
+		827BC8631E56007D002965EB /* SYUploadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8521E56007D002965EB /* SYUploadRequest.swift */; };
+		827BC8681E568BDE002965EB /* AFError+AlamofireTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8651E568BDE002965EB /* AFError+AlamofireTests.swift */; };
+		827BC8691E568BDE002965EB /* FileManager+AlamofireTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8661E568BDE002965EB /* FileManager+AlamofireTests.swift */; };
+		827BC86A1E568BDE002965EB /* String+AlamofireTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8671E568BDE002965EB /* String+AlamofireTests.swift */; };
+		827BC8711E568D3A002965EB /* SYBasicDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC86C1E568D3A002965EB /* SYBasicDataRequest.swift */; };
+		827BC8721E568D3A002965EB /* SYNetworkCacheRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC86D1E568D3A002965EB /* SYNetworkCacheRequest.swift */; };
+		827BC8731E568D3A002965EB /* SYNetworkDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC86E1E568D3A002965EB /* SYNetworkDownloadRequest.swift */; };
+		827BC8741E568D3A002965EB /* SYNetworkValidationDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC86F1E568D3A002965EB /* SYNetworkValidationDownloadRequest.swift */; };
+		827BC8751E568D3A002965EB /* SYNetworkValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8701E568D3A002965EB /* SYNetworkValidationRequest.swift */; };
+		827BC87C1E568D53002965EB /* SYNetworkDownloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8761E568D53002965EB /* SYNetworkDownloadTests.swift */; };
+		827BC87D1E568D53002965EB /* SYNetworkRequestCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8771E568D53002965EB /* SYNetworkRequestCacheTests.swift */; };
+		827BC87E1E568D53002965EB /* SYNetworkRequestMappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8781E568D53002965EB /* SYNetworkRequestMappable.swift */; };
+		827BC87F1E568D53002965EB /* SYNetworkRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8791E568D53002965EB /* SYNetworkRequestTests.swift */; };
+		827BC8801E568D53002965EB /* SYNetworkTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC87A1E568D53002965EB /* SYNetworkTestCase.swift */; };
+		827BC8811E568D53002965EB /* SYNetworkValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC87B1E568D53002965EB /* SYNetworkValidationTests.swift */; };
+		CC64EF9308AA05B2C2CE1CB7 /* Pods_SYNetworkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0769006E532FC58CC6E5C890 /* Pods_SYNetworkTests.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		827BC7C41E55FDA0002965EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 827BC7B01E55FDA0002965EB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 827BC7B81E55FDA0002965EB;
+			remoteInfo = SYNetwork;
+		};
+		827BC8281E55FFCD002965EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 827BC7B01E55FDA0002965EB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 827BC8131E55FFCD002965EB;
+			remoteInfo = SYNetworkExample;
+		};
+		827BC8331E55FFCD002965EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 827BC7B01E55FDA0002965EB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 827BC8131E55FFCD002965EB;
+			remoteInfo = SYNetworkExample;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0769006E532FC58CC6E5C890 /* Pods_SYNetworkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SYNetworkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		21FE5CD09D01EB228C54EDD7 /* Pods-SYNetwork.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetwork.release.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetwork/Pods-SYNetwork.release.xcconfig"; sourceTree = "<group>"; };
+		73D4CA17AC80F111982A5562 /* Pods-SYNetworkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetworkTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetworkTests/Pods-SYNetworkTests.release.xcconfig"; sourceTree = "<group>"; };
+		827BC7B91E55FDA0002965EB /* SYNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SYNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		827BC7BC1E55FDA0002965EB /* SYNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SYNetwork.h; sourceTree = "<group>"; };
+		827BC7BD1E55FDA0002965EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		827BC7C21E55FDA0002965EB /* SYNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SYNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		827BC7C71E55FDA0002965EB /* SYNetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SYNetworkTests.swift; sourceTree = "<group>"; };
+		827BC7C91E55FDA0002965EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		827BC8141E55FFCD002965EB /* SYNetworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SYNetworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		827BC8161E55FFCD002965EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		827BC8181E55FFCD002965EB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		827BC81B1E55FFCD002965EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		827BC81D1E55FFCD002965EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		827BC8201E55FFCD002965EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		827BC8221E55FFCD002965EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		827BC8271E55FFCD002965EB /* SYNetworkExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SYNetworkExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		827BC82B1E55FFCD002965EB /* SYNetworkExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SYNetworkExampleTests.swift; sourceTree = "<group>"; };
+		827BC82D1E55FFCD002965EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		827BC8321E55FFCD002965EB /* SYNetworkExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SYNetworkExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		827BC8361E55FFCD002965EB /* SYNetworkExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SYNetworkExampleUITests.swift; sourceTree = "<group>"; };
+		827BC8381E55FFCD002965EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		827BC8421E56007D002965EB /* AlamofireObjectMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireObjectMapper.swift; sourceTree = "<group>"; };
+		827BC8431E56007D002965EB /* AlamofireSwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireSwiftyJSON.swift; sourceTree = "<group>"; };
+		827BC8441E56007D002965EB /* String+MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+MD5.swift"; sourceTree = "<group>"; };
+		827BC8451E56007D002965EB /* SYCacheMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYCacheMetadata.swift; sourceTree = "<group>"; };
+		827BC8461E56007D002965EB /* SYDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYDataRequest.swift; sourceTree = "<group>"; };
+		827BC8471E56007D002965EB /* SYDataRequest+Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDataRequest+Cache.swift"; sourceTree = "<group>"; };
+		827BC8481E56007D002965EB /* SYDataRequest+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDataRequest+Serialization.swift"; sourceTree = "<group>"; };
+		827BC8491E56007D002965EB /* SYDataRequest+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDataRequest+Validation.swift"; sourceTree = "<group>"; };
+		827BC84A1E56007D002965EB /* SYDownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYDownloadRequest.swift; sourceTree = "<group>"; };
+		827BC84B1E56007D002965EB /* SYDownloadRequest+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDownloadRequest+Serialization.swift"; sourceTree = "<group>"; };
+		827BC84C1E56007D002965EB /* SYDownloadRequest+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDownloadRequest+Validation.swift"; sourceTree = "<group>"; };
+		827BC84D1E56007D002965EB /* SYNetworkConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkConfig.swift; sourceTree = "<group>"; };
+		827BC84E1E56007D002965EB /* SYRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYRequest.swift; sourceTree = "<group>"; };
+		827BC84F1E56007D002965EB /* SYResponse+DescriptionFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYResponse+DescriptionFormat.swift"; sourceTree = "<group>"; };
+		827BC8501E56007D002965EB /* SYSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYSessionManager.swift; sourceTree = "<group>"; };
+		827BC8511E56007D002965EB /* SYStreamRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYStreamRequest.swift; sourceTree = "<group>"; };
+		827BC8521E56007D002965EB /* SYUploadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYUploadRequest.swift; sourceTree = "<group>"; };
+		827BC8651E568BDE002965EB /* AFError+AlamofireTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AFError+AlamofireTests.swift"; sourceTree = "<group>"; };
+		827BC8661E568BDE002965EB /* FileManager+AlamofireTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+AlamofireTests.swift"; sourceTree = "<group>"; };
+		827BC8671E568BDE002965EB /* String+AlamofireTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+AlamofireTests.swift"; sourceTree = "<group>"; };
+		827BC86C1E568D3A002965EB /* SYBasicDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYBasicDataRequest.swift; sourceTree = "<group>"; };
+		827BC86D1E568D3A002965EB /* SYNetworkCacheRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkCacheRequest.swift; sourceTree = "<group>"; };
+		827BC86E1E568D3A002965EB /* SYNetworkDownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkDownloadRequest.swift; sourceTree = "<group>"; };
+		827BC86F1E568D3A002965EB /* SYNetworkValidationDownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkValidationDownloadRequest.swift; sourceTree = "<group>"; };
+		827BC8701E568D3A002965EB /* SYNetworkValidationRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkValidationRequest.swift; sourceTree = "<group>"; };
+		827BC8761E568D53002965EB /* SYNetworkDownloadTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkDownloadTests.swift; sourceTree = "<group>"; };
+		827BC8771E568D53002965EB /* SYNetworkRequestCacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkRequestCacheTests.swift; sourceTree = "<group>"; };
+		827BC8781E568D53002965EB /* SYNetworkRequestMappable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkRequestMappable.swift; sourceTree = "<group>"; };
+		827BC8791E568D53002965EB /* SYNetworkRequestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkRequestTests.swift; sourceTree = "<group>"; };
+		827BC87A1E568D53002965EB /* SYNetworkTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkTestCase.swift; sourceTree = "<group>"; };
+		827BC87B1E568D53002965EB /* SYNetworkValidationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkValidationTests.swift; sourceTree = "<group>"; };
+		A8F4D8B606156BBD4DACFA3C /* Pods-SYNetwork.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetwork.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetwork/Pods-SYNetwork.debug.xcconfig"; sourceTree = "<group>"; };
+		AF7DA4ED4D9DF3CE530E5A6C /* Pods-SYNetworkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetworkTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetworkTests/Pods-SYNetworkTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FFE9B08B7DB90F81E8807BC8 /* Pods_SYNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SYNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		827BC7B51E55FDA0002965EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0864BA78D8B7D0DD850CC7AC /* Pods_SYNetwork.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC7BF1E55FDA0002965EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827BC7C31E55FDA0002965EB /* SYNetwork.framework in Frameworks */,
+				CC64EF9308AA05B2C2CE1CB7 /* Pods_SYNetworkTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC8111E55FFCD002965EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC8241E55FFCD002965EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC82F1E55FFCD002965EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		80B8D3250DD3D0BF2BBD9580 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A8F4D8B606156BBD4DACFA3C /* Pods-SYNetwork.debug.xcconfig */,
+				21FE5CD09D01EB228C54EDD7 /* Pods-SYNetwork.release.xcconfig */,
+				AF7DA4ED4D9DF3CE530E5A6C /* Pods-SYNetworkTests.debug.xcconfig */,
+				73D4CA17AC80F111982A5562 /* Pods-SYNetworkTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		827BC7AF1E55FDA0002965EB = {
+			isa = PBXGroup;
+			children = (
+				827BC7BB1E55FDA0002965EB /* SYNetwork */,
+				827BC7C61E55FDA0002965EB /* SYNetworkTests */,
+				827BC8151E55FFCD002965EB /* SYNetworkExample */,
+				827BC82A1E55FFCD002965EB /* SYNetworkExampleTests */,
+				827BC8351E55FFCD002965EB /* SYNetworkExampleUITests */,
+				827BC7BA1E55FDA0002965EB /* Products */,
+				80B8D3250DD3D0BF2BBD9580 /* Pods */,
+				ED5D0DF61595EDD0A11DE3DD /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		827BC7BA1E55FDA0002965EB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				827BC7B91E55FDA0002965EB /* SYNetwork.framework */,
+				827BC7C21E55FDA0002965EB /* SYNetworkTests.xctest */,
+				827BC8141E55FFCD002965EB /* SYNetworkExample.app */,
+				827BC8271E55FFCD002965EB /* SYNetworkExampleTests.xctest */,
+				827BC8321E55FFCD002965EB /* SYNetworkExampleUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		827BC7BB1E55FDA0002965EB /* SYNetwork */ = {
+			isa = PBXGroup;
+			children = (
+				827BC7BC1E55FDA0002965EB /* SYNetwork.h */,
+				827BC8421E56007D002965EB /* AlamofireObjectMapper.swift */,
+				827BC8431E56007D002965EB /* AlamofireSwiftyJSON.swift */,
+				827BC8441E56007D002965EB /* String+MD5.swift */,
+				827BC8451E56007D002965EB /* SYCacheMetadata.swift */,
+				827BC84E1E56007D002965EB /* SYRequest.swift */,
+				827BC8461E56007D002965EB /* SYDataRequest.swift */,
+				827BC8471E56007D002965EB /* SYDataRequest+Cache.swift */,
+				827BC8481E56007D002965EB /* SYDataRequest+Serialization.swift */,
+				827BC8491E56007D002965EB /* SYDataRequest+Validation.swift */,
+				827BC84A1E56007D002965EB /* SYDownloadRequest.swift */,
+				827BC84B1E56007D002965EB /* SYDownloadRequest+Serialization.swift */,
+				827BC84C1E56007D002965EB /* SYDownloadRequest+Validation.swift */,
+				827BC84F1E56007D002965EB /* SYResponse+DescriptionFormat.swift */,
+				827BC84D1E56007D002965EB /* SYNetworkConfig.swift */,
+				827BC8501E56007D002965EB /* SYSessionManager.swift */,
+				827BC8511E56007D002965EB /* SYStreamRequest.swift */,
+				827BC8521E56007D002965EB /* SYUploadRequest.swift */,
+				827BC7BD1E55FDA0002965EB /* Info.plist */,
+			);
+			path = SYNetwork;
+			sourceTree = "<group>";
+		};
+		827BC7C61E55FDA0002965EB /* SYNetworkTests */ = {
+			isa = PBXGroup;
+			children = (
+				827BC8641E568BCE002965EB /* Extensions */,
+				827BC86B1E568D27002965EB /* Request */,
+				827BC7C71E55FDA0002965EB /* SYNetworkTests.swift */,
+				827BC7C91E55FDA0002965EB /* Info.plist */,
+				827BC8761E568D53002965EB /* SYNetworkDownloadTests.swift */,
+				827BC8771E568D53002965EB /* SYNetworkRequestCacheTests.swift */,
+				827BC8781E568D53002965EB /* SYNetworkRequestMappable.swift */,
+				827BC8791E568D53002965EB /* SYNetworkRequestTests.swift */,
+				827BC87A1E568D53002965EB /* SYNetworkTestCase.swift */,
+				827BC87B1E568D53002965EB /* SYNetworkValidationTests.swift */,
+			);
+			path = SYNetworkTests;
+			sourceTree = "<group>";
+		};
+		827BC8151E55FFCD002965EB /* SYNetworkExample */ = {
+			isa = PBXGroup;
+			children = (
+				827BC8161E55FFCD002965EB /* AppDelegate.swift */,
+				827BC8181E55FFCD002965EB /* ViewController.swift */,
+				827BC81A1E55FFCD002965EB /* Main.storyboard */,
+				827BC81D1E55FFCD002965EB /* Assets.xcassets */,
+				827BC81F1E55FFCD002965EB /* LaunchScreen.storyboard */,
+				827BC8221E55FFCD002965EB /* Info.plist */,
+			);
+			path = SYNetworkExample;
+			sourceTree = "<group>";
+		};
+		827BC82A1E55FFCD002965EB /* SYNetworkExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				827BC82B1E55FFCD002965EB /* SYNetworkExampleTests.swift */,
+				827BC82D1E55FFCD002965EB /* Info.plist */,
+			);
+			path = SYNetworkExampleTests;
+			sourceTree = "<group>";
+		};
+		827BC8351E55FFCD002965EB /* SYNetworkExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				827BC8361E55FFCD002965EB /* SYNetworkExampleUITests.swift */,
+				827BC8381E55FFCD002965EB /* Info.plist */,
+			);
+			path = SYNetworkExampleUITests;
+			sourceTree = "<group>";
+		};
+		827BC8641E568BCE002965EB /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				827BC8651E568BDE002965EB /* AFError+AlamofireTests.swift */,
+				827BC8661E568BDE002965EB /* FileManager+AlamofireTests.swift */,
+				827BC8671E568BDE002965EB /* String+AlamofireTests.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		827BC86B1E568D27002965EB /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				827BC86C1E568D3A002965EB /* SYBasicDataRequest.swift */,
+				827BC86D1E568D3A002965EB /* SYNetworkCacheRequest.swift */,
+				827BC86E1E568D3A002965EB /* SYNetworkDownloadRequest.swift */,
+				827BC86F1E568D3A002965EB /* SYNetworkValidationDownloadRequest.swift */,
+				827BC8701E568D3A002965EB /* SYNetworkValidationRequest.swift */,
+			);
+			name = Request;
+			sourceTree = "<group>";
+		};
+		ED5D0DF61595EDD0A11DE3DD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FFE9B08B7DB90F81E8807BC8 /* Pods_SYNetwork.framework */,
+				0769006E532FC58CC6E5C890 /* Pods_SYNetworkTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		827BC7B61E55FDA0002965EB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827BC7CA1E55FDA0002965EB /* SYNetwork.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		827BC7B81E55FDA0002965EB /* SYNetwork */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 827BC7CD1E55FDA0002965EB /* Build configuration list for PBXNativeTarget "SYNetwork" */;
+			buildPhases = (
+				4C3B511C928FF01948462788 /* [CP] Check Pods Manifest.lock */,
+				827BC7B41E55FDA0002965EB /* Sources */,
+				827BC7B51E55FDA0002965EB /* Frameworks */,
+				827BC7B61E55FDA0002965EB /* Headers */,
+				827BC7B71E55FDA0002965EB /* Resources */,
+				EB935179F2626A43D3A933C7 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SYNetwork;
+			productName = SYNetwork;
+			productReference = 827BC7B91E55FDA0002965EB /* SYNetwork.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		827BC7C11E55FDA0002965EB /* SYNetworkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 827BC7D01E55FDA0002965EB /* Build configuration list for PBXNativeTarget "SYNetworkTests" */;
+			buildPhases = (
+				A8587BDA333E42DBC548FA7D /* [CP] Check Pods Manifest.lock */,
+				827BC7BE1E55FDA0002965EB /* Sources */,
+				827BC7BF1E55FDA0002965EB /* Frameworks */,
+				827BC7C01E55FDA0002965EB /* Resources */,
+				7AEBAF151084423612CD4C51 /* [CP] Embed Pods Frameworks */,
+				E5617D7FBCB0697B80DC5A96 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				827BC7C51E55FDA0002965EB /* PBXTargetDependency */,
+			);
+			name = SYNetworkTests;
+			productName = SYNetworkTests;
+			productReference = 827BC7C21E55FDA0002965EB /* SYNetworkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		827BC8131E55FFCD002965EB /* SYNetworkExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 827BC8391E55FFCD002965EB /* Build configuration list for PBXNativeTarget "SYNetworkExample" */;
+			buildPhases = (
+				827BC8101E55FFCD002965EB /* Sources */,
+				827BC8111E55FFCD002965EB /* Frameworks */,
+				827BC8121E55FFCD002965EB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SYNetworkExample;
+			productName = SYNetworkExample;
+			productReference = 827BC8141E55FFCD002965EB /* SYNetworkExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		827BC8261E55FFCD002965EB /* SYNetworkExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 827BC83C1E55FFCD002965EB /* Build configuration list for PBXNativeTarget "SYNetworkExampleTests" */;
+			buildPhases = (
+				827BC8231E55FFCD002965EB /* Sources */,
+				827BC8241E55FFCD002965EB /* Frameworks */,
+				827BC8251E55FFCD002965EB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				827BC8291E55FFCD002965EB /* PBXTargetDependency */,
+			);
+			name = SYNetworkExampleTests;
+			productName = SYNetworkExampleTests;
+			productReference = 827BC8271E55FFCD002965EB /* SYNetworkExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		827BC8311E55FFCD002965EB /* SYNetworkExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 827BC83F1E55FFCD002965EB /* Build configuration list for PBXNativeTarget "SYNetworkExampleUITests" */;
+			buildPhases = (
+				827BC82E1E55FFCD002965EB /* Sources */,
+				827BC82F1E55FFCD002965EB /* Frameworks */,
+				827BC8301E55FFCD002965EB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				827BC8341E55FFCD002965EB /* PBXTargetDependency */,
+			);
+			name = SYNetworkExampleUITests;
+			productName = SYNetworkExampleUITests;
+			productReference = 827BC8321E55FFCD002965EB /* SYNetworkExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		827BC7B01E55FDA0002965EB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0820;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = "Shannon Yang";
+				TargetAttributes = {
+					827BC7B81E55FDA0002965EB = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 2KT364D29M;
+						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
+					};
+					827BC7C11E55FDA0002965EB = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 2KT364D29M;
+						ProvisioningStyle = Automatic;
+					};
+					827BC8131E55FFCD002965EB = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 2KT364D29M;
+						ProvisioningStyle = Automatic;
+					};
+					827BC8261E55FFCD002965EB = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 2KT364D29M;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 827BC8131E55FFCD002965EB;
+					};
+					827BC8311E55FFCD002965EB = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 2KT364D29M;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 827BC8131E55FFCD002965EB;
+					};
+				};
+			};
+			buildConfigurationList = 827BC7B31E55FDA0002965EB /* Build configuration list for PBXProject "SYNetwork" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 827BC7AF1E55FDA0002965EB;
+			productRefGroup = 827BC7BA1E55FDA0002965EB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				827BC7B81E55FDA0002965EB /* SYNetwork */,
+				827BC7C11E55FDA0002965EB /* SYNetworkTests */,
+				827BC8131E55FFCD002965EB /* SYNetworkExample */,
+				827BC8261E55FFCD002965EB /* SYNetworkExampleTests */,
+				827BC8311E55FFCD002965EB /* SYNetworkExampleUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		827BC7B71E55FDA0002965EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC7C01E55FDA0002965EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC8121E55FFCD002965EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827BC8211E55FFCD002965EB /* LaunchScreen.storyboard in Resources */,
+				827BC81E1E55FFCD002965EB /* Assets.xcassets in Resources */,
+				827BC81C1E55FFCD002965EB /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC8251E55FFCD002965EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC8301E55FFCD002965EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C3B511C928FF01948462788 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		7AEBAF151084423612CD4C51 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkTests/Pods-SYNetworkTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A8587BDA333E42DBC548FA7D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E5617D7FBCB0697B80DC5A96 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkTests/Pods-SYNetworkTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB935179F2626A43D3A933C7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetwork/Pods-SYNetwork-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		827BC7B41E55FDA0002965EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827BC8551E56007D002965EB /* String+MD5.swift in Sources */,
+				827BC8591E56007D002965EB /* SYDataRequest+Serialization.swift in Sources */,
+				827BC8621E56007D002965EB /* SYStreamRequest.swift in Sources */,
+				827BC8541E56007D002965EB /* AlamofireSwiftyJSON.swift in Sources */,
+				827BC85C1E56007D002965EB /* SYDownloadRequest+Serialization.swift in Sources */,
+				827BC85B1E56007D002965EB /* SYDownloadRequest.swift in Sources */,
+				827BC8561E56007D002965EB /* SYCacheMetadata.swift in Sources */,
+				827BC8631E56007D002965EB /* SYUploadRequest.swift in Sources */,
+				827BC8611E56007D002965EB /* SYSessionManager.swift in Sources */,
+				827BC85D1E56007D002965EB /* SYDownloadRequest+Validation.swift in Sources */,
+				827BC8581E56007D002965EB /* SYDataRequest+Cache.swift in Sources */,
+				827BC85F1E56007D002965EB /* SYRequest.swift in Sources */,
+				827BC8601E56007D002965EB /* SYResponse+DescriptionFormat.swift in Sources */,
+				827BC8571E56007D002965EB /* SYDataRequest.swift in Sources */,
+				827BC85E1E56007D002965EB /* SYNetworkConfig.swift in Sources */,
+				827BC8531E56007D002965EB /* AlamofireObjectMapper.swift in Sources */,
+				827BC85A1E56007D002965EB /* SYDataRequest+Validation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC7BE1E55FDA0002965EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827BC8731E568D3A002965EB /* SYNetworkDownloadRequest.swift in Sources */,
+				827BC8721E568D3A002965EB /* SYNetworkCacheRequest.swift in Sources */,
+				827BC8681E568BDE002965EB /* AFError+AlamofireTests.swift in Sources */,
+				827BC8811E568D53002965EB /* SYNetworkValidationTests.swift in Sources */,
+				827BC8801E568D53002965EB /* SYNetworkTestCase.swift in Sources */,
+				827BC7C81E55FDA0002965EB /* SYNetworkTests.swift in Sources */,
+				827BC8711E568D3A002965EB /* SYBasicDataRequest.swift in Sources */,
+				827BC87F1E568D53002965EB /* SYNetworkRequestTests.swift in Sources */,
+				827BC87C1E568D53002965EB /* SYNetworkDownloadTests.swift in Sources */,
+				827BC87D1E568D53002965EB /* SYNetworkRequestCacheTests.swift in Sources */,
+				827BC87E1E568D53002965EB /* SYNetworkRequestMappable.swift in Sources */,
+				827BC8751E568D3A002965EB /* SYNetworkValidationRequest.swift in Sources */,
+				827BC8691E568BDE002965EB /* FileManager+AlamofireTests.swift in Sources */,
+				827BC8741E568D3A002965EB /* SYNetworkValidationDownloadRequest.swift in Sources */,
+				827BC86A1E568BDE002965EB /* String+AlamofireTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC8101E55FFCD002965EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827BC8191E55FFCD002965EB /* ViewController.swift in Sources */,
+				827BC8171E55FFCD002965EB /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC8231E55FFCD002965EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827BC82C1E55FFCD002965EB /* SYNetworkExampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		827BC82E1E55FFCD002965EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827BC8371E55FFCD002965EB /* SYNetworkExampleUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		827BC7C51E55FDA0002965EB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 827BC7B81E55FDA0002965EB /* SYNetwork */;
+			targetProxy = 827BC7C41E55FDA0002965EB /* PBXContainerItemProxy */;
+		};
+		827BC8291E55FFCD002965EB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 827BC8131E55FFCD002965EB /* SYNetworkExample */;
+			targetProxy = 827BC8281E55FFCD002965EB /* PBXContainerItemProxy */;
+		};
+		827BC8341E55FFCD002965EB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 827BC8131E55FFCD002965EB /* SYNetworkExample */;
+			targetProxy = 827BC8331E55FFCD002965EB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		827BC81A1E55FFCD002965EB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				827BC81B1E55FFCD002965EB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		827BC81F1E55FFCD002965EB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				827BC8201E55FFCD002965EB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		827BC7CB1E55FDA0002965EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		827BC7CC1E55FDA0002965EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		827BC7CE1E55FDA0002965EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8F4D8B606156BBD4DACFA3C /* Pods-SYNetwork.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SYNetwork/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetwork;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		827BC7CF1E55FDA0002965EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 21FE5CD09D01EB228C54EDD7 /* Pods-SYNetwork.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SYNetwork/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetwork;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		827BC7D11E55FDA0002965EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF7DA4ED4D9DF3CE530E5A6C /* Pods-SYNetworkTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				INFOPLIST_FILE = SYNetworkTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetworkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		827BC7D21E55FDA0002965EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 73D4CA17AC80F111982A5562 /* Pods-SYNetworkTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				INFOPLIST_FILE = SYNetworkTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetworkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		827BC83A1E55FFCD002965EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				INFOPLIST_FILE = SYNetworkExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetworkExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		827BC83B1E55FFCD002965EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				INFOPLIST_FILE = SYNetworkExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetworkExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		827BC83D1E55FFCD002965EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				INFOPLIST_FILE = SYNetworkExampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetworkExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SYNetworkExample.app/SYNetworkExample";
+			};
+			name = Debug;
+		};
+		827BC83E1E55FFCD002965EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				INFOPLIST_FILE = SYNetworkExampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetworkExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SYNetworkExample.app/SYNetworkExample";
+			};
+			name = Release;
+		};
+		827BC8401E55FFCD002965EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				INFOPLIST_FILE = SYNetworkExampleUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetworkExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = SYNetworkExample;
+			};
+			name = Debug;
+		};
+		827BC8411E55FFCD002965EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 2KT364D29M;
+				INFOPLIST_FILE = SYNetworkExampleUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.SYNetworkExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = SYNetworkExample;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		827BC7B31E55FDA0002965EB /* Build configuration list for PBXProject "SYNetwork" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				827BC7CB1E55FDA0002965EB /* Debug */,
+				827BC7CC1E55FDA0002965EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		827BC7CD1E55FDA0002965EB /* Build configuration list for PBXNativeTarget "SYNetwork" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				827BC7CE1E55FDA0002965EB /* Debug */,
+				827BC7CF1E55FDA0002965EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		827BC7D01E55FDA0002965EB /* Build configuration list for PBXNativeTarget "SYNetworkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				827BC7D11E55FDA0002965EB /* Debug */,
+				827BC7D21E55FDA0002965EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		827BC8391E55FFCD002965EB /* Build configuration list for PBXNativeTarget "SYNetworkExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				827BC83A1E55FFCD002965EB /* Debug */,
+				827BC83B1E55FFCD002965EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		827BC83C1E55FFCD002965EB /* Build configuration list for PBXNativeTarget "SYNetworkExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				827BC83D1E55FFCD002965EB /* Debug */,
+				827BC83E1E55FFCD002965EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		827BC83F1E55FFCD002965EB /* Build configuration list for PBXNativeTarget "SYNetworkExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				827BC8401E55FFCD002965EB /* Debug */,
+				827BC8411E55FFCD002965EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 827BC7B01E55FDA0002965EB /* Project object */;
+}
