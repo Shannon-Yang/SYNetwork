@@ -76,10 +76,12 @@ extension SYDataRequest {
     
     /// load local cache
     ///
+    /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
+    ///
     /// - Returns: cache data
     /// - Throws: cache load error type
     
-    func loadLocalCache() throws -> Data? {
+    func loadLocalCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Data? {
         
         if self.requestUrl.isEmpty {
             throw LoadCacheError.invalidRequest
@@ -107,14 +109,14 @@ extension SYDataRequest {
         
         // Try load cache.
         
-        guard let data = self.loadCacheData() else {
+        guard let data = self.loadCacheData(customLoadCacheInfo) else {
             throw LoadCacheError.invalidCacheData
         }
         
-         return data
+        return data
     }
     
-   
+    
     /// Clear local cache for the current request
     
     func clearLocalCache() throws {
@@ -178,8 +180,8 @@ private extension SYDataRequest {
         return metadata
     }
     
-    func cacheFilePath() -> String {
-        let fileName = self.cacheFileName()
+    func cacheFilePath(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) -> String {
+        let fileName = self.cacheFileName(customLoadCacheInfo)
         let pathURL = self.cacheBasePath()
         let path = pathURL.appendingPathComponent(fileName).path
         return path
@@ -203,12 +205,45 @@ private extension SYDataRequest {
         }
     }
     
-    func cacheFileName() -> String {
-        let requestMethod = self.requestMethod
-        let baseUrl = SYNetworkConfig.sharedInstance.baseUrlString
-        let requestUrl = self.requestUrl
-        let requestParameters = self.requestParameters
-        let cacheKey = self.cacheKey
+    func cacheFileName(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) -> String {
+        var requestMethod: Alamofire.HTTPMethod?
+        var baseUrl: String?
+        var requestUrl: String?
+        var requestParameters: [String: Any]?
+        var cacheKey: String?
+        if let customLoadCacheInfo = customLoadCacheInfo {
+            if let method = customLoadCacheInfo.requestMethod {
+                requestMethod = method
+            } else {
+                requestMethod = self.requestMethod
+            }
+            if let baseUrlString = customLoadCacheInfo.baseUrlString {
+                baseUrl = baseUrlString
+            } else {
+                baseUrl = SYNetworkConfig.sharedInstance.baseUrlString
+            }
+            if let requestUrlString = customLoadCacheInfo.requestUrlString {
+                requestUrl = requestUrlString
+            } else {
+                requestUrl = self.requestUrl
+            }
+            if let parameters = customLoadCacheInfo.requestParameters {
+                requestParameters = parameters
+            } else {
+                requestParameters = self.requestParameters
+            }
+            if let key = customLoadCacheInfo.cacheKey {
+                cacheKey = key
+            } else {
+                cacheKey = self.cacheKey
+            }
+        } else {
+            requestMethod = self.requestMethod
+            baseUrl = SYNetworkConfig.sharedInstance.baseUrlString
+            requestUrl = self.requestUrl
+            requestParameters = self.requestParameters
+            cacheKey = self.cacheKey
+        }
         let requestInfo = "\(Key.requestMethod.rawValue):\(requestMethod) \(Key.baseUrl.rawValue):\(baseUrl) \(Key.requestUrl.rawValue):\(requestUrl) \(Key.requestParameters.rawValue):\(requestParameters) \(Key.cacheKey.rawValue):\(cacheKey)"
         return requestInfo.md5()
     }
@@ -247,12 +282,12 @@ private extension SYDataRequest {
         return pathURL
     }
     
-    func loadCacheData() -> Data? {
-        let path = self.cacheFilePath()
+    func loadCacheData(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) -> Data? {
+        let path = self.cacheFilePath(customLoadCacheInfo)
         let url = URL(fileURLWithPath: path)
         return try? Data(contentsOf: url)
     }
-
+    
     func loadCacheMetadata() -> Bool {
         let pathURL = self.cacheMetadataFilePath()
         if FileManager.default.fileExists(atPath: pathURL.path, isDirectory: nil) {

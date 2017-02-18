@@ -10,7 +10,9 @@ import Foundation
 import Alamofire
 import ObjectMapper
 
-extension DataRequest {
+// MARK: - Request for ObjectMapper
+
+extension Alamofire.DataRequest {
     
     enum ErrorCode: Int {
         case noData = 1

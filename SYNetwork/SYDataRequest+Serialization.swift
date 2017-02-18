@@ -52,6 +52,20 @@ public protocol CacheCustomizable {
     func shouldUpdateCache<T>(_ response: Alamofire.DataResponse<T>) -> Bool
 }
 
+/// Custom parameter load Cache. Default is Self parameter
+
+public struct CustomLoadCacheInfo {
+    
+    var requestMethod: Alamofire.HTTPMethod?
+    
+    var baseUrlString:  String?
+    
+    var requestUrlString: String?
+    
+    var requestParameters: [String: Any]?
+    
+    var cacheKey: String?
+}
 
 // MARK: - Default
 
@@ -104,10 +118,13 @@ extension SYDataRequest {
     
     /// load response data from cache
     ///
+    /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
+    ///
     /// - Returns: cache data
+    ///
     /// - Throws: cache load error type
     
-    public func responseDataFromCache() throws -> Alamofire.DataResponse<Data> {
+    public func responseDataFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<Data> {
         do {
             return try self.generateResponseDataFromCache()
         } catch let error {
@@ -202,10 +219,12 @@ extension SYDataRequest {
     
     /// load response string from cache
     ///
+    /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
+    ///
     /// - Returns: cache string data
     /// - Throws: cache load error type
     
-    public func responseStringFromCache() throws -> Alamofire.DataResponse<String> {
+    public func responseStringFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<String> {
         do {
             return try self.generateResponseStringFromCache()
         } catch let error {
@@ -306,10 +325,12 @@ extension SYDataRequest {
     
     /// load response JSON from cache
     ///
+    /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
+    ///
     /// - Returns: cache JSON data
     /// - Throws: cache load error type
     
-    public func responseJSONFromCache() throws -> Alamofire.DataResponse<Any> {
+    public func responseJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<Any> {
         do {
             return try self.generateResponseJSONFromCache()
         } catch let error {
@@ -408,10 +429,12 @@ extension SYDataRequest {
     
     /// load response PropertyList from cache
     ///
+    /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
+    ///
     /// - Returns: cache PropertyList data
     /// - Throws: cache load error type
     
-    public func responsePropertyListFromCache() throws -> Alamofire.DataResponse<Any> {
+    public func responsePropertyListFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<Any> {
         do {
             return try self.generateResponsePropertyListFromCache()
         } catch let error {
@@ -512,10 +535,12 @@ extension SYDataRequest {
     
     /// load response SwiftyJSON from cache
     ///
+    /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
+    ///
     /// - Returns: cache SwiftyJSON data
     /// - Throws: cache load error type
     
-    public func responseSwiftyJSONFromCache() throws -> Alamofire.DataResponse<JSON> {
+    public func responseSwiftyJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<JSON> {
         do {
             return try self.generateResponseSwiftyJSONFromCache()
         } catch let error {
@@ -613,10 +638,14 @@ extension SYDataRequest {
     
     /// load response Object from cache
     ///
+    /// - object: An object to perform the mapping on to, When you need your request that you return a specified object，You can make your object implementation “Mappable”
+    ///
+    /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
+    ///
     /// - Returns: cache Object data
     /// - Throws: cache load error type
     
-    public func responseObjectFromCache<T: BaseMappable>(mapToObject object: T?) throws -> Alamofire.DataResponse<T> {
+    public func responseObjectFromCache<T: ObjectMapper.Mappable>(mapToObject object: T? = nil, customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<T> {
         do {
             return try self.generateResponseObjectFromCache(mapToObject: object)
         } catch let error {
@@ -629,7 +658,7 @@ extension SYDataRequest {
      
      - parameter queue:             The queue on which the completion handler is dispatched.
      - parameter keyPath:           The key path where object mapping should be performed
-     - parameter object:            An object to perform the mapping on to, When you need your request that you return a specified object，You can make your object implementation “Mappable”，
+     - parameter object:            An object to perform the mapping on to, When you need your request that you return a specified object，You can make your object implementation “Mappable”
      - parameter responseDataSource: Request's responseData source type, implementing different type responseData source type
      
      /* eg：
@@ -654,7 +683,7 @@ extension SYDataRequest {
      */
     
     @discardableResult
-    public func responseObject<T: ObjectMapper.BaseMappable>(responseDataSource: ResponseDataSource = .server, mapToObject object: T? = nil, completionHandler: @escaping (_ isDataFromCache: Bool, _ dataResponse: Alamofire.DataResponse<T>) -> Void) -> Self {
+    public func responseObject<T: ObjectMapper.Mappable>(responseDataSource: ResponseDataSource = .server, mapToObject object: T? = nil, completionHandler: @escaping (_ isDataFromCache: Bool, _ dataResponse: Alamofire.DataResponse<T>) -> Void) -> Self {
         
         func responseObjectFromRequest() {
             self.dataRequest.responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { response in
@@ -726,10 +755,12 @@ extension SYDataRequest {
     
     /// load response ObjectArray from cache
     ///
+    /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
+    ///
     /// - Returns: cache ObjectArray data
     /// - Throws: cache load error type
     
-    public func responseObjectArrayFromCache<T: BaseMappable>() throws -> Alamofire.DataResponse<[T]> {
+    public func responseObjectArrayFromCache<T: ObjectMapper.Mappable>(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<[T]> {
         do {
             return try self.generateResponseObjectArrayFromCache()
         } catch let error {
@@ -747,7 +778,7 @@ extension SYDataRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func responseObjectArray<T: ObjectMapper.BaseMappable>(responseDataSource: ResponseDataSource = .server, completionHandler: @escaping (_ isDataFromCache: Bool, _ dataResponse: Alamofire.DataResponse<[T]>) -> Void) -> Self {
+    public func responseObjectArray<T: ObjectMapper.Mappable>(responseDataSource: ResponseDataSource = .server, completionHandler: @escaping (_ isDataFromCache: Bool, _ dataResponse: Alamofire.DataResponse<[T]>) -> Void) -> Self {
         
         func responseObjectArrayFromRequest() {
             self.dataRequest.responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (response: DataResponse<[T]>) in
@@ -832,9 +863,9 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseDataFromCache() throws -> Alamofire.DataResponse<Data> {
+    func generateResponseDataFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<Data> {
         do {
-            let data = try self.loadLocalCache()
+            let data = try self.loadLocalCache(customLoadCacheInfo)
             let cacheResponse = DataRequest.serializeResponseData(response: nil, data: data, error: nil)
             let dataResponse = DataResponse(request: nil, response: nil, data: data, result: cacheResponse)
             return dataResponse
@@ -843,9 +874,9 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseStringFromCache() throws -> Alamofire.DataResponse<String> {
+    func generateResponseStringFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<String> {
         do {
-            let data = try self.loadLocalCache()
+            let data = try self.loadLocalCache(customLoadCacheInfo)
             let cacheResponse = DataRequest.serializeResponseString(encoding: self.cacheMetadata?.responseStringEncoding, response: nil, data: data, error: nil)
             let stringResponse = DataResponse(request: nil, response: nil, data: data, result: cacheResponse)
             return stringResponse
@@ -854,9 +885,9 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseJSONFromCache() throws -> Alamofire.DataResponse<Any> {
+    func generateResponseJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<Any> {
         do {
-            let data = try self.loadLocalCache()
+            let data = try self.loadLocalCache(customLoadCacheInfo)
             guard let cacheMetadata = self.cacheMetadata else {
                 throw LoadCacheError.invalidMetadata
             }
@@ -868,9 +899,9 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponsePropertyListFromCache() throws -> Alamofire.DataResponse<Any> {
+    func generateResponsePropertyListFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<Any> {
         do {
-            let data = try self.loadLocalCache()
+            let data = try self.loadLocalCache(customLoadCacheInfo)
             guard let cacheMetadata = self.cacheMetadata else {
                 throw LoadCacheError.invalidMetadata
             }
@@ -882,9 +913,9 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseSwiftyJSONFromCache() throws -> Alamofire.DataResponse<JSON> {
+    func generateResponseSwiftyJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<JSON> {
         do {
-            let data = try self.loadLocalCache()
+            let data = try self.loadLocalCache(customLoadCacheInfo)
             guard let cacheMetadata = self.cacheMetadata else {
                 throw LoadCacheError.invalidMetadata
             }
@@ -896,9 +927,9 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseObjectFromCache<T: ObjectMapper.BaseMappable>(mapToObject object: T?) throws -> Alamofire.DataResponse<T> {
+    func generateResponseObjectFromCache<T: ObjectMapper.Mappable>(mapToObject object: T? = nil, customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<T> {
         do {
-            let data = try self.loadLocalCache()
+            let data = try self.loadLocalCache(customLoadCacheInfo)
             guard let cacheMetadata = self.cacheMetadata else {
                 throw LoadCacheError.invalidMetadata
             }
@@ -911,9 +942,9 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseObjectArrayFromCache<T: ObjectMapper.BaseMappable>() throws -> Alamofire.DataResponse<[T]> {
+    func generateResponseObjectArrayFromCache<T: ObjectMapper.Mappable>(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Alamofire.DataResponse<[T]> {
         do {
-            let data = try self.loadLocalCache()
+            let data = try self.loadLocalCache(customLoadCacheInfo)
             guard let cacheMetadata = self.cacheMetadata else {
                 throw LoadCacheError.invalidMetadata
             }
