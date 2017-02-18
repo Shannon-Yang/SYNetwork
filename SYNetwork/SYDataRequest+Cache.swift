@@ -95,7 +95,7 @@ extension SYDataRequest {
         
         // Try load metadata.
         
-        if !self.loadCacheMetadata() {
+        if !self.loadCacheMetadata(customLoadCacheInfo) {
             throw LoadCacheError.invalidMetadata
         }
         
@@ -276,8 +276,8 @@ private extension SYDataRequest {
         }
     }
     
-    func cacheMetadataFilePath() -> URL {
-        let cacheMetadataFileName = "\(self.cacheFileName()).metadata"
+    func cacheMetadataFilePath(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) -> URL {
+        let cacheMetadataFileName = "\(self.cacheFileName(customLoadCacheInfo)).metadata"
         let pathURL = self.cacheBasePath().appendingPathComponent(cacheMetadataFileName)
         return pathURL
     }
@@ -288,8 +288,8 @@ private extension SYDataRequest {
         return try? Data(contentsOf: url)
     }
     
-    func loadCacheMetadata() -> Bool {
-        let pathURL = self.cacheMetadataFilePath()
+    func loadCacheMetadata(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) -> Bool {
+        let pathURL = self.cacheMetadataFilePath(customLoadCacheInfo)
         if FileManager.default.fileExists(atPath: pathURL.path, isDirectory: nil) {
             if let cacheMetadata = NSKeyedUnarchiver.unarchiveObject(withFile: pathURL.path) as? SYCacheMetadata {
                 self.cacheMetadata = cacheMetadata
