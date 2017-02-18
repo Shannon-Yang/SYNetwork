@@ -81,7 +81,7 @@ extension SYDataRequest {
     /// - Returns: cache data
     /// - Throws: cache load error type
     
-    func loadLocalCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Data? {
+    public func loadLocalCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Data? {
         
         if self.requestUrl.isEmpty {
             throw LoadCacheError.invalidRequest
@@ -132,7 +132,7 @@ extension SYDataRequest {
     
     /// Clear all request's local cache
     
-    static func clearAllLocalCache(completionHandler: @escaping () -> Void) throws {
+    public static func clearAllLocalCache(completionHandler: @escaping () -> Void) throws {
         let pathOfLibrary = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
         let path = "\(pathOfLibrary)/\(Key.SYNetworkCache.rawValue)"
         var removeError: Error?
