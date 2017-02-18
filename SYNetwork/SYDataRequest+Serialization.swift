@@ -56,15 +56,23 @@ public protocol CacheCustomizable {
 
 public struct CustomLoadCacheInfo {
     
-   public var requestMethod: Alamofire.HTTPMethod?
+    public var requestMethod: Alamofire.HTTPMethod?
     
-   public var baseUrlString:  String?
+    public var baseUrlString:  String?
     
-   public var requestUrlString: String?
+    public var requestUrlString: String?
     
-   public var requestParameters: [String: Any]?
+    public var requestParameters: [String: Any]?
     
-   public var cacheKey: String?
+    public var cacheKey: String?
+    
+    public init(requestMethod: Alamofire.HTTPMethod? = nil, baseUrlString:  String? = nil, requestUrlString: String? = nil, requestParameters: [String: Any]? = nil, cacheKey: String? = nil) {
+        self.requestMethod = requestMethod
+        self.baseUrlString = baseUrlString
+        self.requestUrlString = requestUrlString
+        self.requestParameters = requestParameters
+        self.cacheKey = cacheKey
+    }
 }
 
 // MARK: - Default
