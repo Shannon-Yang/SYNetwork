@@ -56,9 +56,11 @@ func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, 
     
     var description = "\n\(mark)"
     
-    description.append("  \(urlRequest?.httpMethod)  \(urlRequest?.description)")
+    description.append("  \(urlRequest?.httpMethod ?? "")  \(urlRequest?.description ?? "")")
     
-    description.append("⬆️⬆️⬆️ [REQUEST]:\n\(SYNetworkConfig.sharedInstance.uniformParameters?.merged(with: request.requestParameters) ?? request.requestParameters)")
+    let parameters = SYNetworkConfig.sharedInstance.uniformParameters?.merged(with: request.requestParameters) ?? request.requestParameters
+    
+    description.append("⬆️⬆️⬆️ [REQUEST]:\n\(parameters ?? [:])")
     
     description.append("⬇️⬇️⬇️ [RESPONSE]:\n")
     
@@ -80,7 +82,7 @@ func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, 
         return description
     }
     
-    description.append("Data: \(data?.count ?? 0) bytes\nResult: \(result)\nTimeline⏰: \(timeline.debugDescription.replacingOccurrences(of: ",", with: "\n"))")
+    description.append("Data: \(data?.count ?? 0) bytes\nResult: \(result ?? "")\nTimeline⏰: \(timeline.debugDescription.replacingOccurrences(of: ",", with: "\n"))")
     
     return description
 }
