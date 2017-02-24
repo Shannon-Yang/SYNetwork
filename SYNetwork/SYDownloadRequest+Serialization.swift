@@ -23,7 +23,7 @@ extension SYDownloadRequest {
     @discardableResult
     public func response(_ completionHandler: @escaping (Alamofire.DefaultDownloadResponse) -> Void)
         -> Self {
-            self.downloadRequest.response(queue: self.downloadQueue, completionHandler: completionHandler)
+            self.downloadRequest.validate().response(queue: self.downloadQueue, completionHandler: completionHandler)
             return self
     }
     
@@ -39,7 +39,7 @@ extension SYDownloadRequest {
     @discardableResult
     public func response<T: DownloadResponseSerializerProtocol>(_ responseSerializer: T, completionHandler: @escaping (Alamofire.DownloadResponse<T.SerializedObject>) -> Void)
         -> Self {
-            self.downloadRequest.response(queue: self.downloadQueue, responseSerializer: responseSerializer, completionHandler: completionHandler)
+            self.downloadRequest.validate().response(queue: self.downloadQueue, responseSerializer: responseSerializer, completionHandler: completionHandler)
             return self
     }
 }
@@ -60,7 +60,7 @@ extension SYDownloadRequest {
         completionHandler: @escaping (Alamofire.DownloadResponse<Data>) -> Void)
         -> Self
     {
-        self.downloadRequest.responseData(queue: self.downloadQueue, completionHandler: completionHandler)
+        self.downloadRequest.validate().responseData(queue: self.downloadQueue, completionHandler: completionHandler)
         return self
     }
     
@@ -84,7 +84,7 @@ extension SYDownloadRequest {
     public func responseString(_ completionHandler: @escaping (Alamofire.DownloadResponse<String>) -> Void)
         -> Self
     {
-        self.downloadRequest.responseString(queue: self.downloadQueue, encoding: self.downloadStringEncoding, completionHandler: completionHandler)
+        self.downloadRequest.validate().responseString(queue: self.downloadQueue, encoding: self.downloadStringEncoding, completionHandler: completionHandler)
         return self
     }
 }
@@ -105,7 +105,7 @@ extension SYDownloadRequest {
     public func responseJSON(_ completionHandler: @escaping (Alamofire.DownloadResponse<Any>) -> Void)
         -> Self
     {
-        self.downloadRequest.responseJSON(queue: self.downloadQueue, options: self.downloadJSONOptions, completionHandler: completionHandler)
+        self.downloadRequest.validate().responseJSON(queue: self.downloadQueue, options: self.downloadJSONOptions, completionHandler: completionHandler)
         return self
     }
 }
@@ -129,7 +129,7 @@ extension SYDownloadRequest {
         completionHandler: @escaping (Alamofire.DownloadResponse<Any>) -> Void)
         -> Self
     {
-        self.downloadRequest.responsePropertyList(queue: self.downloadQueue, options: self.downloadPropertyListOptions, completionHandler: completionHandler)
+        self.downloadRequest.validate().responsePropertyList(queue: self.downloadQueue, options: self.downloadPropertyListOptions, completionHandler: completionHandler)
         return self
     }
 }
