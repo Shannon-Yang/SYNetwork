@@ -176,6 +176,10 @@ open class SYRequest: NSObject {
     
     open func requestFailedFilter<T: ResponseDescriptionFormatting>(_ response: T) { }
     
+    /// Validate Response
+    
+    open func validateResponse<T: ResponseDescriptionFormatting>(_ response: T) -> Bool { return true }
+    
     /// current Request
     
     var alamofireRequest: Alamofire.Request {
