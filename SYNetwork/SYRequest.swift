@@ -178,7 +178,7 @@ open class SYRequest: NSObject {
     
     /// Validate Response
     
-    open func validateResponse<T: ResponseDescriptionFormatting>(_ response: T) -> Bool { return true }
+    open func validateResponse<T>(_ response: Alamofire.DataResponse<T>) -> Bool { return true }
     
     /// current Request
     

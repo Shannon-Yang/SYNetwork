@@ -96,27 +96,8 @@ extension SYDataRequest {
                     self.requestCompleteFilter(defaultDataResponse)
                 }
             }
-            func generateValidateFailResponse(_ defaultDataResponse: Alamofire.DefaultDataResponse) -> Alamofire.DefaultDataResponse {
-                if #available(iOS 10.0, *) {
-                    return Alamofire.DefaultDataResponse(request: defaultDataResponse.request,
-                                                         response: defaultDataResponse.response,
-                                                         data: defaultDataResponse.data,
-                                                         error: self.generateValidationFailureError(),
-                                                         timeline: defaultDataResponse.timeline,
-                                                         metrics: defaultDataResponse.metrics)
-                }
-                return Alamofire.DefaultDataResponse(request: defaultDataResponse.request,
-                                                     response: defaultDataResponse.response,
-                                                     data: defaultDataResponse.data,
-                                                     error: self.generateValidationFailureError(),
-                                                     timeline: defaultDataResponse.timeline)
-            }
-            var response = defaultDataResponse
-            if !self.validateResponse(response) {
-                response = generateValidateFailResponse(response)
-            }
-            requestFilter(response)
-            completionHandler(response)
+            requestFilter(defaultDataResponse)
+            completionHandler(defaultDataResponse)
         })
         return self
     }
