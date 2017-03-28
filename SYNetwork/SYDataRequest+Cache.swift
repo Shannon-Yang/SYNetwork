@@ -11,7 +11,7 @@ import Alamofire
 
 /// cache load error type
 
-enum LoadCacheError: Error {
+public enum LoadCacheError: Error {
     
     /// does not match the cache key
     
@@ -49,7 +49,7 @@ extension SYDataRequest {
     /// - Parameter data: Need to cache data,If optionalData is nil, do not store operation
     
     func cacheToFile(_ responseData: Data?) {
-
+        
         guard self.cacheTimeInSeconds > 0 else {
             return
         }
@@ -79,24 +79,27 @@ extension SYDataRequest {
     /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
     ///
     /// - Returns: cache data
-    /// - Throws: cache load error type
+    /// - completionHandler: load cache completion handle
     
-    public func loadLocalCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) throws -> Data? {
+    public func loadLocalCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Data) -> Void) {
         
         if self.requestUrl.isEmpty {
-            throw LoadCacheError.invalidRequest
+            completionHandler({ throw LoadCacheError.invalidRequest })
+            return
         }
         
         // Make sure cache time in valid.
         
         if self.cacheTimeInSeconds == 0 {
-            throw LoadCacheError.invalidCacheTime
+            completionHandler({ throw LoadCacheError.invalidCacheTime })
+            return
         }
         
         // Try load metadata.
         
         if !self.loadCacheMetadata(customLoadCacheInfo) {
-            throw LoadCacheError.invalidMetadata
+            completionHandler({ throw LoadCacheError.invalidMetadata })
+            return
         }
         
         // Check if cache is still valid.
@@ -104,16 +107,19 @@ extension SYDataRequest {
         do {
             _ = try self.validateCacheWithError()
         } catch let error {
-            throw error
+            completionHandler({ throw error })
+            return
         }
         
         // Try load cache.
         
-        guard let data = self.loadCacheData(customLoadCacheInfo) else {
-            throw LoadCacheError.invalidCacheData
-        }
-        
-        return data
+        self.loadCacheData(customLoadCacheInfo, completionHandler: { data in
+            guard let cacheData = data else {
+                completionHandler({ throw LoadCacheError.invalidCacheData })
+                return
+            }
+            completionHandler({return cacheData})
+        })
     }
     
     
@@ -282,10 +288,12 @@ private extension SYDataRequest {
         return pathURL
     }
     
-    func loadCacheData(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) -> Data? {
-        let path = self.cacheFilePath(customLoadCacheInfo)
-        let url = URL(fileURLWithPath: path)
-        return try? Data(contentsOf: url)
+    func loadCacheData(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ data: Data?) -> Void) {
+        DispatchQueue.global(qos: .default).async {
+            let path = self.cacheFilePath(customLoadCacheInfo)
+            let url = URL(fileURLWithPath: path)
+            completionHandler(try? Data(contentsOf: url))
+        }
     }
     
     func loadCacheMetadata(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) -> Bool {
@@ -318,10 +326,8 @@ private extension SYDataRequest {
         if cacheMetadata.cacheKey != self.cacheKey {
             throw LoadCacheError.cacheKeyMismatch
         }
-        
         return true
     }
-    
     
     func stringEncodingWithRequest(request: SYRequest) -> String.Encoding {
         var convertedEncoding = String.Encoding.isoLatin1
