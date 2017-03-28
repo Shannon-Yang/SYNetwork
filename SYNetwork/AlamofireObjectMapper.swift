@@ -132,7 +132,7 @@ extension DataRequest {
             
             let JSONObject = processResponse(request: request, response: response, data: data, keyPath: keyPath)
             
-            if let parsedObject = Mapper<T>(context: context, shouldIncludeNilValues: false).mapArray(JSONObject: JSONObject){
+            if let parsedObject = Mapper<T>(context: context, shouldIncludeNilValues: false).mapArray(JSONObject: JSONObject) {
                 return .success(parsedObject)
             }
             
