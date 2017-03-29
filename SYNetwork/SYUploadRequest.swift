@@ -100,7 +100,7 @@ extension SYUploadRequest {
     
     public func uploadMultipartFormData(_ encodingCompletion: ((SessionManager.MultipartFormDataEncodingResult) -> Void)?) {
         guard let uploadMultipartFormData = self.uploadMultipartFormData else {
-            print("uploadMultipartFormData is nil")
+            assertionFailure("uploadMultipartFormData is nil")
             return
         }
         SYSessionManager.sharedInstance.upload(multipartFormData: uploadMultipartFormData, usingThreshold: self.encodingMemoryThreshold, to: self.urlString, method: self.requestMethod, headers: self.headers, encodingCompletion: encodingCompletion)
@@ -117,7 +117,7 @@ private extension SYUploadRequest {
             return SYSessionManager.sharedInstance.upload(url, to: self.urlString, method: self.requestMethod, headers: self.headers)
         case .data(let data):
             if data.count == 0 {
-                print("uploadType is nil, In the subclass must return a correct value, otherwise it will fail")
+                assertionFailure("uploadType is nil, In the subclass must return a correct value, otherwise it will fail")
             }
             return SYSessionManager.sharedInstance.upload(data, to: self.urlString, method: self.requestMethod, headers: self.headers)
         case .inputStream(let inputStream):
