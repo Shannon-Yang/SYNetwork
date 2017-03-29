@@ -9,6 +9,11 @@
 import Foundation
 import Alamofire
 
+#if !os(watchOS)
+    
+/// Specific type of `Request` that manages an underlying `URLSessionStreamTask`.
+@available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+    
 open class SYStreamRequest: SYRequest {
     
     //MARK: - Properties
@@ -34,18 +39,21 @@ open class SYStreamRequest: SYRequest {
     /// override current alamofireRequest
     
     override var alamofireRequest: Request {
-        if #available(iOS 9.0, *) {
-            return self.configStreamRequest()
-        }
-        return super.alamofireRequest
+        return self.configStreamRequest()
     }
 }
+    
+#endif
 
 //MARK: - Private SYStreamRequest
 
+#if !os(watchOS)
+    
+@available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+    
 private extension SYStreamRequest {
     
-    @available(iOS 9.0, *)
+    @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
     func configStreamRequest() -> Alamofire.StreamRequest {
         if let netService = self.netService {
             return SYSessionManager.sharedInstance.stream(with: netService)
@@ -54,3 +62,5 @@ private extension SYStreamRequest {
         }
     }
 }
+    
+#endif
