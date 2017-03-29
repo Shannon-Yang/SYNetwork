@@ -49,6 +49,7 @@
 		827BC87F1E568D53002965EB /* SYNetworkRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC8791E568D53002965EB /* SYNetworkRequestTests.swift */; };
 		827BC8801E568D53002965EB /* SYNetworkTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC87A1E568D53002965EB /* SYNetworkTestCase.swift */; };
 		827BC8811E568D53002965EB /* SYNetworkValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BC87B1E568D53002965EB /* SYNetworkValidationTests.swift */; };
+		82818FF21E8B4B8000C7D723 /* Info-tvOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82818FF11E8B4B8000C7D723 /* Info-tvOS.plist */; };
 		CC64EF9308AA05B2C2CE1CB7 /* Pods_SYNetworkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0769006E532FC58CC6E5C890 /* Pods_SYNetworkTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -130,6 +131,7 @@
 		827BC8791E568D53002965EB /* SYNetworkRequestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkRequestTests.swift; sourceTree = "<group>"; };
 		827BC87A1E568D53002965EB /* SYNetworkTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkTestCase.swift; sourceTree = "<group>"; };
 		827BC87B1E568D53002965EB /* SYNetworkValidationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkValidationTests.swift; sourceTree = "<group>"; };
+		82818FF11E8B4B8000C7D723 /* Info-tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		A8F4D8B606156BBD4DACFA3C /* Pods-SYNetwork.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetwork.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetwork/Pods-SYNetwork.debug.xcconfig"; sourceTree = "<group>"; };
 		AF7DA4ED4D9DF3CE530E5A6C /* Pods-SYNetworkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetworkTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetworkTests/Pods-SYNetworkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FFE9B08B7DB90F81E8807BC8 /* Pods_SYNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SYNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -236,6 +238,7 @@
 				827BC8511E56007D002965EB /* SYStreamRequest.swift */,
 				827BC8521E56007D002965EB /* SYUploadRequest.swift */,
 				827BC7BD1E55FDA0002965EB /* Info.plist */,
+				82818FF11E8B4B8000C7D723 /* Info-tvOS.plist */,
 			);
 			path = SYNetwork;
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82818FF21E8B4B8000C7D723 /* Info-tvOS.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -839,6 +843,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -861,6 +866,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
