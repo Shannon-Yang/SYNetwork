@@ -191,14 +191,14 @@
 		8294DB7C1E8B6009007F2A4F = {
 			isa = PBXGroup;
 			children = (
+				23D903F7490EAAF305D178D6 /* Frameworks */,
+				B4E40C1B68EA47ECE9069DCB /* Pods */,
+				8294DB871E8B6009007F2A4F /* Products */,
 				8294DB881E8B6009007F2A4F /* SYNetworking */,
-				8294DB931E8B6009007F2A4F /* SYNetworkingTests */,
 				8294DBA51E8B60B4007F2A4F /* SYNetworkingExample */,
 				8294DBBA1E8B60B4007F2A4F /* SYNetworkingExampleTests */,
 				8294DBC51E8B60B4007F2A4F /* SYNetworkingExampleUITests */,
-				8294DB871E8B6009007F2A4F /* Products */,
-				B4E40C1B68EA47ECE9069DCB /* Pods */,
-				23D903F7490EAAF305D178D6 /* Frameworks */,
+				8294DB931E8B6009007F2A4F /* SYNetworkingTests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -217,26 +217,26 @@
 		8294DB881E8B6009007F2A4F /* SYNetworking */ = {
 			isa = PBXGroup;
 			children = (
-				8294DB891E8B6009007F2A4F /* SYNetworking.h */,
 				8294DBD21E8B60D9007F2A4F /* AlamofireObjectMapper.swift */,
 				8294DBD31E8B60D9007F2A4F /* AlamofireSwiftyJSON.swift */,
-				8294DBD41E8B60D9007F2A4F /* String+MD5.swift */,
+				8294DBF41E8B60E6007F2A4F /* Info-tvOS.plist */,
+				8294DB8A1E8B6009007F2A4F /* Info.plist */,
 				8294DBD51E8B60D9007F2A4F /* SYCacheMetadata.swift */,
-				8294DBD61E8B60DA007F2A4F /* SYDataRequest.swift */,
 				8294DBD71E8B60DA007F2A4F /* SYDataRequest+Cache.swift */,
 				8294DBD81E8B60DA007F2A4F /* SYDataRequest+Serialization.swift */,
 				8294DBD91E8B60DA007F2A4F /* SYDataRequest+Validation.swift */,
-				8294DBDA1E8B60DA007F2A4F /* SYDownloadRequest.swift */,
+				8294DBD61E8B60DA007F2A4F /* SYDataRequest.swift */,
 				8294DBDB1E8B60DA007F2A4F /* SYDownloadRequest+Serialization.swift */,
 				8294DBDC1E8B60DA007F2A4F /* SYDownloadRequest+Validation.swift */,
+				8294DBDA1E8B60DA007F2A4F /* SYDownloadRequest.swift */,
+				8294DB891E8B6009007F2A4F /* SYNetworking.h */,
 				8294DBDD1E8B60DA007F2A4F /* SYNetworkingConfig.swift */,
 				8294DBDE1E8B60DA007F2A4F /* SYRequest.swift */,
 				8294DBDF1E8B60DA007F2A4F /* SYResponse+DescriptionFormat.swift */,
 				8294DBE01E8B60DA007F2A4F /* SYSessionManager.swift */,
 				8294DBE11E8B60DA007F2A4F /* SYStreamRequest.swift */,
 				8294DBE21E8B60DA007F2A4F /* SYUploadRequest.swift */,
-				8294DB8A1E8B6009007F2A4F /* Info.plist */,
-				8294DBF41E8B60E6007F2A4F /* Info-tvOS.plist */,
+				8294DBD41E8B60D9007F2A4F /* String+MD5.swift */,
 			);
 			path = SYNetworking;
 			sourceTree = "<group>";
@@ -246,14 +246,14 @@
 			children = (
 				8294DBF61E8B6180007F2A4F /* Extensions */,
 				8294DBF71E8B6186007F2A4F /* Request */,
-				8294DB941E8B6009007F2A4F /* SYNetworkingTests.swift */,
+				8294DB961E8B6009007F2A4F /* Info.plist */,
 				8294DC081E8B61BD007F2A4F /* SYNetworkingDownloadTests.swift */,
 				8294DC091E8B61BD007F2A4F /* SYNetworkingRequestCacheTests.swift */,
 				8294DC0A1E8B61BD007F2A4F /* SYNetworkingRequestMappable.swift */,
 				8294DC0B1E8B61BD007F2A4F /* SYNetworkingRequestTests.swift */,
 				8294DC0C1E8B61BD007F2A4F /* SYNetworkingTestCase.swift */,
+				8294DB941E8B6009007F2A4F /* SYNetworkingTests.swift */,
 				8294DC0D1E8B61BD007F2A4F /* SYNetworkingValidationTests.swift */,
-				8294DB961E8B6009007F2A4F /* Info.plist */,
 			);
 			path = SYNetworkingTests;
 			sourceTree = "<group>";
@@ -262,11 +262,11 @@
 			isa = PBXGroup;
 			children = (
 				8294DBA61E8B60B4007F2A4F /* AppDelegate.swift */,
-				8294DBA81E8B60B4007F2A4F /* ViewController.swift */,
-				8294DBAA1E8B60B4007F2A4F /* Main.storyboard */,
 				8294DBAD1E8B60B4007F2A4F /* Assets.xcassets */,
-				8294DBAF1E8B60B4007F2A4F /* LaunchScreen.storyboard */,
 				8294DBB21E8B60B4007F2A4F /* Info.plist */,
+				8294DBAF1E8B60B4007F2A4F /* LaunchScreen.storyboard */,
+				8294DBAA1E8B60B4007F2A4F /* Main.storyboard */,
+				8294DBA81E8B60B4007F2A4F /* ViewController.swift */,
 			);
 			path = SYNetworkingExample;
 			sourceTree = "<group>";
@@ -274,8 +274,8 @@
 		8294DBBA1E8B60B4007F2A4F /* SYNetworkingExampleTests */ = {
 			isa = PBXGroup;
 			children = (
-				8294DBBB1E8B60B4007F2A4F /* SYNetworkingExampleTests.swift */,
 				8294DBBD1E8B60B4007F2A4F /* Info.plist */,
+				8294DBBB1E8B60B4007F2A4F /* SYNetworkingExampleTests.swift */,
 			);
 			path = SYNetworkingExampleTests;
 			sourceTree = "<group>";
@@ -283,8 +283,8 @@
 		8294DBC51E8B60B4007F2A4F /* SYNetworkingExampleUITests */ = {
 			isa = PBXGroup;
 			children = (
-				8294DBC61E8B60B4007F2A4F /* SYNetworkingExampleUITests.swift */,
 				8294DBC81E8B60B4007F2A4F /* Info.plist */,
+				8294DBC61E8B60B4007F2A4F /* SYNetworkingExampleUITests.swift */,
 			);
 			path = SYNetworkingExampleUITests;
 			sourceTree = "<group>";
@@ -711,6 +711,7 @@
 				8294DBAB1E8B60B4007F2A4F /* Base */,
 			);
 			name = Main.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 		8294DBAF1E8B60B4007F2A4F /* LaunchScreen.storyboard */ = {
@@ -719,6 +720,7 @@
 				8294DBB01E8B60B4007F2A4F /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
