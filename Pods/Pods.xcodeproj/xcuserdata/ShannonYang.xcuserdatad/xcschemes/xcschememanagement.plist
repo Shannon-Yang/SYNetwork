@@ -8,31 +8,46 @@
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>1</integer>
 		</dict>
 		<key>ObjectMapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
-		<key>Pods-SYNetwork.xcscheme</key>
+		<key>Pods-SYNetworking.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
-		<key>Pods-SYNetworkTests.xcscheme</key>
+		<key>Pods-SYNetworkingTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>4</integer>
 		</dict>
 		<key>SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>5</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>62D6B3EF4D4D5D9223001CA5F7AA0E6E</key>
+		<key>4AD00D0BB7611598F68920BB271D920E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>87A37B47F9C36139B6F8955B3C93E5D1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -42,12 +57,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ACED4418FAEC980B071D6FECD5C10FBD</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>AE16D136F70F76D6B598E7300D44F2F8</key>
+		<key>A42D44D962B3C0978AD11FB0550B891D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
