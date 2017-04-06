@@ -193,14 +193,12 @@ private extension SYDataRequest {
         return path
     }
     
-    
     func cacheBasePath() -> URL {
         let pathOfLibrary = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]
         let pathURL = pathOfLibrary.appendingPathComponent(Key.SYNetworkCache.rawValue)
         self.createDirectoryIfNeeded(path: pathURL.path)
         return pathURL
     }
-    
     
     func createBaseDirectoryAtPath(path: String) {
         do {
