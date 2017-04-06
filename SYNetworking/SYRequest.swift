@@ -104,7 +104,7 @@ open class SYRequest: NSObject {
     
     ///  Request base URL, Default is empty string.
     
-    open var baseUrl: String {
+    open var baseUrlString: String {
         return ""
     }
     
@@ -225,8 +225,8 @@ extension SYRequest {
                 baseUrl = self.cdnUrl
             }
         } else {
-            if !self.baseUrl.isEmpty {
-                baseUrl = self.baseUrl
+            if !self.baseUrlString.isEmpty {
+                baseUrl = self.baseUrlString
             }
         }
         return "\(baseUrl)\(self.requestUrl)"
