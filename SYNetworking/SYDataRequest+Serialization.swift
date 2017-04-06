@@ -79,7 +79,6 @@ public struct CustomLoadCacheInfo {
 
 fileprivate let message = "Must be implemented CacheCustomizable Protocol"
 
-
 // MARK: - Default
 
 extension SYDataRequest {

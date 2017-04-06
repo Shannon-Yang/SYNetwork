@@ -210,50 +210,54 @@ private extension SYDataRequest {
     }
     
     func cacheFileName(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) -> String {
-        var requestMethod: Alamofire.HTTPMethod
-        var baseUrl: String
-        var requestUrl: String
-        var requestParameters = [String: Any]()
-        var cacheKey: String
-        if let customLoadCacheInfo = customLoadCacheInfo {
-            if let method = customLoadCacheInfo.requestMethod {
-                requestMethod = method
+        if self.cacheFileName.isEmpty {
+            var requestMethod: Alamofire.HTTPMethod
+            var baseUrl: String
+            var requestUrl: String
+            var requestParameters = [String: Any]()
+            var cacheKey: String
+            if let customLoadCacheInfo = customLoadCacheInfo {
+                if let method = customLoadCacheInfo.requestMethod {
+                    requestMethod = method
+                } else {
+                    requestMethod = self.requestMethod
+                }
+                if let baseUrlString = customLoadCacheInfo.baseUrlString {
+                    baseUrl = baseUrlString
+                } else {
+                    baseUrl = SYNetworkingConfig.sharedInstance.baseUrlString
+                }
+                if let requestUrlString = customLoadCacheInfo.requestUrlString {
+                    requestUrl = requestUrlString
+                } else {
+                    requestUrl = self.requestUrl
+                }
+                if let parameters = customLoadCacheInfo.requestParameters {
+                    requestParameters = parameters
+                } else {
+                    if let arguments = self.requestParameters {
+                        requestParameters = arguments
+                    }
+                }
+                if let key = customLoadCacheInfo.cacheKey {
+                    cacheKey = key
+                } else {
+                    cacheKey = self.cacheKey
+                }
             } else {
                 requestMethod = self.requestMethod
-            }
-            if let baseUrlString = customLoadCacheInfo.baseUrlString {
-                baseUrl = baseUrlString
-            } else {
                 baseUrl = SYNetworkingConfig.sharedInstance.baseUrlString
-            }
-            if let requestUrlString = customLoadCacheInfo.requestUrlString {
-                requestUrl = requestUrlString
-            } else {
                 requestUrl = self.requestUrl
-            }
-            if let parameters = customLoadCacheInfo.requestParameters {
-                requestParameters = parameters
-            } else {
                 if let arguments = self.requestParameters {
                     requestParameters = arguments
                 }
-            }
-            if let key = customLoadCacheInfo.cacheKey {
-                cacheKey = key
-            } else {
                 cacheKey = self.cacheKey
             }
-        } else {
-            requestMethod = self.requestMethod
-            baseUrl = SYNetworkingConfig.sharedInstance.baseUrlString
-            requestUrl = self.requestUrl
-            if let arguments = self.requestParameters {
-                requestParameters = arguments
-            }
-            cacheKey = self.cacheKey
+            let requestInfo = "\(Key.requestMethod.rawValue):\(requestMethod.rawValue) \(Key.baseUrl.rawValue):\(baseUrl) \(Key.requestUrl.rawValue):\(requestUrl) \(Key.requestParameters.rawValue):\(requestParameters) \(Key.cacheKey.rawValue):\(cacheKey)"
+            return requestInfo.md5()
         }
-        let requestInfo = "\(Key.requestMethod.rawValue):\(requestMethod.rawValue) \(Key.baseUrl.rawValue):\(baseUrl) \(Key.requestUrl.rawValue):\(requestUrl) \(Key.requestParameters.rawValue):\(requestParameters) \(Key.cacheKey.rawValue):\(cacheKey)"
-        return requestInfo.md5()
+        
+        return self.cacheFileName
     }
     
     func createDirectoryIfNeeded(path: String) {

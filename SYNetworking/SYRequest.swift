@@ -150,6 +150,12 @@ open class SYRequest: NSObject {
         return ""
     }
     
+    /// cacheFileName can be used to custom cache file name, default is empty
+    
+    open var cacheFileName: String {
+        return ""
+    }
+    
     /// Associates an HTTP Basic credential with the request, The user.
     
     open var user: String {
