@@ -115,47 +115,55 @@ extension SYDataRequest {
         
         self.loadCacheData(customLoadCacheInfo, completionHandler: { data in
             guard let cacheData = data else {
-                completionHandler({ throw LoadCacheError.invalidCacheData })
+                DispatchQueue.main.async {
+                    completionHandler({ throw LoadCacheError.invalidCacheData })
+                }
                 return
             }
-            completionHandler({return cacheData})
+            DispatchQueue.main.async {
+                completionHandler({ return cacheData })
+            }
         })
     }
     
     
     /// Clear local cache for the current request
     
-    func clearLocalCache() throws {
-        let path = self.cacheFilePath()
-        do {
-            try FileManager.default.removeItem(atPath: path)
-        } catch let error {
-            print("clear local cache failed, error = \(error)")
-            throw error
+    public func clearLocalCache(completionHandler: @escaping (_ clearCache: () throws -> Void) -> Void) {
+        DispatchQueue.global(qos: .default).async {
+            let path = self.cacheFilePath()
+            do {
+                try FileManager.default.removeItem(atPath: path)
+                DispatchQueue.main.async {
+                    completionHandler({})
+                }
+            } catch let error {
+                DispatchQueue.main.async {
+                    print("clear local cache failed, error = \(error)")
+                    completionHandler({  throw error })
+                }
+            }
         }
     }
     
     
     /// Clear all request's local cache
     
-    public static func clearAllLocalCache(completionHandler: @escaping () -> Void) throws {
-        let pathOfLibrary = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
-        let path = "\(pathOfLibrary)/\(Key.SYNetworkCache.rawValue)"
-        var removeError: Error?
+    public static func clearAllLocalCache(completionHandler: @escaping (_ clearCache: () throws -> Void) -> Void) {
         DispatchQueue.global(qos: .default).async {
+            let pathOfLibrary = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
+            let path = "\(pathOfLibrary)/\(Key.SYNetworkCache.rawValue)"
             do {
                 try FileManager.default.removeItem(atPath: path)
                 DispatchQueue.main.async {
-                    completionHandler()
+                    completionHandler({})
                 }
             } catch let error {
-                print("clear all local cache failed, error = \(error)")
-                removeError = error
+                DispatchQueue.main.async {
+                    print("clear all local cache failed, error = \(error)")
+                    completionHandler({ throw error })
+                }
             }
-        }
-        
-        if let error = removeError {
-            throw error
         }
     }
 }
