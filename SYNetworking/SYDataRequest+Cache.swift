@@ -129,18 +129,18 @@ extension SYDataRequest {
     
     /// Clear local cache for the current request
     
-    public func clearLocalCache(completionHandler: @escaping (_ clearCache: () throws -> Void) -> Void) {
+    public func clearLocalCache(completionHandler: ((_ clearCache: () throws -> Void) -> Void)?) {
         DispatchQueue.global(qos: .default).async {
             let path = self.cacheFilePath()
             do {
                 try FileManager.default.removeItem(atPath: path)
                 DispatchQueue.main.async {
-                    completionHandler({})
+                    completionHandler?({})
                 }
             } catch let error {
                 DispatchQueue.main.async {
                     print("clear local cache failed, error = \(error)")
-                    completionHandler({  throw error })
+                    completionHandler?({  throw error })
                 }
             }
         }
@@ -149,19 +149,19 @@ extension SYDataRequest {
     
     /// Clear all request's local cache
     
-    public static func clearAllLocalCache(completionHandler: @escaping (_ clearCache: () throws -> Void) -> Void) {
+    public static func clearAllLocalCache(completionHandler: ((_ clearCache: () throws -> Void) -> Void)?) {
         DispatchQueue.global(qos: .default).async {
             let pathOfLibrary = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
             let path = "\(pathOfLibrary)/\(Key.SYNetworkCache.rawValue)"
             do {
                 try FileManager.default.removeItem(atPath: path)
                 DispatchQueue.main.async {
-                    completionHandler({})
+                    completionHandler?({})
                 }
             } catch let error {
                 DispatchQueue.main.async {
                     print("clear all local cache failed, error = \(error)")
-                    completionHandler({ throw error })
+                    completionHandler?({ throw error })
                 }
             }
         }
