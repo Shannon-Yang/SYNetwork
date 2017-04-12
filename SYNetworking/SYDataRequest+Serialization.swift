@@ -79,10 +79,6 @@ public struct CustomLoadCacheInfo {
 
 fileprivate let message = "Must be implemented CacheCustomizable Protocol"
 
-/// Validation Error Domain
-
-public let SYNetworkingValidationErrorDomain = "com.synetwork.request.validation"
-
 // MARK: - Default
 
 extension SYDataRequest {
@@ -964,9 +960,10 @@ private extension SYDataRequest {
         enum ValidationStatusCode: Int {
             case invalid = -1
         }
+        let requestValidationErrorDomain = "com.synetwork.request.validation"
         let validationFailureDescription = "Validation failure"
         
-        return NSError(domain: SYNetworkingValidationErrorDomain, code: ValidationStatusCode.invalid.rawValue, userInfo: [NSLocalizedDescriptionKey: validationFailureDescription])
+        return NSError(domain: requestValidationErrorDomain, code: ValidationStatusCode.invalid.rawValue, userInfo: [NSLocalizedDescriptionKey: validationFailureDescription])
     }
     
     func requestFilter<T>(_ response: Alamofire.DataResponse<T>) {
