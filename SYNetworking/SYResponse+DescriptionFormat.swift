@@ -49,7 +49,7 @@ extension Alamofire.DefaultDataResponse: ResponseDescription {
     }
     
     public var responseCommon: ResponseCommon? {
-        if #available(iOS 10.0, *) {
+        if #available(iOS 10.0, macOS 10.12, tvOS 10.0, *) {
             return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
         }
         return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
@@ -65,7 +65,7 @@ extension Alamofire.DataResponse: ResponseDescription {
     }
     
     public var responseCommon: ResponseCommon? {
-        if #available(iOS 10.0, *) {
+        if #available(iOS 10.0, macOS 10.12, tvOS 10.0, *) {
             return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
         }
         return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
@@ -81,7 +81,7 @@ extension Alamofire.DefaultDownloadResponse: ResponseDescription {
     }
     
     public var responseCommon: ResponseCommon? {
-        if #available(iOS 10.0, *) {
+        if #available(iOS 10.0, macOS 10.12, tvOS 10.0, *) {
             return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
         }
         return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
@@ -97,7 +97,7 @@ extension Alamofire.DownloadResponse: ResponseDescription {
     }
     
     public var responseCommon: ResponseCommon? {
-        if #available(iOS 10.0, *) {
+        if #available(iOS 10.0, macOS 10.12, tvOS 10.0, *) {
             return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
         }
         return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
