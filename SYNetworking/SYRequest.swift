@@ -183,11 +183,11 @@ open class SYRequest: NSObject {
     
     ///  Called on the main thread after request succeeded.
     
-    open func requestCompleteFilter<T: ResponseDescriptionFormatting>(_ response: T) { }
+    open func requestCompleteFilter<T: ResponseDescription>(_ response: T) { }
     
     ///  Called on the main thread when request failed.
     
-    open func requestFailedFilter<T: ResponseDescriptionFormatting>(_ response: T) { }
+    open func requestFailedFilter<T: ResponseDescription>(_ response: T) { }
     
     /// Validate Response
     
