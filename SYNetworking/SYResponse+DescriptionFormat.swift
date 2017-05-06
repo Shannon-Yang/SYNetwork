@@ -24,19 +24,11 @@ public struct ResponseCommon {
     
     // MARK: - Initallization
     
-    @available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
     init(request: URLRequest?, response: HTTPURLResponse?, timeline: Timeline, _metrics: AnyObject? = nil, error: Error?) {
         self.request = request
         self.response = response
         self.timeline = timeline
         self._metrics = _metrics
-        self.error = error
-    }
-    
-    init(request: URLRequest?, response: HTTPURLResponse?, timeline: Timeline, error: Error?) {
-        self.request = request
-        self.response = response
-        self.timeline = timeline
         self.error = error
     }
 }
