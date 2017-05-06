@@ -18,19 +18,7 @@ public struct ResponseCommon {
     
     var timeline: Timeline
     
-    var _metrics: AnyObject? = nil
-    
     var error: Error?
-    
-    // MARK: - Initallization
-    
-    init(request: URLRequest?, response: HTTPURLResponse?, timeline: Timeline, _metrics: AnyObject? = nil, error: Error?) {
-        self.request = request
-        self.response = response
-        self.timeline = timeline
-        self._metrics = _metrics
-        self.error = error
-    }
 }
 
 public protocol ResponseDescription {
@@ -49,9 +37,6 @@ extension Alamofire.DefaultDataResponse: ResponseDescription {
     }
     
     public var responseCommon: ResponseCommon? {
-        if #available(iOS 10.0, macOS 10.12, tvOS 10.0, *) {
-            return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
-        }
         return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
     }
 }
@@ -65,9 +50,6 @@ extension Alamofire.DataResponse: ResponseDescription {
     }
     
     public var responseCommon: ResponseCommon? {
-        if #available(iOS 10.0, macOS 10.12, tvOS 10.0, *) {
-            return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
-        }
         return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
     }
 }
@@ -81,9 +63,6 @@ extension Alamofire.DefaultDownloadResponse: ResponseDescription {
     }
     
     public var responseCommon: ResponseCommon? {
-        if #available(iOS 10.0, macOS 10.12, tvOS 10.0, *) {
-            return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
-        }
         return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
     }
 }
@@ -97,9 +76,6 @@ extension Alamofire.DownloadResponse: ResponseDescription {
     }
     
     public var responseCommon: ResponseCommon? {
-        if #available(iOS 10.0, macOS 10.12, tvOS 10.0, *) {
-            return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
-        }
         return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
     }
 }
