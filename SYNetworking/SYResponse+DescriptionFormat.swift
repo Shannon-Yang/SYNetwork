@@ -10,44 +10,97 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-public protocol ResponseDescriptionFormatting {
+public struct ResponseCommon {
+    
+    var request: URLRequest?
+    
+    var response: HTTPURLResponse?
+    
+    var timeline: Timeline
+    
+    var _metrics: AnyObject? = nil
+    
+    var error: Error?
+    
+    // MARK: - Initallization
+    
+    init(request: URLRequest?, response: HTTPURLResponse?, timeline: Timeline, _metrics: AnyObject? = nil, error: Error?) {
+        self.request = request
+        self.response = response
+        self.timeline = timeline
+        self._metrics = _metrics
+        self.error = error
+    }
+}
+
+public protocol ResponseDescription {
+    
+    var responseCommon: ResponseCommon? { get }
     
     func responseDescriptionFormat(_ request: SYRequest) -> String
 }
 
 //MARK: - DefaultDataResponse
 
-extension Alamofire.DefaultDataResponse: ResponseDescriptionFormatting {
+extension Alamofire.DefaultDataResponse: ResponseDescription {
     
     public func responseDescriptionFormat(_ request: SYRequest) -> String {
         return generateResponseDescription(request, urlRequest: self.request, response: self.response, data: self.data, error: self.error, timeline: self.timeline)
+    }
+    
+    public var responseCommon: ResponseCommon? {
+        if #available(iOS 10.0, *) {
+            return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
+        }
+        return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
     }
 }
 
 //MARK: - DataResponse
 
-extension Alamofire.DataResponse: ResponseDescriptionFormatting {
+extension Alamofire.DataResponse: ResponseDescription {
     
     public func responseDescriptionFormat(_ request: SYRequest) -> String {
         return generateResponseDescription(request, urlRequest: self.request, response: self.response, data: self.data, result: self.result.description, error: self.error, timeline: self.timeline)
+    }
+    
+    public var responseCommon: ResponseCommon? {
+        if #available(iOS 10.0, *) {
+            return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
+        }
+        return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
     }
 }
 
 //MARK: - DefaultDownloadResponse
 
-extension Alamofire.DefaultDownloadResponse: ResponseDescriptionFormatting {
+extension Alamofire.DefaultDownloadResponse: ResponseDescription {
     
     public func responseDescriptionFormat(_ request: SYRequest) -> String {
         return generateResponseDescription(request, urlRequest: self.request, response: self.response, temporaryURL: self.temporaryURL, destinationURL: self.destinationURL, resumeData: self.resumeData, error: self.error, timeline: self.timeline)
+    }
+    
+    public var responseCommon: ResponseCommon? {
+        if #available(iOS 10.0, *) {
+            return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
+        }
+        return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
     }
 }
 
 //MARK: - DownloadResponse
 
-extension Alamofire.DownloadResponse: ResponseDescriptionFormatting {
+extension Alamofire.DownloadResponse: ResponseDescription {
     
     public func responseDescriptionFormat(_ request: SYRequest) -> String {
         return generateResponseDescription(request, urlRequest: self.request, response: self.response, temporaryURL: self.temporaryURL, destinationURL: self.destinationURL, resumeData: self.resumeData, result: self.result.description, error: self.error, timeline: self.timeline)
+    }
+    
+    public var responseCommon: ResponseCommon? {
+        if #available(iOS 10.0, *) {
+            return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, _metrics: self.metrics, error: self.error)
+        }
+        return ResponseCommon(request: self.request, response: self.response, timeline: self.timeline, error: self.error)
     }
 }
 
