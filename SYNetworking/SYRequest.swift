@@ -90,9 +90,9 @@ open class SYRequest: NSObject {
     
     //MARK: - SubClass Override
     
-    /// The URL path of request. This should only contain the path part of URL, e.g., /v1/user. See alse `baseUrl`.
+    /// The URL path of request. This should only contain the path part of URL, e.g., /v1/user. See alse `baseUrlString`.
     
-    open var requestUrl: String {
+    open var requestURLString: String {
         return ""
     }
     
@@ -104,13 +104,13 @@ open class SYRequest: NSObject {
     
     ///  Request base URL, Default is empty string.
     
-    open var baseUrlString: String {
+    open var baseURLString: String {
         return ""
     }
     
     /// Request CDN URL. Default is empty string.
     
-    open var cdnUrl: String {
+    open var cdnURLString: String {
         return ""
     }
     
@@ -174,6 +174,13 @@ open class SYRequest: NSObject {
         return .forSession
     }
     
+    /// Use this to build custom request. If this method return non-nil value, `baseUrlString`, `requestTimeoutInterval`,
+    ///  `requestParameters`,`requestMethod` will all be ignored.
+    
+    open func buildCustomURLRequest() -> URLRequest? {
+        return nil
+    }
+    
     ///  Called on the main thread after request succeeded.
     
     open func requestCompleteFilter<T: ResponseDescriptionFormatting>(_ response: T) { }
@@ -222,23 +229,30 @@ extension SYRequest {
 extension SYRequest {
     
     var urlString: String {
-        
-        var baseUrl = SYNetworkingConfig.sharedInstance.baseUrlString
+        var baseURL = SYNetworkingConfig.sharedInstance.baseUrlString
         if self.useCDN {
-            if self.cdnUrl.isEmpty {
-                baseUrl = SYNetworkingConfig.sharedInstance.cdnUrlString
+            if self.cdnURLString.isEmpty {
+                baseURL = SYNetworkingConfig.sharedInstance.cdnUrlString
             } else {
-                baseUrl = self.cdnUrl
+                baseURL = self.cdnURLString
             }
         } else {
-            if !self.baseUrlString.isEmpty {
-                baseUrl = self.baseUrlString
+            if !self.baseURLString.isEmpty {
+                baseURL = self.baseURLString
             }
         }
-        return "\(baseUrl)\(self.requestUrl)"
+        return "\(baseURL)\(self.requestURLString)"
     }
     
     func setupAlamofireRequest() -> Alamofire.Request {
+        
+        if let customURLRequest = self.buildCustomURLRequest() {
+            let session = URLSession(configuration: SYNetworkingConfig.sharedInstance.configuration, delegate: SessionDelegate(), delegateQueue: nil)
+            let requestable = Requestable(urlRequest:)
+            let requestTask = RequestTask.data(TaskConvertible?, URLSessionTask?)
+            return Alamofire.Request.
+        }
+        
         return SYSessionManager.sharedInstance.request(self.urlString, method: self.requestMethod, parameters: SYNetworkingConfig.sharedInstance.uniformParameters?.merged(with: self.requestParameters) ?? self.requestParameters, encoding: self.encoding, headers: self.headers)
     }
 }

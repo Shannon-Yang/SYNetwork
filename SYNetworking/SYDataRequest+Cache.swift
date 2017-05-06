@@ -56,7 +56,7 @@ extension SYDataRequest {
         guard let data = responseData else {
             return
         }
-        guard !self.requestUrl.isEmpty else {
+        guard !self.requestURLString.isEmpty else {
             return
         }
         let path = self.cacheFilePath()
