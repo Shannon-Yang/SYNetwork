@@ -83,7 +83,7 @@ extension SYDataRequest {
     
     public func loadLocalCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Data) -> Void) {
         
-        if self.requestUrl.isEmpty {
+        if self.requestURLString.isEmpty {
             completionHandler({ throw LoadCacheError.invalidRequest })
             return
         }
@@ -220,8 +220,8 @@ private extension SYDataRequest {
     func cacheFileName(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil) -> String {
         if self.cacheFileName.isEmpty {
             var requestMethod: Alamofire.HTTPMethod
-            var baseUrl: String
-            var requestUrl: String
+            var baseURLString: String
+            var requestURLString: String
             var requestParameters = [String: Any]()
             var cacheKey: String
             if let customLoadCacheInfo = customLoadCacheInfo {
@@ -230,15 +230,15 @@ private extension SYDataRequest {
                 } else {
                     requestMethod = self.requestMethod
                 }
-                if let baseUrlString = customLoadCacheInfo.baseUrlString {
-                    baseUrl = baseUrlString
+                if let baseUrlString = customLoadCacheInfo.baseURLString {
+                    baseURLString = baseUrlString
                 } else {
-                    baseUrl = SYNetworkingConfig.sharedInstance.baseUrlString
+                    baseURLString = SYNetworkingConfig.sharedInstance.baseURLString
                 }
-                if let requestUrlString = customLoadCacheInfo.requestUrlString {
-                    requestUrl = requestUrlString
+                if let requestUrlString = customLoadCacheInfo.requestURLString {
+                    requestURLString = requestUrlString
                 } else {
-                    requestUrl = self.requestUrl
+                    requestURLString = self.requestURLString
                 }
                 if let parameters = customLoadCacheInfo.requestParameters {
                     requestParameters = parameters
@@ -254,14 +254,14 @@ private extension SYDataRequest {
                 }
             } else {
                 requestMethod = self.requestMethod
-                baseUrl = SYNetworkingConfig.sharedInstance.baseUrlString
-                requestUrl = self.requestUrl
+                baseURLString = SYNetworkingConfig.sharedInstance.baseURLString
+                requestURLString = self.requestURLString
                 if let arguments = self.requestParameters {
                     requestParameters = arguments
                 }
                 cacheKey = self.cacheKey
             }
-            let requestInfo = "\(Key.requestMethod.rawValue):\(requestMethod.rawValue) \(Key.baseUrl.rawValue):\(baseUrl) \(Key.requestUrl.rawValue):\(requestUrl) \(Key.requestParameters.rawValue):\(requestParameters) \(Key.cacheKey.rawValue):\(cacheKey)"
+            let requestInfo = "\(Key.requestMethod.rawValue):\(requestMethod.rawValue) \(Key.baseUrl.rawValue):\(baseURLString) \(Key.requestUrl.rawValue):\(requestURLString) \(Key.requestParameters.rawValue):\(requestParameters) \(Key.cacheKey.rawValue):\(cacheKey)"
             return requestInfo.md5()
         }
         

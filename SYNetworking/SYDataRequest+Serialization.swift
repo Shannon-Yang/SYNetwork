@@ -58,18 +58,18 @@ public struct CustomLoadCacheInfo {
     
     public var requestMethod: Alamofire.HTTPMethod?
     
-    public var baseUrlString:  String?
+    public var baseURLString:  String?
     
-    public var requestUrlString: String?
+    public var requestURLString: String?
     
     public var requestParameters: [String: Any]?
     
     public var cacheKey: String?
     
-    public init(requestMethod: Alamofire.HTTPMethod? = nil, baseUrlString: String? = nil, requestUrlString: String? = nil, requestParameters: [String: Any]? = nil, cacheKey: String? = nil) {
+    public init(requestMethod: Alamofire.HTTPMethod? = nil, baseURLString: String? = nil, requestURLString: String? = nil, requestParameters: [String: Any]? = nil, cacheKey: String? = nil) {
         self.requestMethod = requestMethod
-        self.baseUrlString = baseUrlString
-        self.requestUrlString = requestUrlString
+        self.baseURLString = baseURLString
+        self.requestURLString = requestURLString
         self.requestParameters = requestParameters
         self.cacheKey = cacheKey
     }

@@ -173,14 +173,7 @@ open class SYRequest: NSObject {
     open var persistence: URLCredential.Persistence {
         return .forSession
     }
-    
-    /// Use this to build custom request. If this method return non-nil value, `baseUrlString`, `requestTimeoutInterval`,
-    ///  `requestParameters`,`requestMethod` will all be ignored.
-    
-    open func buildCustomURLRequest() -> URLRequest? {
-        return nil
-    }
-    
+
     ///  Called on the main thread after request succeeded.
     
     open func requestCompleteFilter<T: ResponseDescription>(_ response: T) { }
@@ -229,10 +222,10 @@ extension SYRequest {
 extension SYRequest {
     
     var urlString: String {
-        var baseURL = SYNetworkingConfig.sharedInstance.baseUrlString
+        var baseURL = SYNetworkingConfig.sharedInstance.baseURLString
         if self.useCDN {
             if self.cdnURLString.isEmpty {
-                baseURL = SYNetworkingConfig.sharedInstance.cdnUrlString
+                baseURL = SYNetworkingConfig.sharedInstance.cdnURLString
             } else {
                 baseURL = self.cdnURLString
             }
@@ -245,14 +238,6 @@ extension SYRequest {
     }
     
     func setupAlamofireRequest() -> Alamofire.Request {
-        
-        if let customURLRequest = self.buildCustomURLRequest() {
-            let session = URLSession(configuration: SYNetworkingConfig.sharedInstance.configuration, delegate: SessionDelegate(), delegateQueue: nil)
-            let requestable = Requestable(urlRequest:)
-            let requestTask = RequestTask.data(TaskConvertible?, URLSessionTask?)
-            return Alamofire.Request.
-        }
-        
         return SYSessionManager.sharedInstance.request(self.urlString, method: self.requestMethod, parameters: SYNetworkingConfig.sharedInstance.uniformParameters?.merged(with: self.requestParameters) ?? self.requestParameters, encoding: self.encoding, headers: self.headers)
     }
 }

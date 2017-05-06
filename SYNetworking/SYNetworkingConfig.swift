@@ -21,11 +21,11 @@ public class SYNetworkingConfig {
     
     ///  Request base URL, Default is empty string.
     
-    public var baseUrlString: String = ""
+    public var baseURLString: String = ""
     
     /// Request CDN URL. Default is empty string.
     
-    public var cdnUrlString: String = ""
+    public var cdnURLString: String = ""
 
     /// Request Uniform Parameters. Default is nil.
     
