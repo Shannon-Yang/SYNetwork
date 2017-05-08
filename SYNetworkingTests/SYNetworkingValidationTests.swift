@@ -17,7 +17,7 @@ class SYNetworkingValidationTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        SYNetworkingConfig.sharedInstance.baseUrlString = "https://httpbin.org/"
+        SYNetworkingConfig.sharedInstance.baseURLString = "https://httpbin.org/"
     }
     
     override func tearDown() {
