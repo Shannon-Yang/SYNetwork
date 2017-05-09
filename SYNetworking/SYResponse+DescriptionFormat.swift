@@ -12,13 +12,13 @@ import SwiftyJSON
 
 public struct ResponseCommon {
     
-    var request: URLRequest?
+    public var request: URLRequest?
     
-    var response: HTTPURLResponse?
+    public var response: HTTPURLResponse?
     
-    var timeline: Timeline
+    public var timeline: Timeline
     
-    var error: Error?
+    public var error: Error?
 }
 
 public protocol ResponseDescription {
