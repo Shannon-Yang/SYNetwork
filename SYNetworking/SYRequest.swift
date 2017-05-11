@@ -182,9 +182,9 @@ open class SYRequest: NSObject {
     
     open func requestFailedFilter<T: ResponseDescription>(_ response: T) { }
     
-    /// Validate Response
+    /// Validate response when request success
     
-    open func validateResponse<T>(_ response: Alamofire.DataResponse<T>) -> Bool { return true }
+    open func validateResponseWhenRequestSuccess<T>(_ response: Alamofire.DataResponse<T>) -> Bool { return true }
     
     /// current Request
     
