@@ -118,11 +118,11 @@ extension SYDataRequest {
     @discardableResult
     public func response<T: Alamofire.DataResponseSerializerProtocol>(_ responseSerializer: T, completionHandler: @escaping (_ dataResponse: Alamofire.DataResponse<T.SerializedObject>) -> Void) -> Self {
         self.dataRequest.validate().response(queue: self.responseQueue, responseSerializer: responseSerializer, completionHandler: { dataResponse in
-            func generateValidateFailResponse(_ dataResponse: Alamofire.DataResponse<T.SerializedObject>) -> Alamofire.DataResponse<T.SerializedObject> {
+            func generateValidateFailResponse(_ dataResponse: Alamofire.DataResponse<T.SerializedObject>, serverError: NSError?) -> Alamofire.DataResponse<T.SerializedObject> {
                 let result = responseSerializer.serializeResponse(dataResponse.request,
                                                                   dataResponse.response,
                                                                   dataResponse.data,
-                                                                  self.generateValidationFailureError())
+                                                                  self.generateValidationFailureError(serverError))
                 return Alamofire.DataResponse(request: dataResponse.request,
                                               response: dataResponse.response,
                                               data: dataResponse.data,
@@ -132,8 +132,9 @@ extension SYDataRequest {
             
             var response = dataResponse
             if dataResponse.result.isSuccess {
-                if !self.validateResponseWhenRequestSuccess(response) {
-                    response = generateValidateFailResponse(response)
+                let validate = self.validateResponseWhenRequestSuccess(response)
+                if !validate.0 {
+                    response = generateValidateFailResponse(response, serverError: validate.1)
                 }
             }
             self.requestFilter(response)
@@ -178,8 +179,8 @@ extension SYDataRequest {
             completionHandler(true,responseData)
         }
         
-        func generateValidateFailResponse(_ dataResponse: Alamofire.DataResponse<Data>) -> Alamofire.DataResponse<Data> {
-            let result = DataRequest.serializeResponseData(response: dataResponse.response, data: dataResponse.data, error: self.generateValidationFailureError())
+        func generateValidateFailResponse(_ dataResponse: Alamofire.DataResponse<Data>, serverError: NSError?) -> Alamofire.DataResponse<Data> {
+            let result = DataRequest.serializeResponseData(response: dataResponse.response, data: dataResponse.data, error: self.generateValidationFailureError(serverError))
             return Alamofire.DataResponse(request: dataResponse.request,
                                           response: dataResponse.response,
                                           data: dataResponse.data,
@@ -191,8 +192,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseData(queue: self.responseQueue,completionHandler: { dataResponse in
                 var response = dataResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response, shouldSaveCache: true)
@@ -205,8 +207,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseData(queue: self.responseQueue, completionHandler: { dataResponse in
                 var response = dataResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response)
@@ -244,8 +247,9 @@ extension SYDataRequest {
                             if isUpdateCache {
                                 var response = dataResponse
                                 if response.result.isSuccess {
-                                    if !self.validateResponseWhenRequestSuccess(response) {
-                                        response = generateValidateFailResponse(response)
+                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                    if !validate.0 {
+                                        response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
                                 }
                                 self.requestFilter(response, shouldSaveCache: true)
@@ -298,8 +302,8 @@ extension SYDataRequest {
             completionHandler(true,responseString)
         }
         
-        func generateValidateFailResponse(_ stringResponse: Alamofire.DataResponse<String>) -> Alamofire.DataResponse<String> {
-            let result = DataRequest.serializeResponseString(encoding: self.responseStringEncoding, response: stringResponse.response, data: stringResponse.data, error: self.generateValidationFailureError())
+        func generateValidateFailResponse(_ stringResponse: Alamofire.DataResponse<String>, serverError: NSError?) -> Alamofire.DataResponse<String> {
+            let result = DataRequest.serializeResponseString(encoding: self.responseStringEncoding, response: stringResponse.response, data: stringResponse.data, error: self.generateValidationFailureError(serverError))
             return Alamofire.DataResponse(request: stringResponse.request,
                                           response: stringResponse.response,
                                           data: stringResponse.data,
@@ -311,8 +315,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
                 var response = stringResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response, shouldSaveCache: true)
@@ -325,8 +330,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
                 var response = stringResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response)
@@ -364,8 +370,9 @@ extension SYDataRequest {
                             if isUpdateCache {
                                 var response = stringResponse
                                 if response.result.isSuccess {
-                                    if !self.validateResponseWhenRequestSuccess(response) {
-                                        response = generateValidateFailResponse(response)
+                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                    if !validate.0 {
+                                        response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
                                 }
                                 self.requestFilter(response, shouldSaveCache: true)
@@ -420,8 +427,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
                 var response = jsonResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response, shouldSaveCache: true)
@@ -429,8 +437,8 @@ extension SYDataRequest {
             })
         }
         
-        func generateValidateFailResponse(_ jsonResponse: Alamofire.DataResponse<Any>) -> Alamofire.DataResponse<Any> {
-            let result = DataRequest.serializeResponseJSON(options: self.responseJSONOptions, response: jsonResponse.response, data: jsonResponse.data, error: self.generateValidationFailureError())
+        func generateValidateFailResponse(_ jsonResponse: Alamofire.DataResponse<Any>, serverError: NSError?) -> Alamofire.DataResponse<Any> {
+            let result = DataRequest.serializeResponseJSON(options: self.responseJSONOptions, response: jsonResponse.response, data: jsonResponse.data, error: self.generateValidationFailureError(serverError))
             return Alamofire.DataResponse(request: jsonResponse.request,
                                           response: jsonResponse.response,
                                           data: jsonResponse.data,
@@ -443,8 +451,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
                 var response = jsonResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response)
@@ -482,8 +491,9 @@ extension SYDataRequest {
                             if isUpdateCache {
                                 var response = jsonResponse
                                 if response.result.isSuccess {
-                                    if !self.validateResponseWhenRequestSuccess(response) {
-                                        response = generateValidateFailResponse(response)
+                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                    if !validate.0 {
+                                        response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
                                 }
                                 self.requestFilter(response,shouldSaveCache: true)
@@ -540,8 +550,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responsePropertyList(queue: self.responseQueue, options: self.responsePropertyListOptions, completionHandler: { propertyListResponse in
                 var response = propertyListResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response, shouldSaveCache: true)
@@ -549,8 +560,8 @@ extension SYDataRequest {
             })
         }
         
-        func generateValidateFailResponse(_ propertyListResponse: Alamofire.DataResponse<Any>) -> Alamofire.DataResponse<Any> {
-            let result = DataRequest.serializeResponsePropertyList(options: self.responsePropertyListOptions, response: propertyListResponse.response, data: propertyListResponse.data, error: self.generateValidationFailureError())
+        func generateValidateFailResponse(_ propertyListResponse: Alamofire.DataResponse<Any>, serverError: NSError?) -> Alamofire.DataResponse<Any> {
+            let result = DataRequest.serializeResponsePropertyList(options: self.responsePropertyListOptions, response: propertyListResponse.response, data: propertyListResponse.data, error: self.generateValidationFailureError(serverError))
             return Alamofire.DataResponse(request: propertyListResponse.request,
                                           response: propertyListResponse.response,
                                           data: propertyListResponse.data,
@@ -563,8 +574,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responsePropertyList(queue: self.responseQueue, options: self.responsePropertyListOptions, completionHandler: { propertyListResponse in
                 var response = propertyListResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response)
@@ -602,8 +614,9 @@ extension SYDataRequest {
                             if isUpdateCache {
                                 var response = propertyListResponse
                                 if response.result.isSuccess {
-                                    if !self.validateResponseWhenRequestSuccess(response) {
-                                        response = generateValidateFailResponse(response)
+                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                    if !validate.0 {
+                                        response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
                                 }
                                 self.requestFilter(response, shouldSaveCache: true)
@@ -657,8 +670,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
                 var response = swiftyJSONResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response, shouldSaveCache: true)
@@ -666,8 +680,8 @@ extension SYDataRequest {
             })
         }
         
-        func generateValidateFailResponse(_ swiftyJSONResponse: Alamofire.DataResponse<JSON>) -> Alamofire.DataResponse<JSON> {
-            let result = DataRequest.serializeResponseSwiftyJSON(options: self.responseJSONOptions, response: swiftyJSONResponse.response, data: swiftyJSONResponse.data, error: self.generateValidationFailureError())
+        func generateValidateFailResponse(_ swiftyJSONResponse: Alamofire.DataResponse<JSON>, serverError: NSError?) -> Alamofire.DataResponse<JSON> {
+            let result = DataRequest.serializeResponseSwiftyJSON(options: self.responseJSONOptions, response: swiftyJSONResponse.response, data: swiftyJSONResponse.data, error: self.generateValidationFailureError(serverError))
             return Alamofire.DataResponse(request: swiftyJSONResponse.request,
                                           response: swiftyJSONResponse.response,
                                           data: swiftyJSONResponse.data,
@@ -680,8 +694,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
                 var response = swiftyJSONResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response)
@@ -719,8 +734,9 @@ extension SYDataRequest {
                             if isUpdateCache {
                                 var response = swiftyJSONResponse
                                 if response.result.isSuccess {
-                                    if !self.validateResponseWhenRequestSuccess(response) {
-                                        response = generateValidateFailResponse(response)
+                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                    if !validate.0 {
+                                        response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
                                 }
                                 self.requestFilter(response,shouldSaveCache: true)
@@ -795,8 +811,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
                 var response = objectResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response, shouldSaveCache: true)
@@ -804,9 +821,9 @@ extension SYDataRequest {
             })
         }
         
-        func generateValidateFailResponse(_ objectResponse: Alamofire.DataResponse<T>) -> Alamofire.DataResponse<T> {
+        func generateValidateFailResponse(_ objectResponse: Alamofire.DataResponse<T>, serverError: NSError?) -> Alamofire.DataResponse<T> {
             let responseSerializer = DataRequest.ObjectMapperSerializer(self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext)
-            let result = responseSerializer.serializeResponse(objectResponse.request, objectResponse.response, objectResponse.data, self.generateValidationFailureError())
+            let result = responseSerializer.serializeResponse(objectResponse.request, objectResponse.response, objectResponse.data, self.generateValidationFailureError(serverError))
             return Alamofire.DataResponse(request: objectResponse.request,
                                           response: objectResponse.response,
                                           data: objectResponse.data,
@@ -819,8 +836,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
                 var response = objectResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response)
@@ -858,8 +876,9 @@ extension SYDataRequest {
                             if isUpdateCache {
                                 var response = objectResponse
                                 if response.result.isSuccess {
-                                    if !self.validateResponseWhenRequestSuccess(response) {
-                                        response = generateValidateFailResponse(response)
+                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                    if !validate.0 {
+                                        response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
                                 }
                                 self.requestFilter(response, shouldSaveCache: true)
@@ -907,8 +926,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T]>) in
                 var response = objectArrayResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response, shouldSaveCache: true)
@@ -916,9 +936,9 @@ extension SYDataRequest {
             })
         }
         
-        func generateValidateFailResponse(_ objectArrayResponse: Alamofire.DataResponse<[T]>) -> Alamofire.DataResponse<[T]> {
+        func generateValidateFailResponse(_ objectArrayResponse: Alamofire.DataResponse<[T]>, serverError: NSError?) -> Alamofire.DataResponse<[T]> {
             let responseSerializer = DataRequest.ObjectMapperArraySerializer(self.responseObjectKeyPath, context: self.responseObjectContext) as DataResponseSerializer<[T]>
-            let result = responseSerializer.serializeResponse(objectArrayResponse.request, objectArrayResponse.response, objectArrayResponse.data, self.generateValidationFailureError())
+            let result = responseSerializer.serializeResponse(objectArrayResponse.request, objectArrayResponse.response, objectArrayResponse.data, self.generateValidationFailureError(serverError))
             return Alamofire.DataResponse(request: objectArrayResponse.request,
                                           response: objectArrayResponse.response,
                                           data: objectArrayResponse.data,
@@ -932,8 +952,9 @@ extension SYDataRequest {
             self.dataRequest.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T]>) in
                 var response = objectArrayResponse
                 if response.result.isSuccess {
-                    if !self.validateResponseWhenRequestSuccess(response) {
-                        response = generateValidateFailResponse(response)
+                    let validate = self.validateResponseWhenRequestSuccess(response)
+                    if !validate.0 {
+                        response = generateValidateFailResponse(response, serverError: validate.1)
                     }
                 }
                 self.requestFilter(response)
@@ -971,8 +992,9 @@ extension SYDataRequest {
                             if isUpdateCache {
                                 var response = objectArrayResponse
                                 if response.result.isSuccess {
-                                    if !self.validateResponseWhenRequestSuccess(response) {
-                                        response = generateValidateFailResponse(response)
+                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                    if !validate.0 {
+                                        response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
                                 }
                                 self.requestFilter(response, shouldSaveCache: true)
@@ -993,7 +1015,10 @@ extension SYDataRequest {
 
 private extension SYDataRequest {
     
-    func generateValidationFailureError() -> NSError {
+    func generateValidationFailureError(_ serverError: NSError?) -> NSError {
+        if let sError = serverError {
+            return sError
+        }
         enum ValidationStatusCode: Int {
             case invalid = -1
         }
