@@ -82,9 +82,14 @@ extension Alamofire.DownloadResponse: ResponseDescription {
 
 func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, response: HTTPURLResponse?, temporaryURL: URL? = nil, destinationURL: URL? = nil, resumeData: Data? = nil, data: Data? = nil, result: String? = nil, error: Error?, timeline: Timeline) -> String {
     
+    func generateTimelineResponseDescription(timeline: Timeline) -> String {
+        let description = "{ \n  Request Start Time: \(timeline.requestStartTime)\n\n  Initial Response Time: \(timeline.initialResponseTime)\n\n  Request Completed Time: \(timeline.requestCompletedTime)\n\n  Serialization Completed Time: \(timeline.serializationCompletedTime)\n\n  Latency: \(timeline.latency) secs\n\n  Request Duration: \(timeline.requestDuration) secs\n\n  Serialization Duration: \(timeline.serializationDuration) secs\n\n  Total Duration: \(timeline.totalDuration) secs\n }"
+       return description
+    }
+    
     var mark = "✅😊"
     
-    var description = "\n\(mark)"
+    var description = "\(mark)"
     
     description.append("  RequestMethod: \(urlRequest?.httpMethod ?? "")  RequestURL: \(urlRequest?.description ?? "")")
     
@@ -94,9 +99,9 @@ func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, 
     if let string = JSON(parameters ?? [:]).rawString() {
         parametersString = string
     }
-    description.append(" \n↑↑↑↑ [REQUEST]: \n\(parametersString)")
+    description.append(" \n\n↑↑↑↑ [REQUEST]: \n\n\(parametersString)")
     
-    description.append(" \n↓↓↓↓ [RESPONSE]: \n")
+    description.append(" \n\n↓↓↓↓ [RESPONSE]: \n")
     
     if let temporaryURL = temporaryURL {
         description.append("\nTemporaryURL: \(temporaryURL.absoluteString)")
@@ -112,11 +117,11 @@ func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, 
     
     if let error = error {
         mark = "❌😟"
-        description.append(" Timeline⏰⏰: \n\(JSON(timeline.debugDescription.replacingOccurrences(of: ",", with: "\n")).description)\nError❗️: \(error.localizedDescription)")
+        description.append(" Timeline⏰⏰: \n\(generateTimelineResponseDescription(timeline: timeline))\n\nError❗️: \(error.localizedDescription)")
         return description
     }
     
-    description.append("\nData: \(data?.count ?? 0) bytes\nResult: \(result ?? "")\nTimeline⏰⏰: \(JSON(timeline.debugDescription.replacingOccurrences(of: ",", with: "\n")).description)")
+    description.append("\nData: \(data?.count ?? 0) bytes\n\nResult: \(result ?? "")\n\nTimeline⏰⏰: \n\(generateTimelineResponseDescription(timeline: timeline))")
     
     return description
 }
