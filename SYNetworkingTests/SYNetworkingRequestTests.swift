@@ -23,7 +23,7 @@ class SYNetworkingRequestTests: SYNetworkTestCase {
     
     func testBasicSuccessHTTPRequest() {
         
-        SYNetworkingConfig.sharedInstance.baseUrlString = "https://httpbin.org/"
+        SYNetworkingConfig.sharedInstance.baseURLString = "https://httpbin.org/"
         let get = SYBasicDataRequest(requestUrlString: "get", method: .get, parameters: ["foo": "bar"])
         self.expectSuccess(with: .default, request: get)
         self.expectSuccess(with: .data, request: get)
@@ -33,7 +33,7 @@ class SYNetworkingRequestTests: SYNetworkTestCase {
         
         // test ObjectMapper.
         
-        SYNetworkingConfig.sharedInstance.baseUrlString = "https://raw.githubusercontent.com/tristanhimmelman/AlamofireObjectMapper/"
+        SYNetworkingConfig.sharedInstance.baseURLString = "https://raw.githubusercontent.com/tristanhimmelman/AlamofireObjectMapper/"
         let get_d8b = SYBasicDataRequest(requestUrlString: "d8bb95982be8a11a2308e779bb9a9707ebe42ede/sample_json", method: .get)
         self.expectSuccess(with: .objectMapper(.default), request: get_d8b)
         self.expectSuccess(with: .objectMapper(.object), request: get_d8b)

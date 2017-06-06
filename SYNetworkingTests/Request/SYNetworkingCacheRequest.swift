@@ -25,7 +25,7 @@ class SYNetworkingCacheRequest: SYDataRequest {
         super.init()
     }
     
-    override var requestUrl: String {
+    override var requestURLString: String {
         return self.requestUrlString
     }
     

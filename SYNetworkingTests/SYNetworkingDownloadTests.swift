@@ -21,7 +21,7 @@ class DownloadTestCase: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        SYNetworkingConfig.sharedInstance.baseUrlString = "https://httpbin.org/"
+        SYNetworkingConfig.sharedInstance.baseURLString = "https://httpbin.org/"
         FileManager.removeAllItemsInsideDirectory(at: testDirectoryURL)
         FileManager.createDirectory(at: testDirectoryURL)
         
@@ -54,7 +54,7 @@ class DownloadTestCase: XCTestCase {
 class DownloadInitializationTestCase: DownloadTestCase {
     
     func testDownloadClassMethodWithMethodURLAndDestination() {
-        let download = SYNetworkDownloadRequest(requestUrlString: "", method: .get)
+        let download = SYNetworkingDownloadRequest(requestUrlString: "", method: .get)
         // Then
         XCTAssertEqual(download.request?.httpMethod, "GET")
         XCTAssertEqual(download.request?.url?.absoluteString, "https://httpbin.org/")
@@ -67,7 +67,7 @@ class DownloadInitializationTestCase: DownloadTestCase {
         let headers = ["Authorization": "123456"]
         
         // When
-        let request = SYNetworkDownloadRequest(requestUrlString: urlString, method: .get, header: headers)
+        let request = SYNetworkingDownloadRequest(requestUrlString: urlString, method: .get, header: headers)
         
         // Then
         XCTAssertNotNil(request.request)
@@ -97,7 +97,7 @@ class DownloadResponseTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: urlString, method: .get, destinationPath: destination)
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: urlString, method: .get, destinationPath: destination)
         downloadRequest
             .response { resp in
                 response = resp
@@ -135,7 +135,7 @@ class DownloadResponseTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: urlString, method: .get, destinationPath: destination)
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: urlString, method: .get, destinationPath: destination)
         downloadRequest
             .response { resp in
                 response = resp
@@ -163,7 +163,7 @@ class DownloadResponseTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: urlString)
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: urlString)
         downloadRequest
             .downloadProgress { progress in
                 progressValues.append(progress.fractionCompleted)
@@ -206,7 +206,7 @@ class DownloadResponseTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: urlString, parameters: parameters)
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: urlString, parameters: parameters)
         downloadRequest
             .response { resp in
                 response = resp
@@ -248,7 +248,7 @@ class DownloadResponseTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: urlString, header: headers, destinationPath: destination)
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: urlString, header: headers, destinationPath: destination)
         downloadRequest
             .response { resp in
                 response = resp
@@ -285,7 +285,7 @@ class DownloadResponseTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: "", destinationPath: { _, _ in (fileURL, [])})
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: "", destinationPath: { _, _ in (fileURL, [])})
         downloadRequest
             .response { resp in
                 response = resp
@@ -317,7 +317,7 @@ class DownloadResponseTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: "", destinationPath: { _, _ in (fileURL, [.createIntermediateDirectories])})
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: "", destinationPath: { _, _ in (fileURL, [.createIntermediateDirectories])})
         downloadRequest
             .response { resp in
                 response = resp
@@ -348,7 +348,7 @@ class DownloadResponseTestCase: DownloadTestCase {
             var response: DefaultDownloadResponse?
             
             // When
-            let downloadRequest = SYNetworkDownloadRequest(requestUrlString: "", destinationPath: { _, _ in (fileURL, [])})
+            let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: "", destinationPath: { _, _ in (fileURL, [])})
             downloadRequest
                 .response { resp in
                     response = resp
@@ -388,7 +388,7 @@ class DownloadResponseTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: "", destinationPath: { _, _ in (fileURL, [.removePreviousFile])})
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: "", destinationPath: { _, _ in (fileURL, [.removePreviousFile])})
         downloadRequest
             .response { resp in
                 response = resp
@@ -423,7 +423,7 @@ class DownloadResumeDataTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: urlString)
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: urlString)
         downloadRequest
             .response { resp in
                 response = resp
@@ -452,7 +452,7 @@ class DownloadResumeDataTestCase: DownloadTestCase {
         var response: DefaultDownloadResponse?
         
         // When
-        let downloadRequest = SYNetworkDownloadRequest(requestUrlString: urlString, method: .get)
+        let downloadRequest = SYNetworkingDownloadRequest(requestUrlString: urlString, method: .get)
         
         downloadRequest.downloadProgress { (progress) in
             guard !cancelled else { return }
@@ -488,7 +488,7 @@ class DownloadResumeDataTestCase: DownloadTestCase {
         var response: DownloadResponse<Any>?
         
         // When
-        let download = SYNetworkDownloadRequest(requestUrlString: urlString, method: .get)
+        let download = SYNetworkingDownloadRequest(requestUrlString: urlString, method: .get)
         download.downloadProgress { progress in
             guard !cancelled else { return }
             
@@ -524,7 +524,7 @@ class DownloadResumeDataTestCase: DownloadTestCase {
         var response1: DownloadResponse<Data>?
         
         // When
-        let download = SYNetworkDownloadRequest(requestUrlString: urlString, method: .get)
+        let download = SYNetworkingDownloadRequest(requestUrlString: urlString, method: .get)
         download.downloadProgress { progress in
             guard !cancelled else { return }
             

@@ -31,10 +31,10 @@ class SYBasicDataRequest: SYDataRequest {
         super.init()
     }
     
-    override var requestUrl: String {
+    override var requestURLString: String {
         return self.requestUrlString
     }
-    
+
     override var requestMethod: HTTPMethod {
         return self.method
     }

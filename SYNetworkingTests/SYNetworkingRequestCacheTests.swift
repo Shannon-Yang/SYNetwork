@@ -16,7 +16,7 @@ class SYNetworkingRequestCacheTests: SYNetworkTestCase {
     
     override func setUp() {
         super.setUp()
-        SYNetworkingConfig.sharedInstance.baseUrlString = "https://httpbin.org/"
+        SYNetworkingConfig.sharedInstance.baseURLString = "https://httpbin.org/"
         get = SYBasicDataRequest(requestUrlString: "get", method: .get, parameters: ["foo": "bar"])
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -29,55 +29,16 @@ class SYNetworkingRequestCacheTests: SYNetworkTestCase {
     
     func testBasicResponseDataSourceServer() {
         self.expectSuccess(.server, request: get)
-        self.testClearAllCache()
     }
     
     func testBasicResponseDataSourceCacheIfPossible() {
-        self.testClearAllCache()
         self.expectSuccess(.cacheIfPossible, request: get)
     }
     
     func testBasicResponseDataSourceCacheAndServer() {
-        self.testClearAllCache()
         self.expectSuccess(.cacheAndServer, request: get)
     }
-    
-    func testClearAllCache() {
-        do {
-            try SYDataRequest.clearAllLocalCache {
-                print("clear success")
-            }
-        } catch let error {
-            print("\(error)")
-        }
-    }
-    
-    func testExpiredCacheTime() {
-        
-        get = SYBasicDataRequest(requestUrlString: "get", method: .get, parameters: ["foo": "bar"], cacheTimeInSeconds: 5)
-        guard let get = get else {
-            return
-        }
-        let exp = self.expectation(description: "Request should succeed")
-        get.responseJSON(responseDataSource: .cacheIfPossible, { (isDataFromCache, dataResponse) in
-            XCTAssertFalse(isDataFromCache)
-            exp.fulfill()
-            
-            sleep(6)
-            
-            // load cache data should failure
-            
-            do {
-                let data = try get.responseJSONFromCache()
-                XCTAssertNil(data)
-            } catch let error {
-                print("\(error)")
-                XCTAssertNotNil(error)
-            }
-        })
-        self.waitForExpectationsWithCommonTimeout()
-    }
-    
+
     func testCacheKey() {
         
         let key1 = "version 1"

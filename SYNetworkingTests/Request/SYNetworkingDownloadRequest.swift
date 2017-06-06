@@ -32,7 +32,7 @@ class SYNetworkingDownloadRequest: SYDownloadRequest {
         return self.parameters
     }
     
-    override var requestUrl: String {
+    override var requestURLString: String {
         return self.requestUrlString
     }
     
