@@ -42,5 +42,9 @@ public class SYNetworkingConfig {
     /// The delegate used when initializing the session. `SessionDelegate()` by default.
     
     public var sessionDelegate: Alamofire.SessionDelegate = Alamofire.SessionDelegate()
+    
+    /// It indicates whether you want to print the request log. default is true
+    
+    public var shouldPrintRequestLog: Bool = true
 }
 

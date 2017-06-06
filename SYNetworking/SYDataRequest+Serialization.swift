@@ -1039,6 +1039,11 @@ private extension SYDataRequest {
         case .failure(_):
             self.requestFailedFilter(response)
         }
+        
+        if SYNetworkingConfig.sharedInstance.shouldPrintRequestLog {
+            let description = response.responseDescriptionFormat(self)
+            print("\(description)")
+        }
     }
     
     func generateResponseDataFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<Data>) -> Void) {
