@@ -46,7 +46,7 @@ extension Alamofire.DefaultDataResponse: ResponseDescription {
 extension Alamofire.DataResponse: ResponseDescription {
     
     public func responseDescriptionFormat(_ request: SYRequest) -> String {
-        return generateResponseDescription(request, urlRequest: self.request, response: self.response, data: self.data, result: self.result.description, error: self.error, timeline: self.timeline)
+        return generateResponseDescription(request, urlRequest: self.request, response: self.response, data: self.data, error: self.error, timeline: self.timeline)
     }
     
     public var responseCommon: ResponseCommon? {
@@ -72,7 +72,7 @@ extension Alamofire.DefaultDownloadResponse: ResponseDescription {
 extension Alamofire.DownloadResponse: ResponseDescription {
     
     public func responseDescriptionFormat(_ request: SYRequest) -> String {
-        return generateResponseDescription(request, urlRequest: self.request, response: self.response, temporaryURL: self.temporaryURL, destinationURL: self.destinationURL, resumeData: self.resumeData, result: self.result.description, error: self.error, timeline: self.timeline)
+        return generateResponseDescription(request, urlRequest: self.request, response: self.response, temporaryURL: self.temporaryURL, destinationURL: self.destinationURL, resumeData: self.resumeData, error: self.error, timeline: self.timeline)
     }
     
     public var responseCommon: ResponseCommon? {
@@ -80,7 +80,7 @@ extension Alamofire.DownloadResponse: ResponseDescription {
     }
 }
 
-func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, response: HTTPURLResponse?, temporaryURL: URL? = nil, destinationURL: URL? = nil, resumeData: Data? = nil, data: Data? = nil, result: String? = nil, error: Error?, timeline: Timeline) -> String {
+func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, response: HTTPURLResponse?, temporaryURL: URL? = nil, destinationURL: URL? = nil, resumeData: Data? = nil, data: Data? = nil, error: Error?, timeline: Timeline) -> String {
     
     func generateTimelineResponseDescription(timeline: Timeline) -> String {
         let description = "{ \n  Request Start Time: \(timeline.requestStartTime)\n\n  Initial Response Time: \(timeline.initialResponseTime)\n\n  Request Completed Time: \(timeline.requestCompletedTime)\n\n  Serialization Completed Time: \(timeline.serializationCompletedTime)\n\n  Latency: \(timeline.latency) secs\n\n  Request Duration: \(timeline.requestDuration) secs\n\n  Serialization Duration: \(timeline.serializationDuration) secs\n\n  Total Duration: \(timeline.totalDuration) secs\n }"
@@ -94,7 +94,6 @@ func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, 
     description.append("  RequestMethod: \(urlRequest?.httpMethod ?? "")  RequestURL: \(urlRequest?.description ?? "")")
     
     let parameters = SYNetworkingConfig.sharedInstance.uniformParameters?.merged(with: request.requestParameters) ?? request.requestParameters
-    
     var parametersString = ""
     if let string = JSON(parameters ?? [:]).rawString() {
         parametersString = string
@@ -120,8 +119,11 @@ func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, 
         description.append(" Timeline⏰⏰: \n\(generateTimelineResponseDescription(timeline: timeline))\n\nError❗️: \(error.localizedDescription)")
         return description
     }
-    
-    description.append("\nData: \(data?.count ?? 0) bytes\n\nResult: \(result ?? "")\n\nTimeline⏰⏰: \n\(generateTimelineResponseDescription(timeline: timeline))")
+    var resultJSONString: String?
+    if let resultData = data {
+        resultJSONString = JSON(resultData).rawString()
+    }
+    description.append("\nData: \(data?.count ?? 0) bytes\n\nResult: \(resultJSONString ?? "")\n\nTimeline⏰⏰: \n\(generateTimelineResponseDescription(timeline: timeline))")
     
     return description
 }
