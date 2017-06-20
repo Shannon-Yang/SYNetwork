@@ -39,17 +39,19 @@ public protocol CacheCustomizable {
     /// Custom Request cache operations From Business Logic Layer, indicating the need to send a request
     ///
     /// - Parameter request: current request
+    /// - Parameter CacheResponse: cache Response
     /// - Returns: true is send request , false It does not send the request
     
-    func shouldSendRequest(_ request: SYRequest) -> Bool
+    func shouldSendRequest<T>(_ request: SYRequest, cacheResponse: Alamofire.DataResponse<T>) -> Bool
     
     
     /// Custom response cache, By Business Logic Layer to indicate the current cache needs to be updated
     ///
+    /// - Parameter request: current request
     /// - Parameter response: current request response
     /// - Returns: if return true, will to update cache,otherwise not update
     
-    func shouldUpdateCache<T>(_ response: Alamofire.DataResponse<T>) -> Bool
+    func shouldUpdateCache<T>(_ request: SYRequest, response: Alamofire.DataResponse<T>) -> Bool
 }
 
 /// Custom parameter load Cache. Default is Self parameter
@@ -239,11 +241,12 @@ extension SYDataRequest {
             }
             self.responseDataFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Data>) in
                 do {
-                    loadCache(responseData: try loadCacheData())
-                    let isSendRequest = customCacheRequest.shouldSendRequest(self)
+                    let cacheResponse = try loadCacheData()
+                    loadCache(responseData: cacheResponse)
+                    let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
                         self.dataRequest.validate().responseData(queue: self.responseQueue,completionHandler: { dataResponse in
-                            let isUpdateCache = customCacheRequest.shouldUpdateCache(dataResponse)
+                            let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: dataResponse)
                             if isUpdateCache {
                                 var response = dataResponse
                                 if response.result.isSuccess {
@@ -362,11 +365,12 @@ extension SYDataRequest {
             }
             self.responseStringFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<String>) in
                 do {
-                    loadCache(responseString: try loadCacheData())
-                    let isSendRequest = customCacheRequest.shouldSendRequest(self)
+                    let cacheResponse = try loadCacheData()
+                    loadCache(responseString: cacheResponse)
+                    let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
                         self.dataRequest.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
-                            let isUpdateCache = customCacheRequest.shouldUpdateCache(stringResponse)
+                            let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: stringResponse)
                             if isUpdateCache {
                                 var response = stringResponse
                                 if response.result.isSuccess {
@@ -483,11 +487,12 @@ extension SYDataRequest {
             }
             self.responseJSONFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Any>) in
                 do {
-                    loadCache(responseJSON: try loadCacheData())
-                    let isSendRequest = customCacheRequest.shouldSendRequest(self)
+                    let cacheResponse = try loadCacheData()
+                    loadCache(responseJSON: cacheResponse)
+                    let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
                         self.dataRequest.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
-                            let isUpdateCache = customCacheRequest.shouldUpdateCache(jsonResponse)
+                            let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: jsonResponse)
                             if isUpdateCache {
                                 var response = jsonResponse
                                 if response.result.isSuccess {
@@ -606,11 +611,12 @@ extension SYDataRequest {
             }
             self.responsePropertyListFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Any>) in
                 do {
-                    loadCache(responsePropertyList: try loadCacheData())
-                    let isSendRequest = customCacheRequest.shouldSendRequest(self)
+                    let cacheResponse = try loadCacheData()
+                    loadCache(responsePropertyList: cacheResponse)
+                    let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
                         self.dataRequest.validate().responsePropertyList(queue: self.responseQueue, options: self.responsePropertyListOptions, completionHandler: { propertyListResponse in
-                            let isUpdateCache = customCacheRequest.shouldUpdateCache(propertyListResponse)
+                            let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: propertyListResponse)
                             if isUpdateCache {
                                 var response = propertyListResponse
                                 if response.result.isSuccess {
@@ -726,11 +732,12 @@ extension SYDataRequest {
             }
             self.responseSwiftyJSONFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<JSON>) in
                 do {
-                    loadCache(responseSwiftyJSON: try loadCacheData())
-                    let isSendRequest = customCacheRequest.shouldSendRequest(self)
+                    let cacheResponse = try loadCacheData()
+                    loadCache(responseSwiftyJSON: cacheResponse)
+                    let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
                         self.dataRequest.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
-                            let isUpdateCache = customCacheRequest.shouldUpdateCache(swiftyJSONResponse)
+                            let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: swiftyJSONResponse)
                             if isUpdateCache {
                                 var response = swiftyJSONResponse
                                 if response.result.isSuccess {
@@ -868,11 +875,12 @@ extension SYDataRequest {
             }
             self.responseObjectFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<T>) in
                 do {
-                    loadCache(responseObject: try loadCacheData())
-                    let isSendRequest = customCacheRequest.shouldSendRequest(self)
+                    let cacheResponse = try loadCacheData()
+                    loadCache(responseObject: cacheResponse)
+                    let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
                         self.dataRequest.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
-                            let isUpdateCache = customCacheRequest.shouldUpdateCache(objectResponse)
+                            let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: objectResponse)
                             if isUpdateCache {
                                 var response = objectResponse
                                 if response.result.isSuccess {
@@ -984,11 +992,12 @@ extension SYDataRequest {
             }
             self.responseObjectArrayFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<[T]>) in
                 do {
-                    loadCache(responseObjectArray: try loadCacheData())
-                    let isSendRequest = customCacheRequest.shouldSendRequest(self)
+                    let cacheResponse = try loadCacheData()
+                    loadCache(responseObjectArray: cacheResponse)
+                    let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
                         self.dataRequest.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T]>) in
-                            let isUpdateCache = customCacheRequest.shouldUpdateCache(objectArrayResponse)
+                            let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: objectArrayResponse)
                             if isUpdateCache {
                                 var response = objectArrayResponse
                                 if response.result.isSuccess {

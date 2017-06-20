@@ -95,7 +95,7 @@ func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, 
     
     let parameters = SYNetworkingConfig.sharedInstance.uniformParameters?.merged(with: request.requestParameters) ?? request.requestParameters
     var parametersString = ""
-    if let string = JSON(parameters ?? [:]).rawString() {
+    if let jsonParameters = parameters,let string = JSON(jsonParameters).rawString() {
         parametersString = string
     }
     description.append(" \n\n↑↑↑↑ [REQUEST]: \n\n\(parametersString)")
