@@ -51,6 +51,7 @@
 		8294DC111E8B61BD007F2A4F /* SYNetworkingRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DC0B1E8B61BD007F2A4F /* SYNetworkingRequestTests.swift */; };
 		8294DC121E8B61BD007F2A4F /* SYNetworkingTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DC0C1E8B61BD007F2A4F /* SYNetworkingTestCase.swift */; };
 		8294DC131E8B61BD007F2A4F /* SYNetworkingValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DC0D1E8B61BD007F2A4F /* SYNetworkingValidationTests.swift */; };
+		E9F9E8A64C88C037F1F2D350 /* Pods_SYNetworkingExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44B46F61C65895E2FACC534A /* Pods_SYNetworkingExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,7 +80,10 @@
 
 /* Begin PBXFileReference section */
 		01E76A5393D8962EEA2761FA /* Pods-SYNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetworking.release.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetworking/Pods-SYNetworking.release.xcconfig"; sourceTree = "<group>"; };
+		44B46F61C65895E2FACC534A /* Pods_SYNetworkingExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SYNetworkingExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B9989F40799FD81FA9E8036 /* Pods-SYNetworkingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetworkingTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetworkingTests/Pods-SYNetworkingTests.debug.xcconfig"; sourceTree = "<group>"; };
+		71667FB8959DC21C7A9E3D8F /* Pods-SYNetworkingExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetworkingExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetworkingExample/Pods-SYNetworkingExample.release.xcconfig"; sourceTree = "<group>"; };
+		7DBB7B8EE6175A017BABA28C /* Pods-SYNetworkingExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetworkingExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetworkingExample/Pods-SYNetworkingExample.debug.xcconfig"; sourceTree = "<group>"; };
 		8294DB861E8B6009007F2A4F /* SYNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SYNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8294DB891E8B6009007F2A4F /* SYNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SYNetworking.h; sourceTree = "<group>"; };
 		8294DB8A1E8B6009007F2A4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -159,6 +163,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9F9E8A64C88C037F1F2D350 /* Pods_SYNetworkingExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +189,7 @@
 			children = (
 				E6A243A0463F14126593FBF7 /* Pods_SYNetworking.framework */,
 				E202261CDEEFD1A04A71C8E3 /* Pods_SYNetworkingTests.framework */,
+				44B46F61C65895E2FACC534A /* Pods_SYNetworkingExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -318,6 +324,8 @@
 				01E76A5393D8962EEA2761FA /* Pods-SYNetworking.release.xcconfig */,
 				6B9989F40799FD81FA9E8036 /* Pods-SYNetworkingTests.debug.xcconfig */,
 				8BE46176B237799F2D05A7C7 /* Pods-SYNetworkingTests.release.xcconfig */,
+				7DBB7B8EE6175A017BABA28C /* Pods-SYNetworkingExample.debug.xcconfig */,
+				71667FB8959DC21C7A9E3D8F /* Pods-SYNetworkingExample.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -381,9 +389,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8294DBCF1E8B60B4007F2A4F /* Build configuration list for PBXNativeTarget "SYNetworkingExample" */;
 			buildPhases = (
+				62E5BF429C5D5839F304ED34 /* [CP] Check Pods Manifest.lock */,
 				8294DBA01E8B60B4007F2A4F /* Sources */,
 				8294DBA11E8B60B4007F2A4F /* Frameworks */,
 				8294DBA21E8B60B4007F2A4F /* Resources */,
+				C7DBD160A881988720881CCD /* [CP] Embed Pods Frameworks */,
+				1BE7F0B2DA75A6953A852910 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -550,6 +561,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworking/Pods-SYNetworking-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		1BE7F0B2DA75A6953A852910 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkingExample/Pods-SYNetworkingExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3F5C5C01A02376A37B3880C0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -580,6 +606,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkingTests/Pods-SYNetworkingTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		62E5BF429C5D5839F304ED34 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		BF499DF0E3CBE3D797EE0596 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -593,6 +634,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C7DBD160A881988720881CCD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkingExample/Pods-SYNetworkingExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F145AD00D6DC8B05153F0E22 /* [CP] Copy Pods Resources */ = {
@@ -904,6 +960,7 @@
 		};
 		8294DBC91E8B60B4007F2A4F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7DBB7B8EE6175A017BABA28C /* Pods-SYNetworkingExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2KT364D29M;
@@ -918,6 +975,7 @@
 		};
 		8294DBCA1E8B60B4007F2A4F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 71667FB8959DC21C7A9E3D8F /* Pods-SYNetworkingExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2KT364D29M;

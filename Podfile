@@ -17,3 +17,11 @@ pod 'Alamofire', '~> 4.0'
 pod 'SwiftyJSON'
 pod 'ObjectMapper', '~> 2.2'
 end
+
+target 'SYNetworkingExample’ do
+pod 'Alamofire', '~> 4.0'
+pod 'SwiftyJSON'
+pod 'ObjectMapper', '~> 2.2'
+end
+
+

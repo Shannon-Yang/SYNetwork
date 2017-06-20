@@ -1,0 +1,6 @@
+framework module Pods_SYNetworkingExample {
+  umbrella header "Pods-SYNetworkingExample-umbrella.h"
+
+  export *
+  module * { export * }
+}
