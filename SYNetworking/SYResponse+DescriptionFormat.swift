@@ -83,7 +83,7 @@ extension Alamofire.DownloadResponse: ResponseDescription {
 func generateResponseDescription(_ request: SYRequest, urlRequest: URLRequest?, response: HTTPURLResponse?, temporaryURL: URL? = nil, destinationURL: URL? = nil, resumeData: Data? = nil, data: Data? = nil, error: Error?, timeline: Timeline) -> String {
     
     func generateTimelineResponseDescription(timeline: Timeline) -> String {
-        let description = "{ \n  Request Start Time: \(timeline.requestStartTime)\n\n  Initial Response Time: \(timeline.initialResponseTime)\n\n  Request Completed Time: \(timeline.requestCompletedTime)\n\n  Serialization Completed Time: \(timeline.serializationCompletedTime)\n\n  Latency: \(timeline.latency) secs\n\n  Request Duration: \(timeline.requestDuration) secs\n\n  Serialization Duration: \(timeline.serializationDuration) secs\n\n  Total Duration: \(timeline.totalDuration) secs\n }"
+        let description = "{ \n  Request Duration: \(String(format: "%.6f", timeline.requestDuration)) secs\n  Serialization Duration: \(String(format: "%.6f", timeline.serializationDuration)) secs\n  Total Duration: \(String(format: "%.6f", timeline.totalDuration)) secs\n }"
        return description
     }
     
