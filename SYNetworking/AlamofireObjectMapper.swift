@@ -10,11 +10,6 @@ import Foundation
 import Alamofire
 import ObjectMapper
 
-
-import Foundation
-import Alamofire
-import ObjectMapper
-
 // MARK: - Request for ObjectMapper
 
 extension DataRequest {

@@ -7,21 +7,21 @@ use_frameworks!
 inhibit_all_warnings!
 
 target 'SYNetworking’ do
-pod 'Alamofire', '~> 4.0'
+pod 'Alamofire', '~> 4.5'
 pod 'SwiftyJSON'
-pod 'ObjectMapper', '~> 2.2'
+pod 'ObjectMapper'
 end
 
 target 'SYNetworkingTests' do
-pod 'Alamofire', '~> 4.0'
+pod 'Alamofire', '~> 4.5'
 pod 'SwiftyJSON'
-pod 'ObjectMapper', '~> 2.2'
+pod 'ObjectMapper'
 end
 
 target 'SYNetworkingExample’ do
-pod 'Alamofire', '~> 4.0'
+pod 'Alamofire', '~> 4.5'
 pod 'SwiftyJSON'
-pod 'ObjectMapper', '~> 2.2'
+pod 'ObjectMapper'
 end
 
 
