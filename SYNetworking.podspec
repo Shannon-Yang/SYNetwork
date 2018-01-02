@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "SYNetworking"
-  s.version      = "1.0.8"
+  s.version      = "1.1"
   s.summary      = "SYNetworking is is a high level request util based on Alamofire."
 
   # This description is used to generate tags and improve search results.
@@ -132,8 +132,8 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.dependency 'Alamofire', '~> 4.0'
-  s.dependency 'ObjectMapper', '~> 2.2'
+  s.dependency 'Alamofire', '~> 4.5'
+  s.dependency 'ObjectMapper'
   s.dependency 'SwiftyJSON'
   
 end
