@@ -8,6 +8,9 @@
 
 import Foundation
 import Alamofire
+import var CommonCrypto.CC_MD5_DIGEST_LENGTH
+import func CommonCrypto.CC_MD5
+import typealias CommonCrypto.CC_LONG
 
 /// cache load error type
 
@@ -186,7 +189,7 @@ private extension SYDataRequest {
         let metadata = SYCacheMetadata()
         metadata.cacheKey = self.cacheKey
         metadata.creationDate = Date()
-        metadata.responseStringEncoding = self.stringEncodingWithRequest(request: self)
+        metadata.responseStringEncoding = self.stringEncodingWithRequest()
         metadata.responseJSONOptions = self.responseJSONOptions
         metadata.responsePropertyListOptions = self.responsePropertyListOptions
         metadata.responseObjectKeyPath = self.responseObjectKeyPath
@@ -228,7 +231,7 @@ private extension SYDataRequest {
                 if let method = customLoadCacheInfo.requestMethod {
                     requestMethod = method
                 } else {
-                    requestMethod = self.requestMethod
+                    requestMethod = self.method
                 }
                 if let baseUrlString = customLoadCacheInfo.baseURLString {
                     baseURLString = baseUrlString
@@ -243,7 +246,7 @@ private extension SYDataRequest {
                 if let parameters = customLoadCacheInfo.requestParameters {
                     requestParameters = parameters
                 } else {
-                    if let arguments = self.requestParameters {
+                    if let arguments = self.parameters {
                         requestParameters = arguments
                     }
                 }
@@ -253,19 +256,37 @@ private extension SYDataRequest {
                     cacheKey = self.cacheKey
                 }
             } else {
-                requestMethod = self.requestMethod
+                requestMethod = self.method
                 baseURLString = SYNetworkingConfig.sharedInstance.baseURLString
                 requestURLString = self.requestURLString
-                if let arguments = self.requestParameters {
+                if let arguments = self.parameters {
                     requestParameters = arguments
                 }
                 cacheKey = self.cacheKey
             }
             let requestInfo = "\(Key.requestMethod.rawValue):\(requestMethod.rawValue) \(Key.baseUrl.rawValue):\(baseURLString) \(Key.requestUrl.rawValue):\(requestURLString) \(Key.requestParameters.rawValue):\(requestParameters) \(Key.cacheKey.rawValue):\(cacheKey)"
-            return requestInfo.md5()
+            return self.md5(string: requestInfo)
         }
         
         return self.cacheFileName
+    }
+    
+    func md5(string: String) -> String {
+        let length = Int(CC_MD5_DIGEST_LENGTH)
+        let messageData = string.data(using:.utf8)!
+        var digestData = Data(count: length)
+
+        _ = digestData.withUnsafeMutableBytes { digestBytes -> UInt8 in
+            messageData.withUnsafeBytes { messageBytes -> UInt8 in
+                if let messageBytesBaseAddress = messageBytes.baseAddress, let digestBytesBlindMemory = digestBytes.bindMemory(to: UInt8.self).baseAddress {
+                    let messageLength = CC_LONG(messageData.count)
+                    CC_MD5(messageBytesBaseAddress, messageLength, digestBytesBlindMemory)
+                }
+                return 0
+            }
+        }
+        let s = digestData.map { String(format: "%02hhx", $0) }.joined()
+        return s
     }
     
     func createDirectoryIfNeeded(path: String) {
@@ -343,9 +364,9 @@ private extension SYDataRequest {
         return true
     }
     
-    func stringEncodingWithRequest(request: SYRequest) -> String.Encoding {
+    func stringEncodingWithRequest() -> String.Encoding {
         var convertedEncoding = String.Encoding.isoLatin1
-        if let encodingName = request.response?.textEncodingName as CFString! {
+        if let encodingName = self.request?.response?.textEncodingName as CFString? {
             convertedEncoding = String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(
                 CFStringConvertIANACharSetNameToEncoding(encodingName))
             )

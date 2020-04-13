@@ -11,76 +11,15 @@ import Alamofire
 
 open class SYDownloadRequest: SYRequest {
     
-    // MARK: Properties
-    
-    /// The request sent or to be sent to the server.
-    
-    open override var request: URLRequest? {
-        return self.downloadRequest.request
-    }
-    
-    /// The resume data of the underlying download task if available after a failure.
-    
-    var resumeData: Data? {
-        return self.downloadRequest.resumeData
-    }
-    
-    /// The progress of downloading the response data from the server for the request.
-    
-    open var progress: Progress {
-        return self.downloadRequest.progress
-    }
-    
-    // MARK: State
-    
-    /// Cancels the request.
-    
-    open override func cancel() {
-        self.downloadRequest.cancel()
-    }
-    
-    // MARK: Progress
-    
-    /// Sets a closure to be called periodically during the lifecycle of the `Request` as data is read from the server.
-    ///
-    /// - parameter queue:   The dispatch queue to execute the closure on.
-    /// - parameter closure: The code to be executed periodically as data is read from the server.
-    ///
-    /// - returns: The request.
-    
-    open func downloadProgress(queue: DispatchQueue = DispatchQueue.main, closure: @escaping Alamofire.DownloadRequest.ProgressHandler) -> Self {
-        self.downloadRequest.downloadProgress(queue: queue, closure: closure)
-        return self
-    }
-    
-    // MARK: Destination
-    
-    /// Creates a download file destination closure which uses the default file manager to move the temporary file to a
-    /// file URL in the first available directory with the specified search path directory and search path domain mask.
-    ///
-    /// - parameter directory: The search path directory. `.DocumentDirectory` by default.
-    /// - parameter domain:    The search path domain mask. `.UserDomainMask` by default.
-    ///
-    /// - returns: A download file destination closure.
-    
-    open class func suggestedDownloadDestination(
-        for directory: FileManager.SearchPathDirectory = .documentDirectory,
-        in domain: FileManager.SearchPathDomainMask = .userDomainMask)
-        -> Alamofire.DownloadRequest.DownloadFileDestination {
-            return Alamofire.DownloadRequest.suggestedDownloadDestination(for: directory, in: domain)
-    }
-    
     //MARK: - SubClass Override
     
     /// The queue on which the completion handler is dispatched. default is nil.
     
-    open var downloadQueue: DispatchQueue? {
-        return nil
-    }
+    open var downloadQueue: DispatchQueue = .main
     
     /// The final destination URL of the data returned from the server if it was moved.
     
-    open var destination: Alamofire.DownloadRequest.DownloadFileDestination? {
+    open var destination: DownloadRequest.Destination? {
         return nil
     }
     
@@ -104,28 +43,20 @@ open class SYDownloadRequest: SYRequest {
         return []
     }
     
-    /// override current alamofireRequest
+    /// current data request
     
-    override var alamofireRequest: Alamofire.Request {
-        return self.configDownloadRequest()
+    public var request: DownloadRequest?
+    
+    public override init() {
+        super.init()
+        self.request = self.session.download(self.urlString,
+                                             method: self.method,
+                                             parameters: self.parameters,
+                                             encoding: self.encoding,
+                                             headers: self.headers,
+                                             interceptor: self.interceptor,
+                                             requestModifier: self.requestModifier,to: self.destination)
+        
     }
     
-    /// current downloadRequest
-    
-    lazy var downloadRequest: Alamofire.DownloadRequest = { [unowned self] in
-        return self.alamofireRequest as! Alamofire.DownloadRequest
-        }()
-}
-
-//MARK: - Private SYDownloadRequest
-
-private extension SYDownloadRequest {
-    
-    func configDownloadRequest() -> Alamofire.DownloadRequest {
-        let downloadRequest = SYSessionManager.sharedInstance.download(self.urlString, method: self.requestMethod, parameters: self.requestParameters, encoding: self.encoding, headers: self.headers, to: self.destination)
-        if let resumeData = downloadRequest.resumeData {
-            return SYSessionManager.sharedInstance.download(resumingWith: resumeData, to: self.destination)
-        }
-        return downloadRequest
-    }
 }

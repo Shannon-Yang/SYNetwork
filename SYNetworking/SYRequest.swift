@@ -13,79 +13,67 @@ import Alamofire
 
 open class SYRequest: NSObject {
     
+    //MARK: - Session Config
+    
+    /// The configuration used to construct the managed session.`URLSessionConfiguration.default` by default
+    
+    public var configuration: URLSessionConfiguration = URLSessionConfiguration.default
+    
+    // Underlying `URLSession` for this instance. Default is "URLSession(configuration: configuration, delegate: delegate, delegateQueue: delegateQueue)"
+    
+    public var urlSession: URLSession?
+    
+    /// The delegate used when initializing the session. `SYSessionDelegate()` by default.
+    
+    public var delegate: SessionDelegate = SessionDelegate()
+    
+    /// Root `DispatchQueue` for all internal callbacks and state updates. **MUST** be a serial queue. `DispatchQueue(label: "org.alamofire.session.rootQueue")` by default.
+    
+    public var rootQueue: DispatchQueue = DispatchQueue(label: "org.alamofire.session.rootQueue")
+    
+    /// Determines whether this instance will automatically start all `Request`s. `true` by default. If set to `false`, all `Request`s created must have `.resume()` called. on them for them to start.
+    
+    public var startRequestsImmediately: Bool = true
+    
+    /// `DispatchQueue` on which to perform `URLRequest` creation. By default this queue will use the `rootQueue` as its `target`. A separate queue can be used if it's determined request creation is a bottleneck, but that should only be done after careful testing and profiling. `nil` by default.
+    
+    public var requestQueue: DispatchQueue? = nil
+    
+    // `DispatchQueue` on which to perform all response serialization. By default this queue will use the `rootQueue` as its `target`. A separate queue can be used if it's determined response serialization is a bottleneck, but that should only be done after careful testing and profiling. `nil` by default.
+    
+    public var serializationQueue: DispatchQueue? = nil
+    
+    //  `RequestInterceptor` to be used for all `Request`s created by this instance. `nil` by default.
+    
+    public var interceptor: RequestInterceptor? = nil
+    
+    
+    // Closure which provides a `URLRequest` for mutation.
+    
+    public var requestModifier: ((inout URLRequest) throws -> Void)? = nil
+    
+    /// he server trust policy manager to use for evaluating all server trust. default is nil
+    
+    public var serverTrustManager: ServerTrustManager? = nil
+    
+    // `RedirectHandler` to be used by all `Request`s created by this instance. `nil` by default.
+    
+    public var redirectHandler: RedirectHandler? = nil
+    
+    //  - cachedResponseHandler:    `CachedResponseHandler` to be used by all `Request`s created by this instance. `nil` by default.
+    
+    public var cachedResponseHandler: CachedResponseHandler? = nil
+    
+    //   - eventMonitors: Additional `EventMonitor`s used by the instance. Alamofire always adds a `AlamofireNotifications` `EventMonitor` to the array passed here. `[]` by default.
+    
+    public var eventMonitors: [EventMonitor] = []
+    
+    
     // MARK: Properties
     
     /// cacheMetadata used request's cache
     
     var cacheMetadata: SYCacheMetadata?
-    
-    /// The delegate for the underlying task.
-    
-    open var delegate: TaskDelegate {
-        return self.alamofireRequest.delegate
-    }
-    
-    /// The underlying task.
-    
-    open var task: URLSessionTask? {
-        return self.alamofireRequest.task
-    }
-    
-    /// The request sent or to be sent to the server.
-    
-    open var request: URLRequest? {
-        return self.alamofireRequest.request
-    }
-    
-    /// The response received from the server, if any.
-    
-    open var response: HTTPURLResponse? {
-        return self.alamofireRequest.response
-    }
-    
-    /// The number of times the request has been retried.
-    
-    open var retryCount: UInt {
-        return self.alamofireRequest.retryCount
-    }
-    
-    /// The session belonging to the underlying task.
-    
-    open var session: URLSession {
-        return self.alamofireRequest.session
-    }
-    
-    // MARK: Authentication
-    
-    /// Associates an HTTP Basic credential with the request.
-    ///
-    /// - returns: The request.
-    
-    @discardableResult
-    open func authenticate() -> Self {
-        self.alamofireRequest.authenticate(user: self.user, password: self.password, persistence: self.persistence)
-        return self
-    }
-    
-    // MARK: State
-    
-    /// Resumes the request.
-    
-    open func resume() {
-        self.alamofireRequest.resume()
-    }
-    
-    /// Suspends the request.
-    
-    open func suspend() {
-        self.alamofireRequest.suspend()
-    }
-    
-    /// Cancels the request.
-    
-    open func cancel() {
-        self.alamofireRequest.cancel()
-    }
     
     
     //MARK: - SubClass Override
@@ -116,25 +104,25 @@ open class SYRequest: NSObject {
     
     /// HTTP request method. default is .post
     
-    open var requestMethod: Alamofire.HTTPMethod {
+    open var method: HTTPMethod {
         return .post
     }
     
     /// Additional request parameters.
     
-    open var requestParameters: [String: Any]? {
+    open var parameters: Parameters? {
         return nil
     }
     
     /// Http Header
     
-    open var headers: [String: String]? {
+    open var headers: HTTPHeaders? {
         return nil
     }
     
-    /// An encoding mode used http request. default is URLEncoding.default
+    /// to be used to encode the `parameters` value into the `URLRequest`.
     
-    open var encoding: Alamofire.ParameterEncoding {
+    open var encoding: ParameterEncoding {
         return URLEncoding.default
     }
     
@@ -158,7 +146,7 @@ open class SYRequest: NSObject {
     
     /// Associates an HTTP Basic credential with the request, The user.
     
-    open var user: String {
+    open var username: String {
         return ""
     }
     
@@ -173,7 +161,7 @@ open class SYRequest: NSObject {
     open var persistence: URLCredential.Persistence {
         return .forSession
     }
-
+    
     ///  Called on the main thread after request succeeded.
     
     open func requestCompleteFilter<T: ResponseDescription>(_ response: T) { }
@@ -184,38 +172,36 @@ open class SYRequest: NSObject {
     
     /// Validate response when request success
     
-    open func validateResponseWhenRequestSuccess<T>(_ response: Alamofire.DataResponse<T>) -> (Bool, NSError?) { return (true, nil) }
+    open func validateResponseWhenRequestSuccess<T>(_ response: T) -> (Bool, Error?) { return (true, nil) }
     
-    /// current Request
+
+    //MARK: - Init
     
-    var alamofireRequest: Alamofire.Request {
-        return self.setupAlamofireRequest()
+    // Underlying `URLSession` for this instance.
+    
+    let session: Session
+    
+    // init instance
+    
+    public override init() {
+        if let urlSession = self.urlSession {
+            self.session = Session(session: urlSession,
+                                   delegate: self.delegate,
+                                   rootQueue: self.rootQueue,
+                                   startRequestsImmediately: self.startRequestsImmediately,
+                                   requestQueue: self.requestQueue,
+                                   serializationQueue: self.serializationQueue,
+                                   interceptor: self.interceptor,
+                                   serverTrustManager: self.serverTrustManager,
+                                   redirectHandler: self.redirectHandler,
+                                   cachedResponseHandler: self.cachedResponseHandler,
+                                   eventMonitors: self.eventMonitors)
+        } else {
+            self.session = Session(configuration: self.configuration, delegate: self.delegate, rootQueue: self.rootQueue, startRequestsImmediately: self.startRequestsImmediately, requestQueue: self.requestQueue, serializationQueue: self.serializationQueue, interceptor: self.interceptor, serverTrustManager: self.serverTrustManager, redirectHandler: self.redirectHandler, cachedResponseHandler: self.cachedResponseHandler, eventMonitors: self.eventMonitors)
+        }
+        super.init()
     }
 }
-
-//MARK: - CustomStringConvertible
-
-extension SYRequest {
-    
-    /// The textual representation used when written to an output stream, which includes the HTTP method and URL, as
-    /// well as the response status code if a response has been received.
-    
-    open override var description: String {
-        return self.alamofireRequest.description
-    }
-}
-
-//MARK: - CustomDebugStringConvertible
-
-extension SYRequest {
-    
-    /// The textual representation used when written to an output stream, in the form of a cURL command.
-    
-    open override var debugDescription: String {
-        return self.alamofireRequest.debugDescription
-    }
-}
-
 
 // MARK: - Private SYRequest
 
@@ -235,10 +221,6 @@ extension SYRequest {
             }
         }
         return "\(baseURL)\(self.requestURLString)"
-    }
-    
-    func setupAlamofireRequest() -> Alamofire.Request {
-        return SYSessionManager.sharedInstance.request(self.urlString, method: self.requestMethod, parameters: SYNetworkingConfig.sharedInstance.uniformParameters?.merged(with: self.requestParameters) ?? self.requestParameters, encoding: self.encoding, headers: self.headers)
     }
 }
 

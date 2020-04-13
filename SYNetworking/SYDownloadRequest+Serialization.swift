@@ -21,9 +21,9 @@ extension SYDownloadRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func response(_ completionHandler: @escaping (Alamofire.DefaultDownloadResponse) -> Void)
+    public func response(_ completionHandler: @escaping (AFDownloadResponse<URL?>) -> Void)
         -> Self {
-            self.downloadRequest.validate().response(queue: self.downloadQueue, completionHandler: completionHandler)
+            self.request?.validate().response(queue: self.downloadQueue, completionHandler: completionHandler)
             return self
     }
     
@@ -37,9 +37,9 @@ extension SYDownloadRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func response<T: DownloadResponseSerializerProtocol>(_ responseSerializer: T, completionHandler: @escaping (Alamofire.DownloadResponse<T.SerializedObject>) -> Void)
+    public func response<T: DownloadResponseSerializerProtocol>(_ responseSerializer: T, completionHandler: @escaping (AFDownloadResponse<T.SerializedObject>) -> Void)
         -> Self {
-            self.downloadRequest.validate().response(queue: self.downloadQueue, responseSerializer: responseSerializer, completionHandler: completionHandler)
+            self.request?.validate().response(queue: self.downloadQueue, responseSerializer: responseSerializer, completionHandler: completionHandler)
             return self
     }
 }
@@ -57,10 +57,10 @@ extension SYDownloadRequest {
     @discardableResult
     public func responseData(
         queue: DispatchQueue? = nil,
-        completionHandler: @escaping (Alamofire.DownloadResponse<Data>) -> Void)
+        completionHandler: @escaping (AFDownloadResponse<Data>) -> Void)
         -> Self
     {
-        self.downloadRequest.validate().responseData(queue: self.downloadQueue, completionHandler: completionHandler)
+        self.request?.validate().responseData(queue:self.downloadQueue,completionHandler: completionHandler)
         return self
     }
     
@@ -81,10 +81,10 @@ extension SYDownloadRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func responseString(_ completionHandler: @escaping (Alamofire.DownloadResponse<String>) -> Void)
+    public func responseString(_ completionHandler: @escaping (AFDownloadResponse<String>) -> Void)
         -> Self
     {
-        self.downloadRequest.validate().responseString(queue: self.downloadQueue, encoding: self.downloadStringEncoding, completionHandler: completionHandler)
+        self.request?.validate().responseString(queue: self.downloadQueue, encoding: self.downloadStringEncoding, completionHandler: completionHandler)
         return self
     }
 }
@@ -102,34 +102,10 @@ extension SYDownloadRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func responseJSON(_ completionHandler: @escaping (Alamofire.DownloadResponse<Any>) -> Void)
+    public func responseJSON(_ completionHandler: @escaping (AFDownloadResponse<Any>) -> Void)
         -> Self
     {
-        self.downloadRequest.validate().responseJSON(queue: self.downloadQueue, options: self.downloadJSONOptions, completionHandler: completionHandler)
-        return self
-    }
-}
-
-
-//MARK: - PropertyList
-
-extension SYDownloadRequest {
-    
-    /// Adds a handler to be called once the request has finished.
-    ///
-    /// - parameter options:           The property list reading options. Defaults to `[]`.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    ///
-    /// - returns: The request.
-    
-    @discardableResult
-    public func responsePropertyList(
-        queue: DispatchQueue? = nil,
-        options: PropertyListSerialization.ReadOptions = [],
-        completionHandler: @escaping (Alamofire.DownloadResponse<Any>) -> Void)
-        -> Self
-    {
-        self.downloadRequest.validate().responsePropertyList(queue: self.downloadQueue, options: self.downloadPropertyListOptions, completionHandler: completionHandler)
+        self.request?.validate().responseJSON(queue: self.downloadQueue, options: self.downloadJSONOptions, completionHandler: completionHandler)
         return self
     }
 }

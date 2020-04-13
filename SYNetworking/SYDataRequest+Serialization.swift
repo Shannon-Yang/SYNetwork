@@ -42,7 +42,7 @@ public protocol CacheCustomizable {
     /// - Parameter CacheResponse: cache Response
     /// - Returns: true is send request , false It does not send the request
     
-    func shouldSendRequest<T>(_ request: SYRequest, cacheResponse: Alamofire.DataResponse<T>) -> Bool
+    func shouldSendRequest<T,U>(_ request: SYRequest, cacheResponse: DataResponse<T,U>) -> Bool
     
     
     /// Custom response cache, By Business Logic Layer to indicate the current cache needs to be updated
@@ -51,14 +51,14 @@ public protocol CacheCustomizable {
     /// - Parameter response: current request response
     /// - Returns: if return true, will to update cache,otherwise not update
     
-    func shouldUpdateCache<T>(_ request: SYRequest, response: Alamofire.DataResponse<T>) -> Bool
+    func shouldUpdateCache<T,U>(_ request: SYRequest, response: DataResponse<T,U>) -> Bool
 }
 
 /// Custom parameter load Cache. Default is Self parameter
 
 public struct CustomLoadCacheInfo {
     
-    public var requestMethod: Alamofire.HTTPMethod?
+    public var requestMethod: HTTPMethod?
     
     public var baseURLString:  String?
     
@@ -68,7 +68,7 @@ public struct CustomLoadCacheInfo {
     
     public var cacheKey: String?
     
-    public init(requestMethod: Alamofire.HTTPMethod? = nil, baseURLString: String? = nil, requestURLString: String? = nil, requestParameters: [String: Any]? = nil, cacheKey: String? = nil) {
+    public init(requestMethod: HTTPMethod? = nil, baseURLString: String? = nil, requestURLString: String? = nil, requestParameters: [String: Any]? = nil, cacheKey: String? = nil) {
         self.requestMethod = requestMethod
         self.baseURLString = baseURLString
         self.requestURLString = requestURLString
@@ -90,11 +90,12 @@ extension SYDataRequest {
     /// - parameter completionHandler: The code to be executed once the request has finished.
     ///
     /// - returns: The request.
-    
+
     @discardableResult
-    public func response(_ completionHandler: @escaping (_ defaultDataResponse: Alamofire.DefaultDataResponse) -> Void) -> Self {
-        self.dataRequest.validate().response(queue: self.responseQueue, completionHandler: { (defaultDataResponse: Alamofire.DefaultDataResponse) in
-            func requestFilter(_ defaultDataResponse: Alamofire.DefaultDataResponse) {
+    public func response(_ completionHandler: @escaping (_ defaultDataResponse: AFDataResponse<Data?>) -> Void) -> Self {
+        
+        self.request?.validate().response { (defaultDataResponse:AFDataResponse<Data?>) in
+            func requestFilter(_ defaultDataResponse: AFDataResponse<Data?>) {
                 if let _ = defaultDataResponse.error {
                     self.requestFailedFilter(defaultDataResponse)
                 } else {
@@ -103,7 +104,7 @@ extension SYDataRequest {
             }
             requestFilter(defaultDataResponse)
             completionHandler(defaultDataResponse)
-        })
+        }
         return self
     }
     
@@ -118,30 +119,27 @@ extension SYDataRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func response<T: Alamofire.DataResponseSerializerProtocol>(_ responseSerializer: T, completionHandler: @escaping (_ dataResponse: Alamofire.DataResponse<T.SerializedObject>) -> Void) -> Self {
-        self.dataRequest.validate().response(queue: self.responseQueue, responseSerializer: responseSerializer, completionHandler: { dataResponse in
-            func generateValidateFailResponse(_ dataResponse: Alamofire.DataResponse<T.SerializedObject>, serverError: NSError?) -> Alamofire.DataResponse<T.SerializedObject> {
-                let result = responseSerializer.serializeResponse(dataResponse.request,
-                                                                  dataResponse.response,
-                                                                  dataResponse.data,
-                                                                  self.generateValidationFailureError(serverError))
-                return Alamofire.DataResponse(request: dataResponse.request,
-                                              response: dataResponse.response,
-                                              data: dataResponse.data,
-                                              result: result,
-                                              timeline: dataResponse.timeline)
+    public func response<T: DataResponseSerializerProtocol>(_ responseSerializer: T, completionHandler: @escaping (_ dataResponse: AFDataResponse<T.SerializedObject>) -> Void) -> Self {
+        
+        self.request?.validate().response(queue: self.responseQueue, responseSerializer: responseSerializer) { (dataResponse:AFDataResponse<T.SerializedObject>) in
+            
+            func generateValidateFailResponse(_ dataResponse:DataResponse<T.SerializedObject,AFError>,serverError: Error?) -> DataResponse<T.SerializedObject,AFError> {
+                return DataResponse(request: dataResponse.request, response: dataResponse.response, data: dataResponse.data, metrics: dataResponse.metrics, serializationDuration: dataResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
             }
             
             var response = dataResponse
-            if dataResponse.result.isSuccess {
-                let validate = self.validateResponseWhenRequestSuccess(response)
+            switch dataResponse.result {
+            case .success(let obj):
+                let validate = self.validateResponseWhenRequestSuccess(obj)
                 if !validate.0 {
                     response = generateValidateFailResponse(response, serverError: validate.1)
                 }
+            case .failure(_):
+                break
             }
             self.requestFilter(response)
             completionHandler(response)
-        })
+        }
         return self
     }
 }
@@ -159,9 +157,8 @@ extension SYDataRequest {
     /// - Returns: cache data
     ///
     /// - completionHandler: load cache completion handle
-    
-    public func responseDataFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<Data>) -> Void) {
-        self.generateResponseDataFromCache(customLoadCacheInfo, completionHandler: completionHandler)
+    public func responseDataFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<Data,AFError>) -> Void) {
+        self.generateResponseDataFromCache(customLoadCacheInfo,completionHandler: completionHandler)
     }
     
     /// Adds a handler to be called once the request has finished.
@@ -175,29 +172,27 @@ extension SYDataRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func responseData(responseDataSource: ResponseDataSource = .server, _ completionHandler: @escaping (_ isDataFromCache: Bool, _ dataResponse: Alamofire.DataResponse<Data>) -> Void) -> Self {
+    public func responseData(responseDataSource: ResponseDataSource = .server, _ completionHandler: @escaping (_ isDataFromCache: Bool, _ dataResponse: DataResponse<Data,AFError>) -> Void) -> Self {
         
-        func loadCache(responseData: Alamofire.DataResponse<Data>) {
+        func loadCache(responseData: DataResponse<Data,AFError>) {
             completionHandler(true,responseData)
         }
         
-        func generateValidateFailResponse(_ dataResponse: Alamofire.DataResponse<Data>, serverError: NSError?) -> Alamofire.DataResponse<Data> {
-            let result = DataRequest.serializeResponseData(response: dataResponse.response, data: dataResponse.data, error: self.generateValidationFailureError(serverError))
-            return Alamofire.DataResponse(request: dataResponse.request,
-                                          response: dataResponse.response,
-                                          data: dataResponse.data,
-                                          result: result,
-                                          timeline: dataResponse.timeline)
+        func generateValidateFailResponse(_ dataResponse: DataResponse<Data,AFError>, serverError: Error?) -> DataResponse<Data,AFError> {
+            return DataResponse(request: dataResponse.request, response: dataResponse.response, data: dataResponse.data, metrics: dataResponse.metrics, serializationDuration: dataResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
         }
         
         func responseDataFromRequest() {
-            self.dataRequest.validate().responseData(queue: self.responseQueue,completionHandler: { dataResponse in
+            self.request?.validate().responseData(queue: self.responseQueue,completionHandler: { dataResponse in
                 var response = dataResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response, shouldSaveCache: true)
                 completionHandler(false,response)
@@ -206,19 +201,23 @@ extension SYDataRequest {
         
         switch responseDataSource {
         case .server:
-            self.dataRequest.validate().responseData(queue: self.responseQueue, completionHandler: { dataResponse in
+            self.request?.validate().responseData(queue: self.responseQueue, completionHandler: { dataResponse in
                 var response = dataResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
-            self.responseDataFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Data>) in
+            
+            self.responseDataFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<Data,AFError>) in
                 do {
                     loadCache(responseData: try loadCacheData())
                 } catch _ {
@@ -226,7 +225,7 @@ extension SYDataRequest {
                 }
             })
         case .cacheAndServer:
-            self.responseDataFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Data>) in
+            self.responseDataFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<Data,AFError>) in
                 do {
                     loadCache(responseData: try loadCacheData())
                     responseDataFromRequest()
@@ -239,21 +238,24 @@ extension SYDataRequest {
                 assertionFailure(message)
                 return self
             }
-            self.responseDataFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Data>) in
+            self.responseDataFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<Data,AFError>) in
                 do {
                     let cacheResponse = try loadCacheData()
                     loadCache(responseData: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.dataRequest.validate().responseData(queue: self.responseQueue,completionHandler: { dataResponse in
+                        self.request?.validate().responseData(queue: self.responseQueue,completionHandler: { dataResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: dataResponse)
                             if isUpdateCache {
                                 var response = dataResponse
-                                if response.result.isSuccess {
-                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                switch response.result {
+                                case .success(let obj):
+                                    let validate = self.validateResponseWhenRequestSuccess(obj)
                                     if !validate.0 {
                                         response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
+                                case .failure(_):
+                                    break
                                 }
                                 self.requestFilter(response, shouldSaveCache: true)
                                 completionHandler(false,response)
@@ -281,7 +283,7 @@ extension SYDataRequest {
     /// - Returns: cache string data
     /// - completionHandler: load cache completion handle
     
-    public func responseStringFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<String>) -> Void) {
+    public func responseStringFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<String,AFError>) -> Void) {
         self.generateResponseStringFromCache(customLoadCacheInfo, completionHandler: completionHandler)
     }
     
@@ -299,29 +301,27 @@ extension SYDataRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func responseString(responseDataSource: ResponseDataSource = .server, _ completionHandler: @escaping (_ isDataFromCache: Bool, _ stringResponse: Alamofire.DataResponse<String>) -> Void) -> Self {
+    public func responseString(responseDataSource: ResponseDataSource = .server, _ completionHandler: @escaping (_ isDataFromCache: Bool, _ stringResponse: DataResponse<String,AFError>) -> Void) -> Self {
         
-        func loadCache(responseString: Alamofire.DataResponse<String>) {
+        func loadCache(responseString: DataResponse<String,AFError>) {
             completionHandler(true,responseString)
         }
         
-        func generateValidateFailResponse(_ stringResponse: Alamofire.DataResponse<String>, serverError: NSError?) -> Alamofire.DataResponse<String> {
-            let result = DataRequest.serializeResponseString(encoding: self.responseStringEncoding, response: stringResponse.response, data: stringResponse.data, error: self.generateValidationFailureError(serverError))
-            return Alamofire.DataResponse(request: stringResponse.request,
-                                          response: stringResponse.response,
-                                          data: stringResponse.data,
-                                          result: result,
-                                          timeline: stringResponse.timeline)
+        func generateValidateFailResponse(_ stringResponse: DataResponse<String,AFError>, serverError: Error?) -> DataResponse<String,AFError> {
+            return DataResponse(request: stringResponse.request, response: stringResponse.response, data: stringResponse.data, metrics: stringResponse.metrics, serializationDuration: stringResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
         }
         
         func responseStringFromRequest() {
-            self.dataRequest.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
+            self.request?.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
                 var response = stringResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response, shouldSaveCache: true)
                 completionHandler(false,response)
@@ -330,19 +330,22 @@ extension SYDataRequest {
         
         switch responseDataSource {
         case .server:
-            self.dataRequest.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
+            self.request?.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
                 var response = stringResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
-            self.responseStringFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<String>) in
+            self.responseStringFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<String,AFError>) in
                 do {
                     loadCache(responseString: try loadCacheData())
                 } catch _ {
@@ -350,7 +353,7 @@ extension SYDataRequest {
                 }
             })
         case .cacheAndServer:
-            self.responseStringFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<String>) in
+            self.responseStringFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<String,AFError>) in
                 do {
                     loadCache(responseString: try loadCacheData())
                     responseStringFromRequest()
@@ -363,21 +366,24 @@ extension SYDataRequest {
                 assertionFailure(message)
                 return self
             }
-            self.responseStringFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<String>) in
+            self.responseStringFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<String,AFError>) in
                 do {
                     let cacheResponse = try loadCacheData()
                     loadCache(responseString: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.dataRequest.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
+                        self.request?.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: stringResponse)
                             if isUpdateCache {
                                 var response = stringResponse
-                                if response.result.isSuccess {
-                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                switch response.result {
+                                case .success(let obj):
+                                    let validate = self.validateResponseWhenRequestSuccess(obj)
                                     if !validate.0 {
                                         response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
+                                case .failure(_):
+                                    break
                                 }
                                 self.requestFilter(response, shouldSaveCache: true)
                                 completionHandler(false,response)
@@ -405,7 +411,7 @@ extension SYDataRequest {
     /// - Returns: cache JSON data
     /// - completionHandler: load cache completion handle
     
-    public func responseJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<Any>) -> Void) {
+    public func responseJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<Any,AFError>) -> Void) {
         self.generateResponseJSONFromCache(customLoadCacheInfo, completionHandler: completionHandler)
     }
     
@@ -421,50 +427,51 @@ extension SYDataRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func responseJSON(responseDataSource: ResponseDataSource = .server, _ completionHandler: @escaping (_ isDataFromCache: Bool, _ jsonResponse: Alamofire.DataResponse<Any>) -> Void) -> Self {
+    public func responseJSON(responseDataSource: ResponseDataSource = .server, _ completionHandler: @escaping (_ isDataFromCache: Bool, _ jsonResponse: DataResponse<Any,AFError>) -> Void) -> Self {
         
-        func loadCache(responseJSON: Alamofire.DataResponse<Any>) {
+        func loadCache(responseJSON: DataResponse<Any,AFError>) {
             completionHandler(true,responseJSON)
         }
         
         func responseJSONFromRequest() {
-            self.dataRequest.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
+            self.request?.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
                 var response = jsonResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response, shouldSaveCache: true)
                 completionHandler(false,response)
             })
         }
         
-        func generateValidateFailResponse(_ jsonResponse: Alamofire.DataResponse<Any>, serverError: NSError?) -> Alamofire.DataResponse<Any> {
-            let result = DataRequest.serializeResponseJSON(options: self.responseJSONOptions, response: jsonResponse.response, data: jsonResponse.data, error: self.generateValidationFailureError(serverError))
-            return Alamofire.DataResponse(request: jsonResponse.request,
-                                          response: jsonResponse.response,
-                                          data: jsonResponse.data,
-                                          result: result,
-                                          timeline: jsonResponse.timeline)
+        func generateValidateFailResponse(_ jsonResponse: DataResponse<Any,AFError>, serverError: Error?) -> DataResponse<Any,AFError> {
+            return DataResponse(request: jsonResponse.request, response: jsonResponse.response, data: jsonResponse.data, metrics: jsonResponse.metrics, serializationDuration: jsonResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
         }
         
         switch responseDataSource {
         case .server:
-            self.dataRequest.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
+            self.request?.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
                 var response = jsonResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
-            self.responseJSONFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Any>) in
+            self.responseJSONFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<Any,AFError>) in
                 do {
                     loadCache(responseJSON: try loadCacheData())
                 } catch _ {
@@ -472,7 +479,7 @@ extension SYDataRequest {
                 }
             })
         case .cacheAndServer:
-            self.responseJSONFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Any>) in
+            self.responseJSONFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<Any,AFError>) in
                 do {
                     loadCache(responseJSON: try loadCacheData())
                     responseJSONFromRequest()
@@ -485,21 +492,24 @@ extension SYDataRequest {
                 assertionFailure(message)
                 return self
             }
-            self.responseJSONFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Any>) in
+            self.responseJSONFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<Any,AFError>) in
                 do {
                     let cacheResponse = try loadCacheData()
                     loadCache(responseJSON: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.dataRequest.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
+                        self.request?.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: jsonResponse)
                             if isUpdateCache {
                                 var response = jsonResponse
-                                if response.result.isSuccess {
-                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                switch response.result {
+                                case .success(let obj):
+                                   let validate = self.validateResponseWhenRequestSuccess(obj)
                                     if !validate.0 {
                                         response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
+                                case .failure(_):
+                                    break
                                 }
                                 self.requestFilter(response,shouldSaveCache: true)
                                 completionHandler(false,response)
@@ -516,130 +526,6 @@ extension SYDataRequest {
     }
 }
 
-//MARK: - PropertyList
-
-extension SYDataRequest {
-    
-    /// load response PropertyList from cache
-    ///
-    /// - customLoadCacheInfo: custom request info to load Cache. Default customLoadCacheInfo is nil, will use 'Self' request info
-    ///
-    /// - Returns: cache PropertyList data
-    /// - completionHandler: load cache completion handle
-    
-    public func responsePropertyListFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<Any>) -> Void) {
-        self.generateResponsePropertyListFromCache(customLoadCacheInfo, completionHandler: completionHandler)
-    }
-    
-    /// Creates a response serializer that returns an object constructed from the response data using
-    /// `PropertyListSerialization` with the specified reading options.
-    ///
-    /// - parameter responseDataSource: Request's responseData source type, implementing different type responseData source type
-    ///
-    /// - parameter options: The property list reading options. Defaults to `[]`.
-    ///
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    ///
-    /// - parameter isDataFromCache: Whether data is from local cache. default is false
-    ///
-    /// - returns: The request.
-    
-    @discardableResult
-    public func responsePropertyList(responseDataSource: ResponseDataSource = .server, _ completionHandler: @escaping (_ isDataFromCache: Bool,_ propertyListResponse: Alamofire.DataResponse<Any>) -> Void) -> Self {
-        
-        func loadCache(responsePropertyList: Alamofire.DataResponse<Any>) {
-            completionHandler(true,responsePropertyList)
-        }
-        
-        func responsePropertyListFromRequest() {
-            self.dataRequest.validate().responsePropertyList(queue: self.responseQueue, options: self.responsePropertyListOptions, completionHandler: { propertyListResponse in
-                var response = propertyListResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                }
-                self.requestFilter(response, shouldSaveCache: true)
-                completionHandler(false,response)
-            })
-        }
-        
-        func generateValidateFailResponse(_ propertyListResponse: Alamofire.DataResponse<Any>, serverError: NSError?) -> Alamofire.DataResponse<Any> {
-            let result = DataRequest.serializeResponsePropertyList(options: self.responsePropertyListOptions, response: propertyListResponse.response, data: propertyListResponse.data, error: self.generateValidationFailureError(serverError))
-            return Alamofire.DataResponse(request: propertyListResponse.request,
-                                          response: propertyListResponse.response,
-                                          data: propertyListResponse.data,
-                                          result: result,
-                                          timeline: propertyListResponse.timeline)
-        }
-        
-        switch responseDataSource {
-        case .server:
-            self.dataRequest.validate().responsePropertyList(queue: self.responseQueue, options: self.responsePropertyListOptions, completionHandler: { propertyListResponse in
-                var response = propertyListResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                }
-                self.requestFilter(response)
-                completionHandler(false,response)
-            })
-        case .cacheIfPossible:
-            self.responsePropertyListFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Any>) in
-                do {
-                    loadCache(responsePropertyList: try loadCacheData())
-                } catch _ {
-                    responsePropertyListFromRequest()
-                }
-            })
-        case .cacheAndServer:
-            self.responsePropertyListFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Any>) in
-                do {
-                    loadCache(responsePropertyList: try loadCacheData())
-                    responsePropertyListFromRequest()
-                } catch _ {
-                    responsePropertyListFromRequest()
-                }
-            })
-        case .custom:
-            guard let customCacheRequest = self as? CacheCustomizable else {
-                assertionFailure(message)
-                return self
-            }
-            self.responsePropertyListFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<Any>) in
-                do {
-                    let cacheResponse = try loadCacheData()
-                    loadCache(responsePropertyList: cacheResponse)
-                    let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
-                    if isSendRequest {
-                        self.dataRequest.validate().responsePropertyList(queue: self.responseQueue, options: self.responsePropertyListOptions, completionHandler: { propertyListResponse in
-                            let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: propertyListResponse)
-                            if isUpdateCache {
-                                var response = propertyListResponse
-                                if response.result.isSuccess {
-                                    let validate = self.validateResponseWhenRequestSuccess(response)
-                                    if !validate.0 {
-                                        response = generateValidateFailResponse(response, serverError: validate.1)
-                                    }
-                                }
-                                self.requestFilter(response, shouldSaveCache: true)
-                                completionHandler(false,response)
-                            }
-                        })
-                    }
-                } catch _ {
-                    responsePropertyListFromRequest()
-                }
-            })
-        }
-        return self
-    }
-    
-}
-
 //MARK: - SwiftyJSON
 
 extension SYDataRequest {
@@ -651,7 +537,7 @@ extension SYDataRequest {
     /// - Returns: cache SwiftyJSON data
     /// - completionHandler: load cache completion handle
     
-    public func responseSwiftyJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<JSON>) -> Void) {
+    public func responseSwiftyJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<JSON,AFError>) -> Void) {
         self.generateResponseSwiftyJSONFromCache(customLoadCacheInfo, completionHandler: completionHandler)
     }
     
@@ -666,50 +552,51 @@ extension SYDataRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func responseSwiftyJSON(responseDataSource: ResponseDataSource = .server, _ completionHandler: @escaping (_ isDataFromCache: Bool, _ swiftyJSONResponse: Alamofire.DataResponse<JSON>) -> Void) -> Self {
+    public func responseSwiftyJSON(responseDataSource: ResponseDataSource = .server, _ completionHandler: @escaping (_ isDataFromCache: Bool, _ swiftyJSONResponse: DataResponse<JSON,AFError>) -> Void) -> Self {
         
-        func loadCache(responseSwiftyJSON: Alamofire.DataResponse<JSON>) {
+        func loadCache(responseSwiftyJSON: DataResponse<JSON,AFError>) {
             completionHandler(true,responseSwiftyJSON)
         }
         
         func responseSwiftyJSONFromRequest() {
-            self.dataRequest.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
+            self.request?.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
                 var response = swiftyJSONResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response, shouldSaveCache: true)
                 completionHandler(false,response)
             })
         }
         
-        func generateValidateFailResponse(_ swiftyJSONResponse: Alamofire.DataResponse<JSON>, serverError: NSError?) -> Alamofire.DataResponse<JSON> {
-            let result = DataRequest.serializeResponseSwiftyJSON(options: self.responseJSONOptions, response: swiftyJSONResponse.response, data: swiftyJSONResponse.data, error: self.generateValidationFailureError(serverError))
-            return Alamofire.DataResponse(request: swiftyJSONResponse.request,
-                                          response: swiftyJSONResponse.response,
-                                          data: swiftyJSONResponse.data,
-                                          result: result,
-                                          timeline: swiftyJSONResponse.timeline)
+        func generateValidateFailResponse(_ swiftyJSONResponse: DataResponse<JSON,AFError>, serverError: Error?) -> DataResponse<JSON,AFError> {
+            return DataResponse(request: swiftyJSONResponse.request, response: swiftyJSONResponse.response, data: swiftyJSONResponse.data, metrics: swiftyJSONResponse.metrics, serializationDuration: swiftyJSONResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
         }
         
         switch responseDataSource {
         case .server:
-            self.dataRequest.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
+            self.request?.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
                 var response = swiftyJSONResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
-            self.responseSwiftyJSONFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<JSON>) in
+            self.responseSwiftyJSONFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<JSON,AFError>) in
                 do {
                     loadCache(responseSwiftyJSON: try loadCacheData())
                 } catch _ {
@@ -717,7 +604,7 @@ extension SYDataRequest {
                 }
             })
         case .cacheAndServer:
-            self.responseSwiftyJSONFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<JSON>) in
+            self.responseSwiftyJSONFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<JSON,AFError>) in
                 do {
                     loadCache(responseSwiftyJSON: try loadCacheData())
                     responseSwiftyJSONFromRequest()
@@ -730,21 +617,24 @@ extension SYDataRequest {
                 assertionFailure(message)
                 return self
             }
-            self.responseSwiftyJSONFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<JSON>) in
+            self.responseSwiftyJSONFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<JSON,AFError>) in
                 do {
                     let cacheResponse = try loadCacheData()
                     loadCache(responseSwiftyJSON: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.dataRequest.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
+                        self.request?.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: swiftyJSONResponse)
                             if isUpdateCache {
                                 var response = swiftyJSONResponse
-                                if response.result.isSuccess {
-                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                switch response.result {
+                                case .success(let obj):
+                                    let validate = self.validateResponseWhenRequestSuccess(obj)
                                     if !validate.0 {
                                         response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
+                                case .failure(_):
+                                    break
                                 }
                                 self.requestFilter(response,shouldSaveCache: true)
                                 completionHandler(false,response)
@@ -774,7 +664,7 @@ extension SYDataRequest {
     /// - Returns: cache Object data
     /// - completionHandler: load cache completion handle
     
-    public func responseObjectFromCache<T: ObjectMapper.Mappable>(mapToObject object: T? = nil, customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<T>) -> Void) {
+    public func responseObjectFromCache<T: Mappable>(mapToObject object: T? = nil, customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<T,AFError>) -> Void) {
         self.generateResponseObjectFromCache(mapToObject: object, customLoadCacheInfo: customLoadCacheInfo, completionHandler: completionHandler)
     }
     
@@ -808,51 +698,51 @@ extension SYDataRequest {
      */
     
     @discardableResult
-    public func responseObject<T: ObjectMapper.Mappable>(responseDataSource: ResponseDataSource = .server, mapToObject object: T? = nil, completionHandler: @escaping (_ isDataFromCache: Bool, _ objectResponse: Alamofire.DataResponse<T>) -> Void) -> Self {
+    public func responseObject<T: Mappable>(responseDataSource: ResponseDataSource = .server, mapToObject object: T? = nil, completionHandler: @escaping (_ isDataFromCache: Bool, _ objectResponse: DataResponse<T,AFError>) -> Void) -> Self {
         
-        func loadCache(responseObject: Alamofire.DataResponse<T>) {
+        func loadCache(responseObject: DataResponse<T,AFError>) {
             completionHandler(true,responseObject)
         }
         
         func responseObjectFromRequest() {
-            self.dataRequest.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
+            self.request?.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
                 var response = objectResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response, shouldSaveCache: true)
                 completionHandler(false,response)
             })
         }
         
-        func generateValidateFailResponse(_ objectResponse: Alamofire.DataResponse<T>, serverError: NSError?) -> Alamofire.DataResponse<T> {
-            let responseSerializer = DataRequest.ObjectMapperSerializer(self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext)
-            let result = responseSerializer.serializeResponse(objectResponse.request, objectResponse.response, objectResponse.data, self.generateValidationFailureError(serverError))
-            return Alamofire.DataResponse(request: objectResponse.request,
-                                          response: objectResponse.response,
-                                          data: objectResponse.data,
-                                          result: result,
-                                          timeline: objectResponse.timeline)
+        func generateValidateFailResponse(_ objectResponse: DataResponse<T,AFError>, serverError: Error?) -> DataResponse<T,AFError> {
+            return DataResponse(request: objectResponse.request, response: objectResponse.response, data: objectResponse.data, metrics: objectResponse.metrics, serializationDuration: objectResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
         }
         
         switch responseDataSource {
         case .server:
-            self.dataRequest.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
+            self.request?.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
                 var response = objectResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
-            self.responseObjectFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<T>) in
+            self.responseObjectFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<T,AFError>) in
                 do {
                     loadCache(responseObject: try loadCacheData())
                 } catch _ {
@@ -860,7 +750,7 @@ extension SYDataRequest {
                 }
             })
         case .cacheAndServer:
-            self.responseObjectFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<T>) in
+            self.responseObjectFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<T,AFError>) in
                 do {
                     loadCache(responseObject: try loadCacheData())
                     responseObjectFromRequest()
@@ -873,21 +763,24 @@ extension SYDataRequest {
                 assertionFailure(message)
                 return self
             }
-            self.responseObjectFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<T>) in
+            self.responseObjectFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<T,AFError>) in
                 do {
                     let cacheResponse = try loadCacheData()
                     loadCache(responseObject: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.dataRequest.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
+                        self.request?.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: objectResponse)
                             if isUpdateCache {
                                 var response = objectResponse
-                                if response.result.isSuccess {
-                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                switch response.result {
+                                case .success(let obj):
+                                    let validate = self.validateResponseWhenRequestSuccess(obj)
                                     if !validate.0 {
                                         response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
+                                case .failure(_):
+                                    break
                                 }
                                 self.requestFilter(response, shouldSaveCache: true)
                                 completionHandler(false,response)
@@ -910,7 +803,7 @@ extension SYDataRequest {
     /// - Returns: cache ObjectArray data
     /// - completionHandler: load cache completion handle
     
-    public func responseObjectArrayFromCache<T: ObjectMapper.Mappable>(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<[T]>) -> Void) {
+    public func responseObjectArrayFromCache<T: Mappable>(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<[T],AFError>) -> Void) {
         self.generateResponseObjectArrayFromCache(customLoadCacheInfo, completionHandler: completionHandler)
     }
     
@@ -924,52 +817,52 @@ extension SYDataRequest {
     /// - returns: The request.
     
     @discardableResult
-    public func responseObjectArray<T: ObjectMapper.Mappable>(responseDataSource: ResponseDataSource = .server, completionHandler: @escaping (_ isDataFromCache: Bool, _ objectArrayResponse: Alamofire.DataResponse<[T]>) -> Void) -> Self {
+    public func responseObjectArray<T: Mappable>(responseDataSource: ResponseDataSource = .server, completionHandler: @escaping (_ isDataFromCache: Bool, _ objectArrayResponse: DataResponse<[T],AFError>) -> Void) -> Self {
         
-        func loadCache(responseObjectArray: Alamofire.DataResponse<[T]>) {
+        func loadCache(responseObjectArray: DataResponse<[T],AFError>) {
             completionHandler(true,responseObjectArray)
         }
         
         func responseObjectArrayFromRequest() {
-            self.dataRequest.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T]>) in
+            self.request?.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T],AFError>) in
                 var response = objectArrayResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response, shouldSaveCache: true)
                 completionHandler(false,response)
             })
         }
         
-        func generateValidateFailResponse(_ objectArrayResponse: Alamofire.DataResponse<[T]>, serverError: NSError?) -> Alamofire.DataResponse<[T]> {
-            let responseSerializer = DataRequest.ObjectMapperArraySerializer(self.responseObjectKeyPath, context: self.responseObjectContext) as DataResponseSerializer<[T]>
-            let result = responseSerializer.serializeResponse(objectArrayResponse.request, objectArrayResponse.response, objectArrayResponse.data, self.generateValidationFailureError(serverError))
-            return Alamofire.DataResponse(request: objectArrayResponse.request,
-                                          response: objectArrayResponse.response,
-                                          data: objectArrayResponse.data,
-                                          result: result,
-                                          timeline: objectArrayResponse.timeline)
+        func generateValidateFailResponse(_ objectArrayResponse: DataResponse<[T],AFError>, serverError: Error?) -> DataResponse<[T],AFError> {
+            return DataResponse(request: objectArrayResponse.request, response: objectArrayResponse.response, data: objectArrayResponse.data, metrics: objectArrayResponse.metrics, serializationDuration: objectArrayResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
         }
         
         
         switch responseDataSource {
         case .server:
-            self.dataRequest.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T]>) in
+            self.request?.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T],AFError>) in
                 var response = objectArrayResponse
-                if response.result.isSuccess {
-                    let validate = self.validateResponseWhenRequestSuccess(response)
+                switch response.result {
+                case .success(let obj):
+                    let validate = self.validateResponseWhenRequestSuccess(obj)
                     if !validate.0 {
                         response = generateValidateFailResponse(response, serverError: validate.1)
                     }
+                case .failure(_):
+                    break
                 }
                 self.requestFilter(response)
                 completionHandler(false,response)
             })
         case .cacheIfPossible:
-            self.responseObjectArrayFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<[T]>) in
+            self.responseObjectArrayFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<[T],AFError>) in
                 do {
                     loadCache(responseObjectArray: try loadCacheData())
                 } catch _ {
@@ -977,7 +870,7 @@ extension SYDataRequest {
                 }
             })
         case .cacheAndServer:
-            self.responseObjectArrayFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<[T]>) in
+            self.responseObjectArrayFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<[T],AFError>) in
                 do {
                     loadCache(responseObjectArray: try loadCacheData())
                     responseObjectArrayFromRequest()
@@ -990,21 +883,24 @@ extension SYDataRequest {
                 assertionFailure(message)
                 return self
             }
-            self.responseObjectArrayFromCache(completionHandler: { (loadCacheData: () throws -> Alamofire.DataResponse<[T]>) in
+            self.responseObjectArrayFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<[T],AFError>) in
                 do {
                     let cacheResponse = try loadCacheData()
                     loadCache(responseObjectArray: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.dataRequest.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T]>) in
+                        self.request?.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T],AFError>) in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: objectArrayResponse)
                             if isUpdateCache {
                                 var response = objectArrayResponse
-                                if response.result.isSuccess {
-                                    let validate = self.validateResponseWhenRequestSuccess(response)
+                                switch response.result {
+                                case .success(let obj):
+                                    let validate = self.validateResponseWhenRequestSuccess(obj)
                                     if !validate.0 {
                                         response = generateValidateFailResponse(response, serverError: validate.1)
                                     }
+                                case .failure(_):
+                                    break
                                 }
                                 self.requestFilter(response, shouldSaveCache: true)
                                 completionHandler(false,response)
@@ -1024,9 +920,10 @@ extension SYDataRequest {
 
 private extension SYDataRequest {
     
-    func generateValidationFailureError(_ serverError: NSError?) -> NSError {
+    func generateValidationFailureError(_ serverError: Error?) -> AFError {
         if let sError = serverError {
-            return sError
+            let afError = AFError.createURLRequestFailed(error: sError)
+            return afError
         }
         enum ValidationStatusCode: Int {
             case invalid = -1
@@ -1034,10 +931,12 @@ private extension SYDataRequest {
         let requestValidationErrorDomain = "com.synetwork.request.validation"
         let validationFailureDescription = "Validation failure"
         
-        return NSError(domain: requestValidationErrorDomain, code: ValidationStatusCode.invalid.rawValue, userInfo: [NSLocalizedDescriptionKey: validationFailureDescription])
+        let e = NSError(domain: requestValidationErrorDomain, code: ValidationStatusCode.invalid.rawValue, userInfo: [NSLocalizedDescriptionKey: validationFailureDescription])
+        let error = AFError.createURLRequestFailed(error: e)
+        return error
     }
     
-    func requestFilter<T>(_ response: Alamofire.DataResponse<T>, shouldSaveCache: Bool = false) {
+    func requestFilter<T,U>(_ response: DataResponse<T,U>, shouldSaveCache: Bool = false) {
         switch response.result {
         case .success(_):
             self.requestCompleteFilter(response)
@@ -1055,25 +954,25 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseDataFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<Data>) -> Void) {
+    func generateResponseDataFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ dataResponse: () throws -> DataResponse<Data,AFError>) -> Void) {
         self.loadLocalCache(customLoadCacheInfo) { (loadCacheData: () throws -> Data) in
             do {
-                let data = try loadCacheData()
-                let cacheResponse = DataRequest.serializeResponseData(response: nil, data: data, error: nil)
-                let dataResponse = DataResponse(request: nil, response: nil, data: data, result: cacheResponse)
-                completionHandler({ return dataResponse })
+                let cacheData = try loadCacheData()
+                let data = try DataResponseSerializer().serialize(request: nil, response: nil, data: cacheData, error: nil)
+                let dataResponse = DataResponse<Data, AFError>(request: nil, response: nil, data: cacheData, metrics: nil, serializationDuration: 0, result: .success(data))
+                completionHandler({dataResponse})
             } catch let error {
-                completionHandler({ throw error })
+                completionHandler({throw error})
             }
         }
     }
     
-    func generateResponseStringFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<String>) -> Void) {
+    func generateResponseStringFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<String,AFError>) -> Void) {
         self.loadLocalCache(customLoadCacheInfo) { (loadCacheData: () throws -> Data) in
             do {
                 let data = try loadCacheData()
-                let cacheResponse = DataRequest.serializeResponseString(encoding: self.cacheMetadata?.responseStringEncoding, response: nil, data: data, error: nil)
-                let stringResponse = DataResponse(request: nil, response: nil, data: data, result: cacheResponse)
+                let string = try StringResponseSerializer().serialize(request: nil, response: nil, data: data, error: nil)
+                let stringResponse = DataResponse<String, AFError>(request: nil, response: nil, data: data, metrics: nil, serializationDuration: 0, result: .success(string))
                 completionHandler({ return stringResponse })
             } catch let error {
                 completionHandler({ throw error })
@@ -1081,7 +980,7 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<Any>) -> Void) {
+    func generateResponseJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<Any,AFError>) -> Void) {
         self.loadLocalCache(customLoadCacheInfo) { (loadCacheData: () throws -> Data) in
             do {
                 let data = try loadCacheData()
@@ -1089,8 +988,10 @@ private extension SYDataRequest {
                     completionHandler({ throw LoadCacheError.invalidMetadata })
                     return
                 }
-                let cacheResponse = DataRequest.serializeResponseJSON(options:cacheMetadata.responseJSONOptions, response: nil, data: data, error: nil)
-                let jsonResponse = DataResponse(request: nil, response: nil, data: data, result: cacheResponse)
+                let serialize = JSONResponseSerializer(options: cacheMetadata.responseJSONOptions)
+                let json = try serialize.serialize(request: nil, response: nil, data: data, error: nil)
+                
+                let jsonResponse = DataResponse<Any,AFError>(request: nil, response: nil, data: data, metrics: nil, serializationDuration: 0, result: .success(json))
                 completionHandler({ return jsonResponse })
             } catch let error {
                 completionHandler({ throw error })
@@ -1098,7 +999,7 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponsePropertyListFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<Any>) -> Void) {
+    func generateResponseSwiftyJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<JSON,AFError>) -> Void) {
         self.loadLocalCache(customLoadCacheInfo) { (loadCacheData: () throws -> Data) in
             do {
                 let data = try loadCacheData()
@@ -1106,25 +1007,10 @@ private extension SYDataRequest {
                     completionHandler({ throw LoadCacheError.invalidMetadata })
                     return
                 }
-                let cacheResponse = DataRequest.serializeResponsePropertyList(options: cacheMetadata.responsePropertyListOptions, response: nil, data: data, error: nil)
-                let propertyListResponse = DataResponse(request: nil, response: nil, data: data, result: cacheResponse)
-                completionHandler({ return propertyListResponse })
-            } catch let error {
-                completionHandler({ throw error })
-            }
-        }
-    }
-    
-    func generateResponseSwiftyJSONFromCache(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<JSON>) -> Void) {
-        self.loadLocalCache(customLoadCacheInfo) { (loadCacheData: () throws -> Data) in
-            do {
-                let data = try loadCacheData()
-                guard let cacheMetadata = self.cacheMetadata else {
-                    completionHandler({ throw LoadCacheError.invalidMetadata })
-                    return
-                }
-                let cacheResponse = DataRequest.serializeResponseSwiftyJSON(options:cacheMetadata.responseJSONOptions, response: nil, data: data, error: nil)
-                let swiftyJSONResponse = DataResponse(request: nil, response: nil, data: data, result: cacheResponse)
+                let serialize = SwiftyJSONResponseSerializer(options: cacheMetadata.responseJSONOptions)
+                let swiftyJson = try serialize.serialize(request: nil, response: nil, data: data, error: nil)
+                
+                let swiftyJSONResponse = DataResponse<JSON,AFError>(request: nil, response: nil, data: data, metrics: nil, serializationDuration: 0, result: .success(swiftyJson))
                 completionHandler({ return swiftyJSONResponse })
             } catch let error {
                 completionHandler({ throw error })
@@ -1132,7 +1018,7 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseObjectFromCache<T: ObjectMapper.Mappable>(mapToObject object: T? = nil, customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<T>) -> Void) {
+    func generateResponseObjectFromCache<T: Mappable>(mapToObject object: T? = nil, customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<T,AFError>) -> Void) {
         self.loadLocalCache(customLoadCacheInfo) { (loadCacheData: () throws -> Data) in
             do {
                 let data = try loadCacheData()
@@ -1140,9 +1026,13 @@ private extension SYDataRequest {
                     completionHandler({ throw LoadCacheError.invalidMetadata })
                     return
                 }
-                let responseSerializer = DataRequest.ObjectMapperSerializer(cacheMetadata.responseObjectKeyPath, mapToObject: object, context: cacheMetadata.responseObjectContext)
-                let cacheResponse = responseSerializer.serializeResponse(nil, nil, data, nil)
-                let objectResponse = DataResponse(request: nil, response: nil, data: data, result: cacheResponse)
+                
+                let serialize = DataRequest.ObjectMapperSerializer(cacheMetadata.responseObjectKeyPath, mapToObject: object, context: cacheMetadata.responseObjectContext)
+                
+                let object = try serialize.serialize(request: nil, response: nil, data: data, error: nil)
+                 
+                let objectResponse = DataResponse<T,AFError>(request: nil, response: nil, data: data, metrics: nil, serializationDuration: 0, result: .success(object))
+                
                 completionHandler({ return objectResponse })
             } catch let error {
                 completionHandler({ throw error })
@@ -1150,7 +1040,7 @@ private extension SYDataRequest {
         }
     }
     
-    func generateResponseObjectArrayFromCache<T: ObjectMapper.Mappable>(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> Alamofire.DataResponse<[T]>) -> Void) {
+    func generateResponseObjectArrayFromCache<T: Mappable>(_ customLoadCacheInfo: CustomLoadCacheInfo? = nil, completionHandler: @escaping (_ loadCacheData: () throws -> DataResponse<[T],AFError>) -> Void) {
         self.loadLocalCache(customLoadCacheInfo) { (loadCacheData: () throws -> Data) in
             do {
                 let data = try loadCacheData()
@@ -1158,9 +1048,12 @@ private extension SYDataRequest {
                     completionHandler({ throw LoadCacheError.invalidMetadata })
                     return
                 }
-                let responseSerializer = DataRequest.ObjectMapperArraySerializer(cacheMetadata.responseObjectKeyPath, context: cacheMetadata.responseObjectContext) as DataResponseSerializer<[T]>
-                let cacheResponse = responseSerializer.serializeResponse(nil, nil, data, nil)
-                let objectArrayResponse = DataResponse(request: nil, response: nil, data: data, result: cacheResponse)
+                let serialize = DataRequest.ObjectMapperArraySerializer(cacheMetadata.responseObjectKeyPath,context: cacheMetadata.responseObjectContext) as MappableArrayResponseSerializer<T>
+                
+                let objectArray = try serialize.serialize(request: nil, response: nil, data: data, error: nil)
+                
+                let objectArrayResponse = DataResponse<[T],AFError>(request: nil, response: nil, data: data, metrics: nil, serializationDuration: 0, result: .success(objectArray))
+                
                 completionHandler({ return objectArrayResponse })
             } catch let error {
                 completionHandler({ throw error })

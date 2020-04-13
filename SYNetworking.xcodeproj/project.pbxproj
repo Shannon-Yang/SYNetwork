@@ -19,22 +19,16 @@
 		8294DBB11E8B60B4007F2A4F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8294DBAF1E8B60B4007F2A4F /* LaunchScreen.storyboard */; };
 		8294DBBC1E8B60B4007F2A4F /* SYNetworkingExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBBB1E8B60B4007F2A4F /* SYNetworkingExampleTests.swift */; };
 		8294DBC71E8B60B4007F2A4F /* SYNetworkingExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBC61E8B60B4007F2A4F /* SYNetworkingExampleUITests.swift */; };
-		8294DBE31E8B60DA007F2A4F /* AlamofireObjectMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBD21E8B60D9007F2A4F /* AlamofireObjectMapper.swift */; };
 		8294DBE41E8B60DA007F2A4F /* AlamofireSwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBD31E8B60D9007F2A4F /* AlamofireSwiftyJSON.swift */; };
-		8294DBE51E8B60DA007F2A4F /* String+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBD41E8B60D9007F2A4F /* String+MD5.swift */; };
 		8294DBE61E8B60DA007F2A4F /* SYCacheMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBD51E8B60D9007F2A4F /* SYCacheMetadata.swift */; };
 		8294DBE71E8B60DA007F2A4F /* SYDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBD61E8B60DA007F2A4F /* SYDataRequest.swift */; };
 		8294DBE81E8B60DA007F2A4F /* SYDataRequest+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBD71E8B60DA007F2A4F /* SYDataRequest+Cache.swift */; };
 		8294DBE91E8B60DA007F2A4F /* SYDataRequest+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBD81E8B60DA007F2A4F /* SYDataRequest+Serialization.swift */; };
-		8294DBEA1E8B60DA007F2A4F /* SYDataRequest+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBD91E8B60DA007F2A4F /* SYDataRequest+Validation.swift */; };
 		8294DBEB1E8B60DA007F2A4F /* SYDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBDA1E8B60DA007F2A4F /* SYDownloadRequest.swift */; };
 		8294DBEC1E8B60DA007F2A4F /* SYDownloadRequest+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBDB1E8B60DA007F2A4F /* SYDownloadRequest+Serialization.swift */; };
-		8294DBED1E8B60DA007F2A4F /* SYDownloadRequest+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBDC1E8B60DA007F2A4F /* SYDownloadRequest+Validation.swift */; };
 		8294DBEE1E8B60DA007F2A4F /* SYNetworkingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBDD1E8B60DA007F2A4F /* SYNetworkingConfig.swift */; };
 		8294DBEF1E8B60DA007F2A4F /* SYRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBDE1E8B60DA007F2A4F /* SYRequest.swift */; };
 		8294DBF01E8B60DA007F2A4F /* SYResponse+DescriptionFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBDF1E8B60DA007F2A4F /* SYResponse+DescriptionFormat.swift */; };
-		8294DBF11E8B60DA007F2A4F /* SYSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBE01E8B60DA007F2A4F /* SYSessionManager.swift */; };
-		8294DBF21E8B60DA007F2A4F /* SYStreamRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBE11E8B60DA007F2A4F /* SYStreamRequest.swift */; };
 		8294DBF31E8B60DA007F2A4F /* SYUploadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBE21E8B60DA007F2A4F /* SYUploadRequest.swift */; };
 		8294DBF51E8B60E6007F2A4F /* Info-tvOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8294DBF41E8B60E6007F2A4F /* Info-tvOS.plist */; };
 		8294DBFB1E8B6195007F2A4F /* AFError+AlamofireTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DBF81E8B6195007F2A4F /* AFError+AlamofireTests.swift */; };
@@ -52,6 +46,7 @@
 		8294DC121E8B61BD007F2A4F /* SYNetworkingTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DC0C1E8B61BD007F2A4F /* SYNetworkingTestCase.swift */; };
 		8294DC131E8B61BD007F2A4F /* SYNetworkingValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294DC0D1E8B61BD007F2A4F /* SYNetworkingValidationTests.swift */; };
 		E9F9E8A64C88C037F1F2D350 /* Pods_SYNetworkingExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44B46F61C65895E2FACC534A /* Pods_SYNetworkingExample.framework */; };
+		FB190B03244172F2003860F1 /* AlamofireObjectMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB190B02244172F2003860F1 /* AlamofireObjectMapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,22 +98,16 @@
 		8294DBC21E8B60B4007F2A4F /* SYNetworkingExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SYNetworkingExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8294DBC61E8B60B4007F2A4F /* SYNetworkingExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SYNetworkingExampleUITests.swift; sourceTree = "<group>"; };
 		8294DBC81E8B60B4007F2A4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8294DBD21E8B60D9007F2A4F /* AlamofireObjectMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireObjectMapper.swift; sourceTree = "<group>"; };
 		8294DBD31E8B60D9007F2A4F /* AlamofireSwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireSwiftyJSON.swift; sourceTree = "<group>"; };
-		8294DBD41E8B60D9007F2A4F /* String+MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+MD5.swift"; sourceTree = "<group>"; };
 		8294DBD51E8B60D9007F2A4F /* SYCacheMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYCacheMetadata.swift; sourceTree = "<group>"; };
 		8294DBD61E8B60DA007F2A4F /* SYDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYDataRequest.swift; sourceTree = "<group>"; };
 		8294DBD71E8B60DA007F2A4F /* SYDataRequest+Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDataRequest+Cache.swift"; sourceTree = "<group>"; };
 		8294DBD81E8B60DA007F2A4F /* SYDataRequest+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDataRequest+Serialization.swift"; sourceTree = "<group>"; };
-		8294DBD91E8B60DA007F2A4F /* SYDataRequest+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDataRequest+Validation.swift"; sourceTree = "<group>"; };
 		8294DBDA1E8B60DA007F2A4F /* SYDownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYDownloadRequest.swift; sourceTree = "<group>"; };
 		8294DBDB1E8B60DA007F2A4F /* SYDownloadRequest+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDownloadRequest+Serialization.swift"; sourceTree = "<group>"; };
-		8294DBDC1E8B60DA007F2A4F /* SYDownloadRequest+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYDownloadRequest+Validation.swift"; sourceTree = "<group>"; };
 		8294DBDD1E8B60DA007F2A4F /* SYNetworkingConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYNetworkingConfig.swift; sourceTree = "<group>"; };
 		8294DBDE1E8B60DA007F2A4F /* SYRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYRequest.swift; sourceTree = "<group>"; };
 		8294DBDF1E8B60DA007F2A4F /* SYResponse+DescriptionFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SYResponse+DescriptionFormat.swift"; sourceTree = "<group>"; };
-		8294DBE01E8B60DA007F2A4F /* SYSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYSessionManager.swift; sourceTree = "<group>"; };
-		8294DBE11E8B60DA007F2A4F /* SYStreamRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYStreamRequest.swift; sourceTree = "<group>"; };
 		8294DBE21E8B60DA007F2A4F /* SYUploadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYUploadRequest.swift; sourceTree = "<group>"; };
 		8294DBF41E8B60E6007F2A4F /* Info-tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		8294DBF81E8B6195007F2A4F /* AFError+AlamofireTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AFError+AlamofireTests.swift"; sourceTree = "<group>"; };
@@ -139,6 +128,7 @@
 		9B30F92B3A721BE572FF8695 /* Pods-SYNetworking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SYNetworking.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SYNetworking/Pods-SYNetworking.debug.xcconfig"; sourceTree = "<group>"; };
 		E202261CDEEFD1A04A71C8E3 /* Pods_SYNetworkingTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SYNetworkingTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6A243A0463F14126593FBF7 /* Pods_SYNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SYNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB190B02244172F2003860F1 /* AlamofireObjectMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireObjectMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,26 +213,21 @@
 		8294DB881E8B6009007F2A4F /* SYNetworking */ = {
 			isa = PBXGroup;
 			children = (
-				8294DBD21E8B60D9007F2A4F /* AlamofireObjectMapper.swift */,
+				FB190B02244172F2003860F1 /* AlamofireObjectMapper.swift */,
 				8294DBD31E8B60D9007F2A4F /* AlamofireSwiftyJSON.swift */,
 				8294DBF41E8B60E6007F2A4F /* Info-tvOS.plist */,
 				8294DB8A1E8B6009007F2A4F /* Info.plist */,
 				8294DBD51E8B60D9007F2A4F /* SYCacheMetadata.swift */,
 				8294DBD71E8B60DA007F2A4F /* SYDataRequest+Cache.swift */,
 				8294DBD81E8B60DA007F2A4F /* SYDataRequest+Serialization.swift */,
-				8294DBD91E8B60DA007F2A4F /* SYDataRequest+Validation.swift */,
 				8294DBD61E8B60DA007F2A4F /* SYDataRequest.swift */,
 				8294DBDB1E8B60DA007F2A4F /* SYDownloadRequest+Serialization.swift */,
-				8294DBDC1E8B60DA007F2A4F /* SYDownloadRequest+Validation.swift */,
 				8294DBDA1E8B60DA007F2A4F /* SYDownloadRequest.swift */,
 				8294DB891E8B6009007F2A4F /* SYNetworking.h */,
 				8294DBDD1E8B60DA007F2A4F /* SYNetworkingConfig.swift */,
 				8294DBDE1E8B60DA007F2A4F /* SYRequest.swift */,
 				8294DBDF1E8B60DA007F2A4F /* SYResponse+DescriptionFormat.swift */,
-				8294DBE01E8B60DA007F2A4F /* SYSessionManager.swift */,
-				8294DBE11E8B60DA007F2A4F /* SYStreamRequest.swift */,
 				8294DBE21E8B60DA007F2A4F /* SYUploadRequest.swift */,
-				8294DBD41E8B60D9007F2A4F /* String+MD5.swift */,
 			);
 			path = SYNetworking;
 			sourceTree = "<group>";
@@ -353,7 +338,6 @@
 				8294DB821E8B6009007F2A4F /* Frameworks */,
 				8294DB831E8B6009007F2A4F /* Headers */,
 				8294DB841E8B6009007F2A4F /* Resources */,
-				158276BA29AD10690C802F03 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -373,7 +357,6 @@
 				8294DB8C1E8B6009007F2A4F /* Frameworks */,
 				8294DB8D1E8B6009007F2A4F /* Resources */,
 				5400CB8A512C506DA8A879F3 /* [CP] Embed Pods Frameworks */,
-				F145AD00D6DC8B05153F0E22 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -394,7 +377,6 @@
 				8294DBA11E8B60B4007F2A4F /* Frameworks */,
 				8294DBA21E8B60B4007F2A4F /* Resources */,
 				C7DBD160A881988720881CCD /* [CP] Embed Pods Frameworks */,
-				1BE7F0B2DA75A6953A852910 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -486,6 +468,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -546,36 +529,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		158276BA29AD10690C802F03 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworking/Pods-SYNetworking-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		1BE7F0B2DA75A6953A852910 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkingExample/Pods-SYNetworkingExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3F5C5C01A02376A37B3880C0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -600,7 +553,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkingTests/Pods-SYNetworkingTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-SYNetworkingTests/Pods-SYNetworkingTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -613,7 +566,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkingTests/Pods-SYNetworkingTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SYNetworkingTests/Pods-SYNetworkingTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		62E5BF429C5D5839F304ED34 /* [CP] Check Pods Manifest.lock */ = {
@@ -658,7 +611,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkingExample/Pods-SYNetworkingExample-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-SYNetworkingExample/Pods-SYNetworkingExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -671,22 +624,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkingExample/Pods-SYNetworkingExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F145AD00D6DC8B05153F0E22 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SYNetworkingTests/Pods-SYNetworkingTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SYNetworkingExample/Pods-SYNetworkingExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -697,21 +635,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				8294DBEC1E8B60DA007F2A4F /* SYDownloadRequest+Serialization.swift in Sources */,
-				8294DBF21E8B60DA007F2A4F /* SYStreamRequest.swift in Sources */,
-				8294DBE51E8B60DA007F2A4F /* String+MD5.swift in Sources */,
 				8294DBE61E8B60DA007F2A4F /* SYCacheMetadata.swift in Sources */,
 				8294DBEB1E8B60DA007F2A4F /* SYDownloadRequest.swift in Sources */,
 				8294DBF31E8B60DA007F2A4F /* SYUploadRequest.swift in Sources */,
 				8294DBF01E8B60DA007F2A4F /* SYResponse+DescriptionFormat.swift in Sources */,
+				FB190B03244172F2003860F1 /* AlamofireObjectMapper.swift in Sources */,
 				8294DBE81E8B60DA007F2A4F /* SYDataRequest+Cache.swift in Sources */,
 				8294DBE71E8B60DA007F2A4F /* SYDataRequest.swift in Sources */,
 				8294DBEF1E8B60DA007F2A4F /* SYRequest.swift in Sources */,
 				8294DBE41E8B60DA007F2A4F /* AlamofireSwiftyJSON.swift in Sources */,
-				8294DBE31E8B60DA007F2A4F /* AlamofireObjectMapper.swift in Sources */,
 				8294DBEE1E8B60DA007F2A4F /* SYNetworkingConfig.swift in Sources */,
-				8294DBED1E8B60DA007F2A4F /* SYDownloadRequest+Validation.swift in Sources */,
-				8294DBF11E8B60DA007F2A4F /* SYSessionManager.swift in Sources */,
-				8294DBEA1E8B60DA007F2A4F /* SYDataRequest+Validation.swift in Sources */,
 				8294DBE91E8B60DA007F2A4F /* SYDataRequest+Serialization.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -847,12 +780,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -895,10 +829,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -919,13 +854,13 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SYNetworking/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -942,12 +877,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SYNetworking/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -962,7 +897,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworkingTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -977,7 +912,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworkingTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -988,11 +923,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2KT364D29M;
 				INFOPLIST_FILE = SYNetworkingExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworkingExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1003,11 +938,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2KT364D29M;
 				INFOPLIST_FILE = SYNetworkingExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworkingExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1022,7 +957,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworkingExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SYNetworkingExample.app/SYNetworkingExample";
 			};
 			name = Debug;
@@ -1038,7 +973,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworkingExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SYNetworkingExample.app/SYNetworkingExample";
 			};
 			name = Release;
@@ -1053,7 +988,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworkingExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = SYNetworkingExample;
 			};
 			name = Debug;
@@ -1068,7 +1003,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yunti.synetworking.SYNetworkingExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = SYNetworkingExample;
 			};
 			name = Release;

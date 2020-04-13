@@ -26,25 +26,14 @@ public class SYNetworkingConfig {
     /// Request CDN URL. Default is empty string.
     
     public var cdnURLString: String = ""
-
+    
     /// Request Uniform Parameters. Default is nil.
     
     public var uniformParameters: [String: Any]? = nil
     
-    /// he server trust policy manager to use for evaluating all server trust. default is nil
-    
-    public var serverTrustPolicyManager: Alamofire.ServerTrustPolicyManager? = nil
-    
-    /// The configuration used to construct the managed session.                                `URLSessionConfiguration.default` by default
-    
-    public var configuration: URLSessionConfiguration = URLSessionConfiguration.default
-    
-    /// The delegate used when initializing the session. `SessionDelegate()` by default.
-    
-    public var sessionDelegate: Alamofire.SessionDelegate = Alamofire.SessionDelegate()
-    
     /// It indicates whether you want to print the request log. default is true
     
     public var shouldPrintRequestLog: Bool = true
+    
 }
 
