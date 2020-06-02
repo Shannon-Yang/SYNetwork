@@ -90,10 +90,10 @@ open class SYRequest: NSObject {
         return false
     }
     
-    ///  Request base URL, Default is empty string.
+    ///  Request base URL, Default is SYNetworkingConfig's baseURLString string.If you want to modify the baseurl, you can override this method in the subclass
     
     open var baseURLString: String {
-        return ""
+        return SYNetworkingConfig.sharedInstance.baseURLString
     }
     
     /// Request CDN URL. Default is empty string.
@@ -179,7 +179,7 @@ open class SYRequest: NSObject {
     
     // Underlying `URLSession` for this instance.
     
-    let session: Session
+    public let session: Session
     
     // init instance
     

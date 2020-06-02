@@ -93,7 +93,6 @@ extension SYDataRequest {
 
     @discardableResult
     public func response(_ completionHandler: @escaping (_ defaultDataResponse: AFDataResponse<Data?>) -> Void) -> Self {
-        
         self.request?.validate().response { (defaultDataResponse:AFDataResponse<Data?>) in
             func requestFilter(_ defaultDataResponse: AFDataResponse<Data?>) {
                 if let _ = defaultDataResponse.error {
