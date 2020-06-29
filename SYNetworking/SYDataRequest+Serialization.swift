@@ -931,7 +931,8 @@ private extension SYDataRequest {
         let validationFailureDescription = "Validation failure"
         
         let e = NSError(domain: requestValidationErrorDomain, code: ValidationStatusCode.invalid.rawValue, userInfo: [NSLocalizedDescriptionKey: validationFailureDescription])
-        let error = AFError.createURLRequestFailed(error: e)
+        let reason = AFError.ResponseValidationFailureReason.customValidationFailed(error: e)
+        let error = AFError.responseValidationFailed(reason: reason)
         return error
     }
     
