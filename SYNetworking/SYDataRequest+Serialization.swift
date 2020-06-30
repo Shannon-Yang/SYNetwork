@@ -921,7 +921,8 @@ private extension SYDataRequest {
     
     func generateValidationFailureError(_ serverError: Error?) -> AFError {
         if let sError = serverError {
-            let afError = AFError.createURLRequestFailed(error: sError)
+            let reason = AFError.ResponseValidationFailureReason.customValidationFailed(error: sError)
+            let afError = AFError.responseValidationFailed(reason: reason)
             return afError
         }
         enum ValidationStatusCode: Int {
