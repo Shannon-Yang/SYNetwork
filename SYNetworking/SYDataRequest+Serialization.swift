@@ -119,26 +119,20 @@ extension SYDataRequest {
     
     @discardableResult
     public func response<T: DataResponseSerializerProtocol>(_ responseSerializer: T, completionHandler: @escaping (_ dataResponse: AFDataResponse<T.SerializedObject>) -> Void) -> Self {
-        
-        self.request?.validate().response(queue: self.responseQueue, responseSerializer: responseSerializer) { (dataResponse:AFDataResponse<T.SerializedObject>) in
-            
-            func generateValidateFailResponse(_ dataResponse:DataResponse<T.SerializedObject,AFError>,serverError: Error?) -> DataResponse<T.SerializedObject,AFError> {
-                return DataResponse(request: dataResponse.request, response: dataResponse.response, data: dataResponse.data, metrics: dataResponse.metrics, serializationDuration: dataResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
+
+        self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+             let validate = self.validateResponseWhenRequestSuccess(data)
+            guard let error = validate.1 else {
+                return .success(Void())
             }
-            
-            var response = dataResponse
-            switch dataResponse.result {
-            case .success(let obj):
-                let validate = self.validateResponseWhenRequestSuccess(obj)
-                if !validate.0 {
-                    response = generateValidateFailResponse(response, serverError: validate.1)
-                }
-            case .failure(_):
-                break
+            if validate.0 {
+                return .success(Void())
             }
-            self.requestFilter(response)
-            completionHandler(response)
-        }
+            return .failure(error)
+            }).response(queue: self.responseQueue, responseSerializer: responseSerializer) { (dataResponse:AFDataResponse<T.SerializedObject>) in
+                self.requestFilter(dataResponse)
+                completionHandler(dataResponse)
+            }
         return self
     }
 }
@@ -177,43 +171,35 @@ extension SYDataRequest {
             completionHandler(true,responseData)
         }
         
-        func generateValidateFailResponse(_ dataResponse: DataResponse<Data,AFError>, serverError: Error?) -> DataResponse<Data,AFError> {
-            return DataResponse(request: dataResponse.request, response: dataResponse.response, data: dataResponse.data, metrics: dataResponse.metrics, serializationDuration: dataResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
-        }
-        
-        func responseDataFromRequest() {
-            self.request?.validate().responseData(queue: self.responseQueue,completionHandler: { dataResponse in
-                var response = dataResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
+        func validateResponse(request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult {
+            do {
+                let serializeData = try DataResponseSerializer().serialize(request: request, response: response, data: data, error: nil)
+                let dataResponse = DataResponse<Data, AFError>(request: request, response: response, data: data, metrics: nil, serializationDuration: 0, result: .success(serializeData))
+                let validate = self.validateResponseWhenRequestSuccess(dataResponse.value)
+                guard let error = validate.1 else {
+                    return .success(Void())
                 }
-                self.requestFilter(response, shouldSaveCache: true)
-                completionHandler(false,response)
+                if validate.0 {
+                    return .success(Void())
+                }
+                return .failure(error)
+            } catch let e {
+                return .failure(e)
+            }
+        }
+
+        func responseDataFromRequest() {
+            self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+               validateResponse(request: request, response: response, data: data)
+            }).responseData(queue: self.responseQueue,completionHandler: { dataResponse in
+                self.requestFilter(dataResponse, shouldSaveCache: true)
+                completionHandler(false,dataResponse)
             })
         }
         
         switch responseDataSource {
         case .server:
-            self.request?.validate().responseData(queue: self.responseQueue, completionHandler: { dataResponse in
-                var response = dataResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
-                }
-                self.requestFilter(response)
-                completionHandler(false,response)
-            })
+            responseDataFromRequest()
         case .cacheIfPossible:
             
             self.responseDataFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<Data,AFError>) in
@@ -243,21 +229,13 @@ extension SYDataRequest {
                     loadCache(responseData: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.request?.validate().responseData(queue: self.responseQueue,completionHandler: { dataResponse in
+                        self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+                            validateResponse(request: request, response: response, data: data)
+                        }).responseData(queue: self.responseQueue,completionHandler: { dataResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: dataResponse)
                             if isUpdateCache {
-                                var response = dataResponse
-                                switch response.result {
-                                case .success(let obj):
-                                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                                    if !validate.0 {
-                                        response = generateValidateFailResponse(response, serverError: validate.1)
-                                    }
-                                case .failure(_):
-                                    break
-                                }
-                                self.requestFilter(response, shouldSaveCache: true)
-                                completionHandler(false,response)
+                                self.requestFilter(dataResponse, shouldSaveCache: true)
+                                completionHandler(false,dataResponse)
                             }
                         })
                     }
@@ -306,43 +284,35 @@ extension SYDataRequest {
             completionHandler(true,responseString)
         }
         
-        func generateValidateFailResponse(_ stringResponse: DataResponse<String,AFError>, serverError: Error?) -> DataResponse<String,AFError> {
-            return DataResponse(request: stringResponse.request, response: stringResponse.response, data: stringResponse.data, metrics: stringResponse.metrics, serializationDuration: stringResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
-        }
-        
-        func responseStringFromRequest() {
-            self.request?.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
-                var response = stringResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
+        func validateResponse(request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult {
+            do {
+                let string = try StringResponseSerializer().serialize(request: request, response: response, data: data, error: nil)
+                let dataResponse = DataResponse<String, AFError>(request: request, response: response, data: data, metrics: nil, serializationDuration: 0, result: .success(string))
+                let validate = self.validateResponseWhenRequestSuccess(dataResponse.value)
+                guard let error = validate.1 else {
+                    return .success(Void())
                 }
-                self.requestFilter(response, shouldSaveCache: true)
-                completionHandler(false,response)
+                if validate.0 {
+                    return .success(Void())
+                }
+                return .failure(error)
+            } catch let e {
+                return .failure(e)
+            }
+        }
+
+        func responseStringFromRequest() {
+            self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+               validateResponse(request: request, response: response, data: data)
+            }).responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
+                self.requestFilter(stringResponse, shouldSaveCache: true)
+                completionHandler(false,stringResponse)
             })
         }
         
         switch responseDataSource {
         case .server:
-            self.request?.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
-                var response = stringResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
-                }
-                self.requestFilter(response)
-                completionHandler(false,response)
-            })
+            responseStringFromRequest()
         case .cacheIfPossible:
             self.responseStringFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<String,AFError>) in
                 do {
@@ -371,21 +341,13 @@ extension SYDataRequest {
                     loadCache(responseString: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.request?.validate().responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
+                        self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+                            validateResponse(request: request, response: response, data: data)
+                        }).responseString(queue: self.responseQueue, encoding: self.responseStringEncoding, completionHandler: { stringResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: stringResponse)
                             if isUpdateCache {
-                                var response = stringResponse
-                                switch response.result {
-                                case .success(let obj):
-                                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                                    if !validate.0 {
-                                        response = generateValidateFailResponse(response, serverError: validate.1)
-                                    }
-                                case .failure(_):
-                                    break
-                                }
-                                self.requestFilter(response, shouldSaveCache: true)
-                                completionHandler(false,response)
+                                self.requestFilter(stringResponse, shouldSaveCache: true)
+                                completionHandler(false,stringResponse)
                             }
                         })
                     }
@@ -432,43 +394,35 @@ extension SYDataRequest {
             completionHandler(true,responseJSON)
         }
         
-        func responseJSONFromRequest() {
-            self.request?.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
-                var response = jsonResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
+        func validateResponse(request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult {
+            do {
+                let json = try JSONResponseSerializer().serialize(request: request, response: response, data: data, error: nil)
+                let dataResponse = DataResponse<Any, AFError>(request: request, response: response, data: data, metrics: nil, serializationDuration: 0, result: .success(json))
+                let validate = self.validateResponseWhenRequestSuccess(dataResponse.value)
+                guard let error = validate.1 else {
+                    return .success(Void())
                 }
-                self.requestFilter(response, shouldSaveCache: true)
-                completionHandler(false,response)
-            })
+                if validate.0 {
+                    return .success(Void())
+                }
+                return .failure(error)
+            } catch let e {
+                return .failure(e)
+            }
         }
-        
-        func generateValidateFailResponse(_ jsonResponse: DataResponse<Any,AFError>, serverError: Error?) -> DataResponse<Any,AFError> {
-            return DataResponse(request: jsonResponse.request, response: jsonResponse.response, data: jsonResponse.data, metrics: jsonResponse.metrics, serializationDuration: jsonResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
+
+        func responseJSONFromRequest() {
+            self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+               validateResponse(request: request, response: response, data: data)
+            }).responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
+                self.requestFilter(jsonResponse, shouldSaveCache: true)
+                completionHandler(false,jsonResponse)
+            })
         }
         
         switch responseDataSource {
         case .server:
-            self.request?.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
-                var response = jsonResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
-                }
-                self.requestFilter(response)
-                completionHandler(false,response)
-            })
+            responseJSONFromRequest()
         case .cacheIfPossible:
             self.responseJSONFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<Any,AFError>) in
                 do {
@@ -497,21 +451,13 @@ extension SYDataRequest {
                     loadCache(responseJSON: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.request?.validate().responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
+                        self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+                            validateResponse(request: request, response: response, data: data)
+                        }).responseJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { jsonResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: jsonResponse)
                             if isUpdateCache {
-                                var response = jsonResponse
-                                switch response.result {
-                                case .success(let obj):
-                                   let validate = self.validateResponseWhenRequestSuccess(obj)
-                                    if !validate.0 {
-                                        response = generateValidateFailResponse(response, serverError: validate.1)
-                                    }
-                                case .failure(_):
-                                    break
-                                }
-                                self.requestFilter(response,shouldSaveCache: true)
-                                completionHandler(false,response)
+                                self.requestFilter(jsonResponse,shouldSaveCache: true)
+                                completionHandler(false,jsonResponse)
                             }
                         })
                     }
@@ -557,43 +503,35 @@ extension SYDataRequest {
             completionHandler(true,responseSwiftyJSON)
         }
         
-        func responseSwiftyJSONFromRequest() {
-            self.request?.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
-                var response = swiftyJSONResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
+        func validateResponse(request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult {
+            do {
+                let json = try SwiftyJSONResponseSerializer().serialize(request: request, response: response, data: data, error: nil)
+                let dataResponse = DataResponse<JSON, AFError>(request: request, response: response, data: data, metrics: nil, serializationDuration: 0, result: .success(json))
+                let validate = self.validateResponseWhenRequestSuccess(dataResponse.value)
+                guard let error = validate.1 else {
+                    return .success(Void())
                 }
-                self.requestFilter(response, shouldSaveCache: true)
-                completionHandler(false,response)
-            })
+                if validate.0 {
+                    return .success(Void())
+                }
+                return .failure(error)
+            } catch let e {
+                return .failure(e)
+            }
         }
-        
-        func generateValidateFailResponse(_ swiftyJSONResponse: DataResponse<JSON,AFError>, serverError: Error?) -> DataResponse<JSON,AFError> {
-            return DataResponse(request: swiftyJSONResponse.request, response: swiftyJSONResponse.response, data: swiftyJSONResponse.data, metrics: swiftyJSONResponse.metrics, serializationDuration: swiftyJSONResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
+
+        func responseSwiftyJSONFromRequest() {
+            self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+                validateResponse(request: request, response: response, data: data)
+            }).responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
+                self.requestFilter(swiftyJSONResponse, shouldSaveCache: true)
+                completionHandler(false,swiftyJSONResponse)
+            })
         }
         
         switch responseDataSource {
         case .server:
-            self.request?.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
-                var response = swiftyJSONResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
-                }
-                self.requestFilter(response)
-                completionHandler(false,response)
-            })
+            responseSwiftyJSONFromRequest()
         case .cacheIfPossible:
             self.responseSwiftyJSONFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<JSON,AFError>) in
                 do {
@@ -622,21 +560,13 @@ extension SYDataRequest {
                     loadCache(responseSwiftyJSON: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.request?.validate().responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
+                        self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+                            validateResponse(request: request, response: response, data: data)
+                        }).responseSwiftyJSON(queue: self.responseQueue, options: self.responseJSONOptions, completionHandler: { swiftyJSONResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: swiftyJSONResponse)
                             if isUpdateCache {
-                                var response = swiftyJSONResponse
-                                switch response.result {
-                                case .success(let obj):
-                                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                                    if !validate.0 {
-                                        response = generateValidateFailResponse(response, serverError: validate.1)
-                                    }
-                                case .failure(_):
-                                    break
-                                }
-                                self.requestFilter(response,shouldSaveCache: true)
-                                completionHandler(false,response)
+                                self.requestFilter(swiftyJSONResponse,shouldSaveCache: true)
+                                completionHandler(false,swiftyJSONResponse)
                             }
                         })
                     }
@@ -703,43 +633,38 @@ extension SYDataRequest {
             completionHandler(true,responseObject)
         }
         
-        func responseObjectFromRequest() {
-            self.request?.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
-                var response = objectResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
+        func validateResponse(request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult {
+            do {
+                let serialize = DataRequest.ObjectMapperSerializer(nil) as MappableResponseSerializer<T>
+                
+                let object = try serialize.serialize(request: request, response: response, data: data, error: nil)
+         
+                let dataResponse = DataResponse<T, AFError>(request: request, response: response, data: data, metrics: nil, serializationDuration: 0, result: .success(object))
+                let validate = self.validateResponseWhenRequestSuccess(dataResponse.value)
+                guard let error = validate.1 else {
+                    return .success(Void())
                 }
-                self.requestFilter(response, shouldSaveCache: true)
-                completionHandler(false,response)
-            })
+                if validate.0 {
+                    return .success(Void())
+                }
+                return .failure(error)
+            } catch let e {
+                return .failure(e)
+            }
         }
-        
-        func generateValidateFailResponse(_ objectResponse: DataResponse<T,AFError>, serverError: Error?) -> DataResponse<T,AFError> {
-            return DataResponse(request: objectResponse.request, response: objectResponse.response, data: objectResponse.data, metrics: objectResponse.metrics, serializationDuration: objectResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
+
+        func responseObjectFromRequest() {
+            self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+                validateResponse(request: request, response: response, data: data)
+            }).responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
+                self.requestFilter(objectResponse, shouldSaveCache: true)
+                completionHandler(false,objectResponse)
+            })
         }
         
         switch responseDataSource {
         case .server:
-            self.request?.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
-                var response = objectResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
-                }
-                self.requestFilter(response)
-                completionHandler(false,response)
-            })
+            responseObjectFromRequest()
         case .cacheIfPossible:
             self.responseObjectFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<T,AFError>) in
                 do {
@@ -768,21 +693,13 @@ extension SYDataRequest {
                     loadCache(responseObject: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.request?.validate().responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
+                        self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+                            validateResponse(request: request, response: response, data: data)
+                        }).responseObject(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, mapToObject: object, context: self.responseObjectContext, completionHandler: { objectResponse in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: objectResponse)
                             if isUpdateCache {
-                                var response = objectResponse
-                                switch response.result {
-                                case .success(let obj):
-                                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                                    if !validate.0 {
-                                        response = generateValidateFailResponse(response, serverError: validate.1)
-                                    }
-                                case .failure(_):
-                                    break
-                                }
-                                self.requestFilter(response, shouldSaveCache: true)
-                                completionHandler(false,response)
+                                self.requestFilter(objectResponse, shouldSaveCache: true)
+                                completionHandler(false,objectResponse)
                             }
                         })
                     }
@@ -822,43 +739,40 @@ extension SYDataRequest {
             completionHandler(true,responseObjectArray)
         }
         
-        func responseObjectArrayFromRequest() {
-            self.request?.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T],AFError>) in
-                var response = objectArrayResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
+        func validateResponse(request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult {
+            do {
+                let serialize = DataRequest.ObjectMapperArraySerializer(nil) as MappableArrayResponseSerializer<T>
+
+                let objectArray = try serialize.serialize(request: request, response: response, data: data, error: nil)
+         
+                let dataResponse = DataResponse<[T], AFError>(request: request, response: response, data: data, metrics: nil, serializationDuration: 0, result: .success(objectArray))
+                let validate = self.validateResponseWhenRequestSuccess(dataResponse.value)
+                guard let error = validate.1 else {
+                    return .success(Void())
                 }
-                self.requestFilter(response, shouldSaveCache: true)
-                completionHandler(false,response)
+                if validate.0 {
+                    return .success(Void())
+                }
+                return .failure(error)
+            } catch let e {
+                return .failure(e)
+            }
+        }
+
+        func responseObjectArrayFromRequest() {
+            self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+                validateResponse(request: request, response: response, data: data)
+            }).responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T],AFError>) in
+                self.requestFilter(objectArrayResponse, shouldSaveCache: true)
+                completionHandler(false,objectArrayResponse)
             })
         }
-        
-        func generateValidateFailResponse(_ objectArrayResponse: DataResponse<[T],AFError>, serverError: Error?) -> DataResponse<[T],AFError> {
-            return DataResponse(request: objectArrayResponse.request, response: objectArrayResponse.response, data: objectArrayResponse.data, metrics: objectArrayResponse.metrics, serializationDuration: objectArrayResponse.serializationDuration, result: .failure(self.generateValidationFailureError(serverError)))
-        }
-        
         
         switch responseDataSource {
         case .server:
             self.request?.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T],AFError>) in
-                var response = objectArrayResponse
-                switch response.result {
-                case .success(let obj):
-                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                    if !validate.0 {
-                        response = generateValidateFailResponse(response, serverError: validate.1)
-                    }
-                case .failure(_):
-                    break
-                }
-                self.requestFilter(response)
-                completionHandler(false,response)
+                self.requestFilter(objectArrayResponse)
+                completionHandler(false,objectArrayResponse)
             })
         case .cacheIfPossible:
             self.responseObjectArrayFromCache(completionHandler: { (loadCacheData: () throws -> DataResponse<[T],AFError>) in
@@ -888,21 +802,13 @@ extension SYDataRequest {
                     loadCache(responseObjectArray: cacheResponse)
                     let isSendRequest = customCacheRequest.shouldSendRequest(self, cacheResponse: cacheResponse)
                     if isSendRequest {
-                        self.request?.validate().responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T],AFError>) in
+                        self.request?.validate({ (request:URLRequest?, response:HTTPURLResponse, data:Data?) -> DataRequest.ValidationResult in
+                            validateResponse(request: request, response: response, data: data)
+                        }).responseArray(queue: self.responseQueue, keyPath: self.responseObjectKeyPath, context: self.responseObjectContext, completionHandler: { (objectArrayResponse: DataResponse<[T],AFError>) in
                             let isUpdateCache = customCacheRequest.shouldUpdateCache(self, response: objectArrayResponse)
                             if isUpdateCache {
-                                var response = objectArrayResponse
-                                switch response.result {
-                                case .success(let obj):
-                                    let validate = self.validateResponseWhenRequestSuccess(obj)
-                                    if !validate.0 {
-                                        response = generateValidateFailResponse(response, serverError: validate.1)
-                                    }
-                                case .failure(_):
-                                    break
-                                }
-                                self.requestFilter(response, shouldSaveCache: true)
-                                completionHandler(false,response)
+                                self.requestFilter(objectArrayResponse, shouldSaveCache: true)
+                                completionHandler(false,objectArrayResponse)
                             }
                         })
                     }
@@ -919,23 +825,23 @@ extension SYDataRequest {
 
 private extension SYDataRequest {
     
-    func generateValidationFailureError(_ serverError: Error?) -> AFError {
-        if let sError = serverError {
-            let reason = AFError.ResponseValidationFailureReason.customValidationFailed(error: sError)
-            let afError = AFError.responseValidationFailed(reason: reason)
-            return afError
-        }
-        enum ValidationStatusCode: Int {
-            case invalid = -1
-        }
-        let requestValidationErrorDomain = "com.synetwork.request.validation"
-        let validationFailureDescription = "Validation failure"
-        
-        let e = NSError(domain: requestValidationErrorDomain, code: ValidationStatusCode.invalid.rawValue, userInfo: [NSLocalizedDescriptionKey: validationFailureDescription])
-        let reason = AFError.ResponseValidationFailureReason.customValidationFailed(error: e)
-        let error = AFError.responseValidationFailed(reason: reason)
-        return error
-    }
+//    func generateValidationFailureError(_ serverError: Error?) -> Error {
+//        if let sError = serverError {
+//            let reason = AFError.ResponseValidationFailureReason.customValidationFailed(error: sError)
+//            let afError = AFError.responseValidationFailed(reason: reason)
+//            return afError
+//        }
+//        enum ValidationStatusCode: Int {
+//            case invalid = -1
+//        }
+//        let requestValidationErrorDomain = "com.synetwork.request.validation"
+//        let validationFailureDescription = "Validation failure"
+//
+//        let e = NSError(domain: requestValidationErrorDomain, code: ValidationStatusCode.invalid.rawValue, userInfo: [NSLocalizedDescriptionKey: validationFailureDescription])
+//        let reason = AFError.ResponseValidationFailureReason.customValidationFailed(error: e)
+//        let error = AFError.responseValidationFailed(reason: reason)
+//        return error
+//    }
     
     func requestFilter<T,U>(_ response: DataResponse<T,U>, shouldSaveCache: Bool = false) {
         switch response.result {
@@ -1027,7 +933,6 @@ private extension SYDataRequest {
                     completionHandler({ throw LoadCacheError.invalidMetadata })
                     return
                 }
-                
                 let serialize = DataRequest.ObjectMapperSerializer(cacheMetadata.responseObjectKeyPath, mapToObject: object, context: cacheMetadata.responseObjectContext)
                 
                 let object = try serialize.serialize(request: nil, response: nil, data: data, error: nil)
@@ -1049,8 +954,9 @@ private extension SYDataRequest {
                     completionHandler({ throw LoadCacheError.invalidMetadata })
                     return
                 }
-                let serialize = DataRequest.ObjectMapperArraySerializer(cacheMetadata.responseObjectKeyPath,context: cacheMetadata.responseObjectContext) as MappableArrayResponseSerializer<T>
                 
+                let serialize = DataRequest.ObjectMapperArraySerializer(cacheMetadata.responseObjectKeyPath,context: cacheMetadata.responseObjectContext) as MappableArrayResponseSerializer<T>
+
                 let objectArray = try serialize.serialize(request: nil, response: nil, data: data, error: nil)
                 
                 let objectArrayResponse = DataResponse<[T],AFError>(request: nil, response: nil, data: data, metrics: nil, serializationDuration: 0, result: .success(objectArray))
