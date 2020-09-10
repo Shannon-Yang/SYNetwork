@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.2.1)
+  - Alamofire (5.2.2)
   - ObjectMapper (4.2.0)
   - SwiftyJSON (5.0.0)
 
@@ -15,7 +15,7 @@ SPEC REPOS:
     - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Alamofire: e911732990610fe89af59ac0077f923d72dc3dfd
+  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
